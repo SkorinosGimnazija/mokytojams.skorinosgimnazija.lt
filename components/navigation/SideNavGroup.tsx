@@ -10,7 +10,7 @@ interface Props {
 export const SideNavGroup: React.FC<Props> = ({ children, title, role }) => {
   const auth = useAuth();
 
-  if (!auth.user?.is(role)) {
+  if (!auth.user!.is(role)) {
     return null;
   }
 
