@@ -5,6 +5,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
     "prettier"
@@ -20,6 +21,11 @@
     }
   },
   "rules": {
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }
