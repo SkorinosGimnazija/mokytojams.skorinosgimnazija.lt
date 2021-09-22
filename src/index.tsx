@@ -1,10 +1,11 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import ReactDOM from 'react-dom';
+import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { store } from '../src/store';
 import { App } from './App';
+import { store } from './store/store';
 import theme from './theme';
 
 ReactDOM.render(
@@ -13,6 +14,7 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <App />
+        <Toaster position="bottom-center" reverseOrder={false} />
       </Router>
     </Provider>
   </ThemeProvider>,

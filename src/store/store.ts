@@ -1,15 +1,19 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { api } from '../services/generated.api';
-import drawerReducer from '../components/drawer/drawerSlice';
-import authReducer from './authSlice';
+import drawerSlice from '../components/drawer/drawerSlice';
+import authSlice from './authSlice';
+import postsSlice from './postsSlice';
+import { rtkQueryErrorLogger } from './middleware/errorLogger';
 
 export const store = configureStore({
   reducer: {
-    drawer: drawerReducer,
-    auth: authReducer,
+    drawer: drawerSlice,
+    auth: authSlice,
+    posts: postsSlice,
     [api.reducerPath]: api.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware, rtkQueryErrorLogger),
 });
 
 export type AppDispatch = typeof store.dispatch;

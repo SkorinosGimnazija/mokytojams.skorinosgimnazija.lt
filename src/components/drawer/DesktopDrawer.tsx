@@ -7,11 +7,12 @@ export const DesktopDrawer = () => {
   return (
     <Drawer
       variant="permanent"
+      open
+      PaperProps={{ elevation: 4 }}
       sx={{
         display: { xs: 'none', sm: 'block' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '240px' },
       }}
-      open
     >
       <NavigationList />
     </Drawer>

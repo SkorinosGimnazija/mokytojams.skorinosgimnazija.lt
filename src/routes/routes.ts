@@ -1,5 +1,4 @@
 import React from 'react';
-import { CreatePost } from '../pages/posts/CreatePost';
 import { EditPost } from '../pages/posts/EditPost';
 import { ViewPosts } from '../pages/posts/ViewPosts';
 import { AuthRole } from '../store/authSlice';
@@ -19,7 +18,7 @@ export const routes: RoutesGroup[] = [
           },
           {
             slug: '/create',
-            component: CreatePost,
+            component: EditPost,
           },
           {
             slug: '/edit/:id',

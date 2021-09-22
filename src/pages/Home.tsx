@@ -8,7 +8,7 @@ export const Home = () => {
   const auth = useAuth();
 
   const Success = () => {
-    return <Typography marginTop={2}>Vilniaus Pranciškaus Skorinos gimnazija</Typography>;
+    return <Typography marginTop={2}>Sėkmingai prisijungėte</Typography>;
   };
 
   const LogIn = () => {

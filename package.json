@@ -6,6 +6,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@mui/icons-material": "^5.0.0",
+    "@mui/lab": "^5.0.0-alpha.48",
     "@mui/material": "^5.0.0",
     "@reduxjs/toolkit": "^1.6.1",
     "date-fns": "^2.23.0",
@@ -17,7 +18,8 @@
     "react-hot-toast": "^2.1.1",
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "^4.0.0"
+    "react-scripts": "^4.0.0",
+    "react-use": "^17.3.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.173",
@@ -38,8 +40,9 @@
     "typescript": "^4.0.0"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "dev:server": "node \"../static server/index.js\"",
+    "dev:client": "react-scripts start",
+    "dev:static": "node \"../static server/index.js\"",
+    "dev:api": "dotnet run --project \"../api.skorinosgimnazija.lt/API\"",
     "build": "react-scripts build",
     "serve": "npx serve -s build -p 3000",
     "generate:api": "npx @rtk-incubator/rtk-query-codegen-openapi --file ./src/services/generated.api.ts --baseQuery ./src/services/baseQuery.ts:baseQuery --hooks http://localhost:5000/swagger/v1/swagger.json"

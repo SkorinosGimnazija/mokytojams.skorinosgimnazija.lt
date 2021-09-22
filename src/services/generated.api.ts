@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './baseQuery';
 export const api = createApi({
   baseQuery: baseQuery,
-  tagTypes: ['type'],
+  tagTypes: [],
   endpoints: (build) => ({
     getUser: build.query<GetUserApiResponse, GetUserApiArg>({
       query: () => ({ url: `/auth/user` }),
@@ -60,7 +60,7 @@ export const api = createApi({
       query: (queryArg) => ({ url: `/posts`, method: 'POST', body: queryArg.body }),
     }),
     editPost: build.mutation<EditPostApiResponse, EditPostApiArg>({
-      query: (queryArg) => ({ url: `/posts`, method: 'PUT', body: queryArg.postEditDto }),
+      query: (queryArg) => ({ url: `/posts`, method: 'PUT', body: queryArg.body }),
     }),
     getPostById: build.query<GetPostByIdApiResponse, GetPostByIdApiArg>({
       query: (queryArg) => ({ url: `/posts/${queryArg.id}` }),
@@ -158,21 +158,33 @@ export type GetPostsApiArg = {
 export type CreatePostApiResponse = /** status 201 Success */ PostDetailsDto;
 export type CreatePostApiArg = {
   body: {
-    IsFeatured?: boolean;
+    IsFeatured: boolean;
     Files?: Blob[];
     Images?: Blob[];
     PublishDate?: string;
     IntroText?: string;
-    IsPublished?: boolean;
-    CategoryId?: number;
-    Slug?: string;
+    IsPublished: boolean;
+    CategoryId: number;
+    Slug: string;
     Text?: string;
-    Title?: string;
+    Title: string;
   };
 };
 export type EditPostApiResponse = /** status 200 Success */ undefined;
 export type EditPostApiArg = {
-  postEditDto: PostEditDto;
+  body: {
+    Id: number;
+    IsFeatured: boolean;
+    Files?: string[];
+    Images?: string[];
+    PublishDate?: string;
+    IntroText?: string;
+    IsPublished: boolean;
+    CategoryId: number;
+    Slug: string;
+    Text?: string;
+    Title: string;
+  };
 };
 export type GetPostByIdApiResponse = /** status 200 Success */ PostDetailsDto;
 export type GetPostByIdApiArg = {
@@ -211,15 +223,20 @@ export type SearchPublicPostsByLanguageAndTextApiArg = {
   page?: number;
 };
 export type UserDto = {
-  roles?: string[] | null;
-  userName?: string | null;
+  roles: string[];
+  userName: string;
+};
+export type LanguageDto = {
+  id: number;
+  name: string;
+  slug: string;
 };
 export type CategoryDto = {
-  id?: number;
-  languageId?: number;
-  name?: string | null;
-  slug?: string | null;
-  showOnHomePage?: boolean;
+  id: number;
+  name: string;
+  slug: string;
+  language: LanguageDto;
+  showOnHomePage: boolean;
 };
 export type ProblemDetails = {
   type?: string | null;
@@ -230,82 +247,69 @@ export type ProblemDetails = {
   [key: string]: any;
 };
 export type CategoryCreateDto = {
-  languageId?: number;
-  name?: string | null;
-  slug?: string | null;
-  showOnHomePage?: boolean;
+  languageId: number;
+  name: string;
+  slug: string;
+  showOnHomePage: boolean;
 };
 export type CategoryEditDto = {
-  id?: number;
-  languageId?: number;
-  name?: string | null;
-  slug?: string | null;
-  showOnHomePage?: boolean;
+  id: number;
+  languageId: number;
+  name: string;
+  slug: string;
+  showOnHomePage: boolean;
 };
 export type MenuDto = {
-  id?: number;
-  order?: number;
-  name?: string | null;
+  id: number;
+  order: number;
+  name: string;
   slug?: string | null;
-  isPublished?: boolean;
-  categoryId?: number;
+  isPublished: boolean;
+  categoryId: number;
   url?: string | null;
   parentMenuId?: number | null;
 };
 export type MenuCreateDto = {
-  order?: number;
-  name?: string | null;
-  isPublished?: boolean;
+  order: number;
+  name: string;
+  isPublished: boolean;
   slug?: string | null;
-  categoryId?: number;
+  categoryId: number;
   url?: string | null;
   parentMenuId?: number | null;
 };
 export type MenuEditDto = {
-  id?: number;
-  order?: number;
-  name?: string | null;
+  id: number;
+  order: number;
+  name: string;
   slug?: string | null;
-  isPublished?: boolean;
-  categoryId?: number;
+  isPublished: boolean;
+  categoryId: number;
   url?: string | null;
   parentMenuId?: number | null;
 };
 export type PostDto = {
-  id?: number;
-  isFeatured?: boolean;
-  isPublished?: boolean;
-  category?: CategoryDto;
-  publishDate?: string;
-  slug?: string | null;
-  title?: string | null;
+  id: number;
+  isFeatured: boolean;
+  isPublished: boolean;
+  category: CategoryDto;
+  publishDate: string;
+  slug: string;
+  title: string;
 };
 export type PostDetailsDto = {
-  id?: number;
-  categoryId?: number;
-  isFeatured?: boolean;
-  files?: string[] | null;
-  images?: string[] | null;
+  id: number;
+  categoryId: number;
+  isFeatured: boolean;
+  files: string[];
+  images: string[];
   introText?: string | null;
-  isPublished?: boolean;
-  category?: CategoryDto;
-  publishDate?: string;
-  slug?: string | null;
+  isPublished: boolean;
+  category: CategoryDto;
+  publishDate: string;
+  slug: string;
   text?: string | null;
-  title?: string | null;
-};
-export type PostEditDto = {
-  id?: number;
-  isFeatured?: boolean;
-  files?: string[] | null;
-  images?: string[] | null;
-  publishDate?: string;
-  introText?: string | null;
-  isPublished?: boolean;
-  categoryId?: number;
-  slug?: string | null;
-  text?: string | null;
-  title?: string | null;
+  title: string;
 };
 export type PostPatchDto = {
   isFeatured?: boolean | null;

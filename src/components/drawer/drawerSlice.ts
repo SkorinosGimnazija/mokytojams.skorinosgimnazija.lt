@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { api } from '../../services/generated.api';
-import { RootState } from '../../store';
+import { RootState } from '../../store/store';
 
 export interface DrawerState {
   isHidden: boolean;

@@ -19,13 +19,13 @@ export const useAuth = () => {
       return;
     }
 
-    console.log('GGWP', userQuery.error);
+    console.error(userQuery.error);
   }, [userQuery.isError, userQuery.error]);
 
   return {
-    isLoading: userQuery.isLoading || userQuery.isFetching || userQuery.isError,
-    isAuthenticated: isAuthenticated,
-    userName: userName,
+    userName,
+    isAuthenticated,
+    isLoading: userQuery.isLoading || userQuery.isError,
     hasRole: (role: AuthRole) => roles.includes(role),
   };
 };
