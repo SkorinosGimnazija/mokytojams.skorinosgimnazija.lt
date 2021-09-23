@@ -12,10 +12,9 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
-import { hi } from 'date-fns/locale';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { SaveButton } from '../../components/buttons/SaveButton';
 import { SquareLoader } from '../../components/loadingSpinners/SquareLoader';
 import {
@@ -29,13 +28,16 @@ import {
 export const EditPost = () => {
   const history = useHistory();
   const postId = Number(useParams<{ id?: string }>().id);
-  const postQuery = useGetPostByIdQuery({ id: postId }, { skip: !postId });
+  const postQuery = useGetPostByIdQuery(
+    { id: postId },
+    { skip: !postId, refetchOnMountOrArgChange: true }
+  );
   const categoryQuery = useGetCategoriesQuery();
 
   const [createPostMutation] = useCreatePostMutation();
   const [editPostMutation] = useEditPostMutation();
 
-  if (categoryQuery.isLoading || postQuery.isLoading) {
+  if (categoryQuery.isLoading || postQuery.isFetching) {
     return <SquareLoader />;
   }
 
@@ -43,8 +45,8 @@ export const EditPost = () => {
     <Formik
       initialValues={{
         id: postId,
-        images: [],
-        files: [],
+        images: [] as string[],
+        files: [] as string[],
         title: postQuery.data?.title ?? 'asd',
         slug: postQuery.data?.slug ?? 'asd',
         introText: postQuery.data?.introText ?? '',
@@ -55,17 +57,6 @@ export const EditPost = () => {
         publishDate: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
       }}
       onSubmit={(values, { setSubmitting }) => {
-        /* <TextField
-              id="title"
-              name="title"
-              label="Title"
-              autoComplete="off"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              // error={formik.touched.email && Boolean(formik.errors.email)}
-              // helperText={formik.touched.email && formik.errors.email}
-            /> */
-
         const formData = new FormData();
 
         for (const key in values) {
@@ -82,10 +73,10 @@ export const EditPost = () => {
         }
 
         if (postId) {
-          //@ts-ignore
+          // @ts-ignore
           editPostMutation({ body: formData }).then(() => setSubmitting(false));
         } else {
-          //@ts-ignore
+          // @ts-ignore
           createPostMutation({ body: formData }).then((response) => {
             const postData = (response as any).data as PostDetailsDto;
             if (postData) {
