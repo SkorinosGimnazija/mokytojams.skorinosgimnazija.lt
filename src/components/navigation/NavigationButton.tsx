@@ -1,4 +1,4 @@
-import MailIcon from '@mui/icons-material/Mail';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import { ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -6,7 +6,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { hideDrawer } from '../drawer/drawerSlice';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 
 interface Props {
   name: string;
@@ -20,7 +19,7 @@ export const NavigationButton: React.FC<Props> = ({ name, slug }) => {
     <>
       <ListItemButton component={Link} to={slug} onClick={() => dispatch(hideDrawer())}>
         <ListItemIcon>
-          <ArticleOutlinedIcon color="primary" />
+          <ArrowForwardIosOutlinedIcon color="primary" fontSize="small" />
         </ListItemIcon>
         <ListItemText primary={name} />
       </ListItemButton>

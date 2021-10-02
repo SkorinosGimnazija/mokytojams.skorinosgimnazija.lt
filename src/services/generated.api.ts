@@ -104,7 +104,7 @@ export const api = createApi({
     }),
   }),
 });
-export type GetUserApiResponse /** status 200 Success */ =
+export type GetUserApiResponse = /** status 200 Success */
   | UserDto
   | /** status 204 Success */ undefined;
 export type GetUserApiArg = void;
@@ -159,9 +159,10 @@ export type CreatePostApiResponse = /** status 201 Success */ PostDetailsDto;
 export type CreatePostApiArg = {
   body: {
     IsFeatured: boolean;
-    Files?: Blob[];
-    Images?: Blob[];
-    PublishDate?: string;
+    NewFiles?: Blob[];
+    NewImages?: Blob[];
+    PublishDate: string;
+    ModifiedDate?: string;
     IntroText?: string;
     IsPublished: boolean;
     CategoryId: number;
@@ -177,7 +178,10 @@ export type EditPostApiArg = {
     IsFeatured: boolean;
     Files?: string[];
     Images?: string[];
-    PublishDate?: string;
+    NewFiles?: Blob[];
+    NewImages?: Blob[];
+    PublishDate: string;
+    ModifiedDate?: string;
     IntroText?: string;
     IsPublished: boolean;
     CategoryId: number;
@@ -265,7 +269,7 @@ export type MenuDto = {
   name: string;
   slug?: string | null;
   isPublished: boolean;
-  categoryId: number;
+  language: LanguageDto;
   url?: string | null;
   parentMenuId?: number | null;
 };
@@ -274,7 +278,7 @@ export type MenuCreateDto = {
   name: string;
   isPublished: boolean;
   slug?: string | null;
-  categoryId: number;
+  languageId: number;
   url?: string | null;
   parentMenuId?: number | null;
 };
@@ -294,6 +298,7 @@ export type PostDto = {
   isPublished: boolean;
   category: CategoryDto;
   publishDate: string;
+  modifiedDate?: string | null;
   slug: string;
   title: string;
 };
@@ -307,6 +312,7 @@ export type PostDetailsDto = {
   isPublished: boolean;
   category: CategoryDto;
   publishDate: string;
+  modifiedDate?: string | null;
   slug: string;
   text?: string | null;
   title: string;

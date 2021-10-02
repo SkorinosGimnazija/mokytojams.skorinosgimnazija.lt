@@ -1,6 +1,7 @@
 import React from 'react';
 import { EditPost } from '../pages/posts/EditPost';
 import { ViewPosts } from '../pages/posts/ViewPosts';
+import { ViewMenus } from '../pages/menus/ViewMenus';
 import { AuthRole } from '../store/authSlice';
 
 export const routes: RoutesGroup[] = [
@@ -24,6 +25,24 @@ export const routes: RoutesGroup[] = [
             slug: '/edit/:id',
             component: EditPost,
           },
+        ],
+      },
+      {
+        name: 'Menus',
+        slug: '/menus',
+        innerRoutes: [
+          {
+            slug: '/',
+            component: ViewMenus,
+          },
+          // {
+          //   slug: '/create',
+          //   component: EditMenu,
+          // },
+          // {
+          //   slug: '/edit/:id',
+          //   component: EditMenu,
+          // },
         ],
       },
     ],
