@@ -43,10 +43,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NotFound } from '../NotFound';
+import { htmlToMarkdown } from '../../lib/converter';
 
 // TODO clean up
 export const EditPost = () => {
   const history = useHistory();
+  const textAreaRef = React.useRef<HTMLTextAreaElement>();
   const redirected = Boolean(useSearchParam('redirected'));
   const postId = Number(useParams<{ id?: string }>().id);
   const [priviewMode, setPriviewMode] = React.useState(false);
@@ -169,7 +171,7 @@ export const EditPost = () => {
                     {priviewMode && <Divider />}
                     {priviewMode && <Markdown>{values.text}</Markdown>}
 
-                    {!priviewMode && (
+                    {/* {!priviewMode && (
                       <Field
                         id="introText"
                         label="Intro"
@@ -180,10 +182,11 @@ export const EditPost = () => {
                         onChange={handleChange}
                         component={TextField}
                       />
-                    )}
+                    )} */}
 
                     {!priviewMode && (
                       <Field
+                        inputRef={textAreaRef}
                         id="text"
                         label="Full article"
                         autoComplete="off"
@@ -192,6 +195,32 @@ export const EditPost = () => {
                         value={values.text}
                         onChange={handleChange}
                         component={TextField}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            padding: '15px 5px',
+                          },
+                          '& .MuiInputBase-input': {
+                            padding: '0px 20px',
+                          },
+                        }}
+                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+                          const html = e.clipboardData.getData('text/html');
+                          if (!html) {
+                            return;
+                          }
+
+                          const markdownText = htmlToMarkdown(html);
+                          // if (!markdownText) {
+                          //   throw 'HTML parsing failed';
+                          // }
+
+                          const input = textAreaRef.current;
+                          const startText = values.text.slice(0, input?.selectionStart ?? 0);
+                          const endText = values.text.slice(input?.selectionEnd ?? 0);
+
+                          setFieldValue('text', startText + markdownText + endText);
+                          e.preventDefault();
+                        }}
                       />
                     )}
                   </Grid>

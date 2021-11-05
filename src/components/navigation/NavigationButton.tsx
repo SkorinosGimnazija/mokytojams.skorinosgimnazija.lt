@@ -18,7 +18,7 @@ export const NavigationButton: React.FC<Props> = ({ name, slug }) => {
   return (
     <>
       <ListItemButton component={Link} to={slug} onClick={() => dispatch(hideDrawer())}>
-        <ListItemIcon>
+        <ListItemIcon sx={{ minWidth: '2rem' }}>
           <ArrowForwardIosOutlinedIcon color="primary" fontSize="small" />
         </ListItemIcon>
         <ListItemText primary={name} />

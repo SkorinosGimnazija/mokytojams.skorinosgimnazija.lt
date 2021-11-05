@@ -3,7 +3,7 @@ import { SquareLoader } from '../../components/loadingSpinners/SquareLoader';
 import { useGetMenusQuery } from '../../services/generated.api';
 
 export const ViewMenus = () => {
-  const menusQuery = useGetMenusQuery({}, { refetchOnMountOrArgChange: true });
+  const menusQuery = useGetMenusQuery(undefined, { refetchOnMountOrArgChange: true });
 
   if (menusQuery.isLoading) {
     return <SquareLoader />;
