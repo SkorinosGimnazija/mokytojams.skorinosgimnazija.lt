@@ -3,11 +3,11 @@
   "clean_urls": true,
   "error_page": "404.html",
   "headers": {
-    "/": {
-      "Cache-Control": "no-cache"
-    },
     "/_next/static/**": {
       "Cache-Control": "public, max-age=31536000, immutable"
+    },
+    "/**": {
+      "Cache-Control": "no-cache"
     }
   }
 }
