@@ -2,10 +2,6 @@
   "root": "build/",
   "clean_urls": true,
   "error_page": "404.html",
-  "logging": {
-    "access": "off",
-    "error": "off"
-  },
   "headers": {
     "/": {
       "Cache-Control": "no-cache"
