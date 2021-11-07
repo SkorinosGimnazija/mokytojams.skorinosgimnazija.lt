@@ -3,8 +3,8 @@
   "clean_urls": true,
   "error_page": "404.html",
   "logging": {
-    "access": false,
-    "error": false
+    "access": "off",
+    "error": "off"
   },
   "headers": {
     "/": {
