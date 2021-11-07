@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Markdown, { compiler } from 'markdown-to-jsx';
-import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/authContext';
 
