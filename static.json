@@ -12,5 +12,8 @@
   },
   "routes": {
     "/**": "index.html"
+  },
+  "logging": {
+    "access": false
   }
 }
