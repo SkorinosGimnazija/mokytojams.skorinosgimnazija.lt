@@ -24,7 +24,7 @@
     "date-fns": "^2.21.3",
     "lodash": "^4.17.21",
     "markdown-to-jsx": "^7.1.2",
-    "next": "^11.0.1",
+    "next": "^11.1.1",
     "postcss": "^8.2.13",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
