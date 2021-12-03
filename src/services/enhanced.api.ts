@@ -1,11 +1,11 @@
-import { api } from './generated.api';
+import { api } from './api';
 
 const enhancedApi = api.enhanceEndpoints({
   endpoints: {
-    searchPost: {
+    searchPosts: {
       keepUnusedDataFor: 0,
     },
   },
 });
 
-export const { useSearchPostQuery } = enhancedApi;
+export const { useSearchPostsQuery } = enhancedApi;

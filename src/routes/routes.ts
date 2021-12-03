@@ -1,7 +1,4 @@
-import React from 'react';
-import { EditPost } from '../pages/posts/EditPost';
-import { ViewPosts } from '../pages/posts/ViewPosts';
-import { ViewMenus } from '../pages/menus/ViewMenus';
+import React, { lazy } from 'react';
 import { AuthRole } from '../store/authSlice';
 
 export const routes: RoutesGroup[] = [
@@ -15,15 +12,15 @@ export const routes: RoutesGroup[] = [
         innerRoutes: [
           {
             slug: '/',
-            component: ViewPosts,
+            lazyElement: lazy(() => import('../pages/posts/ViewPosts')),
           },
           {
             slug: '/create',
-            component: EditPost,
+            lazyElement: lazy(() => import('../pages/posts/EditPost')),
           },
           {
             slug: '/edit/:id',
-            component: EditPost,
+            lazyElement: lazy(() => import('../pages/posts/EditPost')),
           },
         ],
       },
@@ -33,7 +30,7 @@ export const routes: RoutesGroup[] = [
         innerRoutes: [
           {
             slug: '/',
-            component: ViewMenus,
+            lazyElement: lazy(() => import('../pages/menus/ViewMenus')),
           },
           // {
           //   slug: '/create',
@@ -63,5 +60,5 @@ interface Route {
 
 interface InnerRoute {
   slug: string;
-  component: React.ComponentType;
+  lazyElement: React.LazyExoticComponent<() => JSX.Element>;
 }

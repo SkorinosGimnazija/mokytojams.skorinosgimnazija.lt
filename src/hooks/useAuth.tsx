@@ -1,31 +1,12 @@
-import React from 'react';
-import { useGetUserQuery } from '../services/generated.api';
-import {
-  AuthRole,
-  selectIsAuthenticated,
-  selectUserName,
-  selectUserRoles,
-} from '../store/authSlice';
-import { useAppSelector } from './useAppSelector';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/authContext';
+import { AuthRole } from '../store/authSlice';
 
 export const useAuth = () => {
-  const userQuery = useGetUserQuery();
-  const userName = useAppSelector(selectUserName);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const roles = useAppSelector(selectUserRoles);
-
-  React.useEffect(() => {
-    if (!userQuery.isError) {
-      return;
-    }
-
-    console.error(userQuery.error);
-  }, [userQuery.isError, userQuery.error]);
+  const context = useContext(AuthContext);
 
   return {
-    userName,
-    isAuthenticated,
-    isLoading: userQuery.isLoading || userQuery.isError,
-    hasRole: (role: AuthRole) => roles.includes(role),
+    ...context,
+    hasRole: (role: AuthRole) => context.roles?.includes(role),
   };
 };

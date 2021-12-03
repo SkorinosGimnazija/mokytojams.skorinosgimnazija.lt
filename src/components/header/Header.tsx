@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, Chip, Link, Stack } from '@mui/material';
+import { Link, Stack } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,14 +8,14 @@ import { Box } from '@mui/system';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { toggleDrawer } from '../drawer/drawerSlice';
+import { toggleDrawer } from '../../store/drawerSlice';
 import { UserProfile } from './UserProfile';
 
 export const Header = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <AppBar position="fixed" elevation={0} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
         <IconButton
           color="inherit"

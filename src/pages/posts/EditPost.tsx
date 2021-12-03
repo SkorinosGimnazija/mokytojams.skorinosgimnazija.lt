@@ -23,7 +23,7 @@ import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useSearchParam } from 'react-use';
 import { SaveButton } from '../../components/buttons/SaveButton';
 import { SquareLoader } from '../../components/loadingSpinners/SquareLoader';
@@ -32,9 +32,8 @@ import {
   PostDetailsDto,
   useCreatePostMutation,
   useEditPostMutation,
-  useGetCategoriesQuery,
   useGetPostByIdQuery,
-} from '../../services/generated.api';
+} from '../../services/api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -46,18 +45,20 @@ import { NotFound } from '../NotFound';
 import { htmlToMarkdown } from '../../lib/converter';
 
 // TODO clean up
-export const EditPost = () => {
-  const history = useHistory();
+export default function EditPost() {
+  const params = useParams();
+  const postId = Number(params.id);
+  const history = useNavigate();
   const textAreaRef = React.useRef<HTMLTextAreaElement>();
+  const focusedAreaRef = React.useRef<HTMLTextAreaElement>();
   const redirected = Boolean(useSearchParam('redirected'));
-  const postId = Number(useParams<{ id?: string }>().id);
   const [priviewMode, setPriviewMode] = React.useState(false);
   const [currentImageBlobUrls, setCurrentImageBlobUrls] = React.useState<
     { url: string; file: File }[]
   >([]);
   const [open, setOpen] = React.useState(false);
   const [openFiles, setOpenFiles] = React.useState(false);
-  const categoryQuery = useGetCategoriesQuery();
+  // const categoryQuery = useGetCategoriesQuery();
   const postQuery = useGetPostByIdQuery(
     { id: postId },
     { skip: !postId, refetchOnMountOrArgChange: true }
@@ -66,7 +67,7 @@ export const EditPost = () => {
   const [createPostMutation] = useCreatePostMutation();
   const [editPostMutation] = useEditPostMutation();
 
-  if (categoryQuery.isLoading || postQuery.isFetching) {
+  if (postQuery.isFetching) {
     return <SquareLoader />;
   }
 
@@ -84,7 +85,8 @@ export const EditPost = () => {
         text: postQuery.data?.text ?? '',
         isFeatured: postQuery.data?.isFeatured ?? false,
         isPublished: postQuery.data?.isPublished ?? false,
-        categoryId: postQuery.data?.categoryId ?? categoryQuery.data?.[0]?.id ?? '',
+        languageId: 1,
+        categoryId: 1,
         publishDate: format(
           postQuery.data?.publishDate ? new Date(postQuery.data.publishDate) : new Date(),
           "yyyy-MM-dd'T'HH:mm"
@@ -101,9 +103,11 @@ export const EditPost = () => {
           // @ts-ignore
           const value = values[key];
 
-          if (Array.isArray(value)) {
+          if (key === 'publishDate' || key === 'modifiedDate') {
+            if (value) formData.set(key, new Date(value).toISOString());
+          } else if (Array.isArray(value)) {
             Array.from(value).forEach((file) => {
-              formData.append(key, file as Blob);
+              formData.append(key, file);
             });
           } else {
             formData.set(key, value);
@@ -123,10 +127,12 @@ export const EditPost = () => {
           createPostMutation({ body: formData as any }).then((response) => {
             const postData = (response as any).data as PostDetailsDto;
             if (postData) {
-              history.replace({
-                pathname: `/posts/edit/${postData.id}`,
-                search: new URLSearchParams({ redirected: String(true) }).toString(),
-              });
+              history(`/posts/edit/${postData.id}`, { replace: true });
+
+              // history.replace({
+              //   pathname: `/posts/edit/${postData.id}`,
+              //   search: new URLSearchParams({ redirected: String(true) }).toString(),
+              // });
             } else {
               setSubmitting(false);
             }
@@ -171,7 +177,7 @@ export const EditPost = () => {
                     {priviewMode && <Divider />}
                     {priviewMode && <Markdown>{values.text}</Markdown>}
 
-                    {/* {!priviewMode && (
+                    {!priviewMode && (
                       <Field
                         id="introText"
                         label="Intro"
@@ -182,7 +188,7 @@ export const EditPost = () => {
                         onChange={handleChange}
                         component={TextField}
                       />
-                    )} */}
+                    )}
 
                     {!priviewMode && (
                       <Field
@@ -257,15 +263,14 @@ export const EditPost = () => {
                         value={values.categoryId}
                         label="Category"
                         onChange={handleChange}
-                        required
                       >
-                        {categoryQuery.data?.map((x) => {
+                        {/* {categoryQuery.data?.map((x) => {
                           return (
                             <MenuItem key={x.id} value={x.id}>
                               {x.name} ({x.language.slug})
                             </MenuItem>
                           );
-                        })}
+                        })} */}
                       </Select>
                     </FormControl>
 
@@ -468,4 +473,4 @@ export const EditPost = () => {
       )}
     </Formik>
   );
-};
+}

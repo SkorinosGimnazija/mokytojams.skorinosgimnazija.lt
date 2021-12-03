@@ -9,12 +9,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import React from 'react';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAuth } from '../../hooks/useAuth';
-import { useLogoutMutation } from '../../services/generated.api';
 
 export const UserProfile = () => {
   const auth = useAuth();
-  const [logout] = useLogoutMutation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   if (!auth.isAuthenticated) {
@@ -27,6 +26,10 @@ export const UserProfile = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const logout = () => {
+    auth.logOut();
   };
 
   return (
@@ -51,7 +54,7 @@ export const UserProfile = () => {
           <Typography component="span">{auth.userName}</Typography>
         </ListItem>
         <Divider />
-        <MenuItem onClick={() => logout()}>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

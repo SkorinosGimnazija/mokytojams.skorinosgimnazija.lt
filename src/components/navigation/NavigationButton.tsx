@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { hideDrawer } from '../drawer/drawerSlice';
+import { hideDrawer } from '../../store/drawerSlice';
 
 interface Props {
   name: string;
@@ -17,7 +17,15 @@ export const NavigationButton: React.FC<Props> = ({ name, slug }) => {
 
   return (
     <>
-      <ListItemButton component={Link} to={slug} onClick={() => dispatch(hideDrawer())}>
+      <ListItemButton
+        dense
+        disableRipple
+        disableTouchRipple
+        component={Link}
+        to={slug}
+        sx={{ margin: '0 10px', borderRadius: '10px' }}
+        onClick={() => dispatch(hideDrawer())}
+      >
         <ListItemIcon sx={{ minWidth: '2rem' }}>
           <ArrowForwardIosOutlinedIcon color="primary" fontSize="small" />
         </ListItemIcon>

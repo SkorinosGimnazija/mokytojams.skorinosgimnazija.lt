@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { api, PostDto } from '../services/generated.api';
+import { api, PostDto } from '../services/api';
 import uniqBy from 'lodash/uniqBy';
 import merge from 'lodash/merge';
 
@@ -46,7 +46,7 @@ const postsSlice = createSlice({
         const { id: postId } = action.meta.arg.originalArgs;
         state.posts = state.posts.filter((x) => x.id !== postId);
       })
-      .addMatcher(api.endpoints.searchPost.matchFulfilled, (state, action) => {
+      .addMatcher(api.endpoints.searchPosts.matchFulfilled, (state, action) => {
         const payload = action.payload;
         const args = action.meta.arg.originalArgs;
 

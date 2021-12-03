@@ -15,7 +15,6 @@ export const Home = () => {
     return (
       <>
         <GoogleLoginButoon />
-        <Typography marginTop={2}>tik @skorinosgimnazija.lt</Typography>
       </>
     );
   };

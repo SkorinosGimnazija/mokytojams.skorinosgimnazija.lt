@@ -1,8 +1,8 @@
 import React from 'react';
 import { SquareLoader } from '../../components/loadingSpinners/SquareLoader';
-import { useGetMenusQuery } from '../../services/generated.api';
+import { useGetMenusQuery } from '../../services/api';
 
-export const ViewMenus = () => {
+export default function ViewMenus() {
   const menusQuery = useGetMenusQuery(undefined, { refetchOnMountOrArgChange: true });
 
   if (menusQuery.isLoading) {
@@ -16,10 +16,10 @@ export const ViewMenus = () => {
         ?.map((x) => {
           return (
             <li key={x.id}>
-              {x.name} {x.order}
+              {x.title} {x.order}
             </li>
           );
         })}
     </div>
   );
-};
+}

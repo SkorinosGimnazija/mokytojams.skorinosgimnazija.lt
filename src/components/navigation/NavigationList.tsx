@@ -30,7 +30,6 @@ export const NavigationList = () => {
                   return <NavigationButton key={route.slug} name={route.name} slug={route.slug} />;
                 })}
               </List>
-              <Divider />
             </React.Fragment>
           );
         })}

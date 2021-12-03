@@ -9,12 +9,11 @@ import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  GetPostsApiResponse,
   PostDto,
   PostPatchDto,
   useDeletePostMutation,
   usePatchPostMutation,
-} from '../../../services/generated.api';
+} from '../../../services/api';
 import { DeleteButton } from '../../buttons/DeleteButton';
 import { FeatureButton } from '../../buttons/FeatureButton';
 import { PublishButton } from '../../buttons/PublishButton';
@@ -74,14 +73,14 @@ export const PostsList: React.FC<Props> = ({ data }) => {
                 <Typography variant="caption">{post.slug}</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography> {post.category?.name}</Typography>
-                <Typography variant="caption">{post.category?.language?.name}</Typography>
+                <Typography> {post.language?.name}</Typography>
+                <Typography variant="caption">{post.showInFeed}</Typography>
               </TableCell>
               <TableCell align="center">
-                {new Date(post.publishDate!).toLocaleDateString('lt')}
+                {new Date(post.publishDate!).toLocaleString('lt')}
               </TableCell>
               <TableCell align="right">
-                <DeleteButton icon onConfirm={() => handleDelete(post.id)} />
+                <DeleteButton icon onConfirm={() => handleDelete(post.id!)} />
               </TableCell>
             </TableRow>
           ))}
