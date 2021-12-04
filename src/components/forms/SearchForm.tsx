@@ -1,34 +1,26 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import React from 'react';
-// import { useHistory } from 'react-router-dom';
-import { useDebounce, useMount, useUpdateEffect } from 'react-use';
+import { useDebounce } from 'react-use';
 
-export const SearchForm: React.FC = () => {
+interface Props {
+  onChange: (query: string) => void;
+}
+
+export const SearchForm: React.FC<Props> = ({ onChange }) => {
   const [searchInput, setSearchInput] = React.useState('');
-  // const history = useHistory();
 
-  // useMount(() => {
-  //   const searchParam = new URLSearchParams(history.location.search).get('q');
-  //   if (searchParam) setSearchInput(searchParam);
-  // });
-
-  // useUpdateEffect(() => {
-  //   if (!searchInput) history.push({});
-  // }, [searchInput]);
-
-  // useDebounce(
-  //   () => {
-  //     if (searchInput) {
-  //       history.push({ search: new URLSearchParams({ q: searchInput }).toString() });
-  //     }
-  //   },
-  //   500,
-  //   [searchInput]
-  // );
+  useDebounce(
+    () => {
+      onChange(searchInput);
+    },
+    300,
+    [searchInput]
+  );
 
   const handleSearchClear = () => {
     setSearchInput('');
+    onChange('');
   };
 
   return (

@@ -1,30 +1,24 @@
 import { Link, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  PostDto,
-  PostPatchDto,
-  useDeletePostMutation,
-  usePatchPostMutation,
-} from '../../../services/api';
+import { useDeletePostMutation, usePatchPostMutation } from '../../../services/api';
+import { PostDto, PostPatchDto } from '../../../services/generatedApi';
 import { DeleteButton } from '../../buttons/DeleteButton';
 import { FeatureButton } from '../../buttons/FeatureButton';
 import { PublishButton } from '../../buttons/PublishButton';
+import { DefaultTable, DefaultTableProps } from '../../table/DefaultTable';
 
-interface Props {
+interface Props extends DefaultTableProps {
   data?: PostDto[];
 }
 
-export const PostsList: React.FC<Props> = ({ data }) => {
-  const [patchPost] = usePatchPostMutation();
-  const [deletePost] = useDeletePostMutation();
+export const PostsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
+  const [patchPost, { isLoading: patchLoading }] = usePatchPostMutation();
+  const [deletePost, { isLoading: deleteLoading }] = useDeletePostMutation();
 
   const handlePatch = (id: number, postPatchDto: PostPatchDto) => {
     patchPost({ id, postPatchDto });
@@ -35,57 +29,57 @@ export const PostsList: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <TableContainer component={Paper} elevation={4}>
-      <Table>
+    <>
+      <DefaultTable {...props} isLoading={isLoading || patchLoading || deleteLoading}>
         <TableHead>
           <TableRow>
             <TableCell width="120px"></TableCell>
             <TableCell>Title</TableCell>
             <TableCell width="200px" align="right">
-              Category
+              Language
             </TableCell>
             <TableCell width="200px" align="center">
-              Publish date
+              Date
             </TableCell>
             <TableCell width="100px" align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.map((post) => (
-            <TableRow
-              key={post.id}
-              sx={{ ':hover': { backgroundColor: (theme) => theme.palette.grey[200] } }}
-            >
+            <TableRow hover key={post.id}>
               <TableCell>
                 <PublishButton
                   active={post.isPublished}
-                  onClick={() => handlePatch(post.id!, { isPublished: !post.isPublished })}
+                  onClick={() => handlePatch(post.id, { isPublished: !post.isPublished })}
                 />
                 <FeatureButton
                   active={post.isFeatured}
-                  onClick={() => handlePatch(post.id!, { isFeatured: !post.isFeatured })}
+                  onClick={() => handlePatch(post.id, { isFeatured: !post.isFeatured })}
                 />
               </TableCell>
               <TableCell>
-                <Link underline="none" component={RouterLink} to={`/posts/edit/${post.id}`}>
+                <Link component={RouterLink} to={`/posts/edit/${post.id}`}>
                   <Typography>{post.title}</Typography>
                 </Link>
                 <Typography variant="caption">{post.slug}</Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography> {post.language?.name}</Typography>
-                <Typography variant="caption">{post.showInFeed}</Typography>
+                <Typography variant="caption">{post.showInFeed && <>In feed</>}</Typography>
               </TableCell>
               <TableCell align="center">
-                {new Date(post.publishDate!).toLocaleString('lt')}
+                <Typography> {new Date(post.publishDate).toLocaleString('lt')}</Typography>
+                <Typography variant="caption">
+                  {post.modifiedDate && new Date(post.modifiedDate).toLocaleString('lt')}
+                </Typography>
               </TableCell>
               <TableCell align="right">
-                <DeleteButton icon onConfirm={() => handleDelete(post.id!)} />
+                <DeleteButton onConfirm={() => handleDelete(post.id)} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
-    </TableContainer>
+      </DefaultTable>
+    </>
   );
 };

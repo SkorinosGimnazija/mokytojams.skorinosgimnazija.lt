@@ -1,12 +1,12 @@
 import React from 'react';
-import { SquareLoader } from '../../components/loadingSpinners/SquareLoader';
+import { CircularSpinner } from '../../components/loadingSpinners/CircularSpinner';
 import { useGetMenusQuery } from '../../services/api';
 
 export default function ViewMenus() {
   const menusQuery = useGetMenusQuery(undefined, { refetchOnMountOrArgChange: true });
 
   if (menusQuery.isLoading) {
-    return <SquareLoader />;
+    return <CircularSpinner />;
   }
 
   return (

@@ -5,7 +5,6 @@ import drawerSlice from './drawerSlice';
 import { api } from '../services/api';
 import authSlice from './authSlice';
 import { rtkQueryErrorHandler } from './middleware/errorHandler';
-import postsSlice from './postsSlice';
 
 const persistConfig = {
   key: 'user',
@@ -19,7 +18,6 @@ const persistedAuthSlice = persistReducer(persistConfig, authSlice);
 export const store = configureStore({
   reducer: {
     drawer: drawerSlice,
-    posts: postsSlice,
     auth: persistedAuthSlice,
     [api.reducerPath]: api.reducer,
   },

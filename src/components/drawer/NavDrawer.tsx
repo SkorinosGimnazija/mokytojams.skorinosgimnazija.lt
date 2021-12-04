@@ -32,7 +32,7 @@ export const NavDrawer = () => {
             boxSizing: 'border-box',
             width: '240px',
             border: '0',
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: 'primary.light',
           },
         }}
       >

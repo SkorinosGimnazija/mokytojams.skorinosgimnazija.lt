@@ -23,7 +23,7 @@ export const NavigationButton: React.FC<Props> = ({ name, slug }) => {
         disableTouchRipple
         component={Link}
         to={slug}
-        sx={{ margin: '0 10px', borderRadius: '10px' }}
+        sx={{ marginX: 2, borderRadius: 2 }}
         onClick={() => dispatch(hideDrawer())}
       >
         <ListItemIcon sx={{ minWidth: '2rem' }}>

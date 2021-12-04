@@ -1,5 +1,6 @@
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import { IconButton } from '@mui/material';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import { IconButton, Tooltip } from '@mui/material';
 import React from 'react';
 
 interface Props {
@@ -9,8 +10,10 @@ interface Props {
 
 export const PublishButton: React.FC<Props> = ({ active, onClick }) => {
   return (
-    <IconButton onClick={onClick}>
-      <CheckCircleOutlinedIcon color={active ? 'success' : 'action'} />
-    </IconButton>
+    <Tooltip title="Published">
+      <IconButton onClick={onClick}>
+        {active ? <CheckCircleOutlinedIcon color="success" /> : <CircleOutlinedIcon />}
+      </IconButton>
+    </Tooltip>
   );
 };
