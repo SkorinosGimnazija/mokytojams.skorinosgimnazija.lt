@@ -7,7 +7,7 @@ interface Props {
 
 export const SaveButton: React.FC<Props> = ({ disabled }) => {
   return (
-    <LoadingButton loading={disabled} variant="outlined" color="success" type="submit">
+    <LoadingButton loading={disabled} variant="contained" type="submit">
       Išsaugoti
     </LoadingButton>
   );

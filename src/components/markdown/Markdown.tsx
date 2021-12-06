@@ -17,16 +17,19 @@ export const Markdown: React.FC<Props> = ({ children }) => {
         '& p': {
           textAlign: 'justify',
         },
+        '& img': {
+          maxWidth: '100%',
+        },
       }}
     >
       <MarkdownJsx
         options={
           {
             // overrides: {
-            //   h1: {
-            //     component: MyParagraph,
+            //   img: {
+            //     component: MyImage,
             //     props: {
-            //       className: 'foo',
+            //       // props: 'foo',
             //     },
             //   },
             // },

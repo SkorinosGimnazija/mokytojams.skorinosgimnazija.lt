@@ -1,11 +1,4 @@
 export const htmlToMarkdown = (html: string) => {
-  const norm = normalize(html);
-  const md = markdown(norm);
-
-  return md;
-};
-
-const markdown = (html: string) => {
   const md = html
     .replaceAll(/<[/]?span>/g, '')
     .replaceAll(/<(?:i|em)>(.*?)<\/(?:i|em)>/g, '*$1*')
@@ -27,7 +20,7 @@ const markdown = (html: string) => {
   return md.trim();
 };
 
-const normalize = (html: string) => {
+export const normalizeHtml = (html: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(
     html.replaceAll(/\n|\r/g, ' ').replaceAll(/\s{2,}/g, ' '),
@@ -90,5 +83,5 @@ const normalize = (html: string) => {
     }
   }
 
-  return body.innerHTML;
+  return body;
 };

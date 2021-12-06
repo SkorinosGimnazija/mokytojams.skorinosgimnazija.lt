@@ -192,6 +192,7 @@ export type CreatePostApiArg = {
     LanguageId?: number;
     Slug?: string;
     Text?: string;
+    Meta?: string;
     Title?: string;
   };
 };
@@ -213,6 +214,7 @@ export type EditPostApiArg = {
     LanguageId?: number;
     Slug?: string;
     Text?: string;
+    Meta?: string;
     Title?: string;
   };
 };
@@ -297,6 +299,7 @@ export type PostDto = {
   slug: string;
   title: string;
   introText?: string | null;
+  meta?: string | null;
 };
 export type MenuDto = {
   id: number;
@@ -351,6 +354,7 @@ export type PostDetailsDto = {
   slug: string;
   title: string;
   introText?: string | null;
+  meta?: string | null;
   files: string[];
   images: string[];
   text?: string | null;

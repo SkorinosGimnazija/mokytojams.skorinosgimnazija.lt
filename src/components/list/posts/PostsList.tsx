@@ -68,9 +68,9 @@ export const PostsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 <Typography variant="caption">{post.showInFeed && <>In feed</>}</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography> {new Date(post.publishDate).toLocaleString('lt')}</Typography>
+                <Typography>{new Date(post.publishDate).toLocaleDateString('lt')}</Typography>
                 <Typography variant="caption">
-                  {post.modifiedDate && new Date(post.modifiedDate).toLocaleString('lt')}
+                  {post.modifiedDate && new Date(post.modifiedDate).toLocaleDateString('lt')}
                 </Typography>
               </TableCell>
               <TableCell align="right">
