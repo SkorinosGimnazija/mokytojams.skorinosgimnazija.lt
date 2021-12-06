@@ -3,9 +3,29 @@ name: CICD
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      - name: Build
+        run: npm ci
+        run: npm run build
+
+      - name: Test
+        run: npm run test --if-present
+
   deploy:
+    needs: [build]
+    name: CD
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
