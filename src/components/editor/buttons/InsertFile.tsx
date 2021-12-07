@@ -20,6 +20,14 @@ export const InsertFile: React.FC<Props> = ({ onInsert, values }) => {
   const [file, setFile] = useState('');
   const [fileName, setFileName] = useState('');
 
+  const files = React.useMemo(
+    () => [
+      ...(values.files?.map((x) => x.split('/')[1] ?? x) ?? []),
+      ...(values.newFiles?.map((x) => x.name) ?? []),
+    ],
+    [values.newFiles, values.files]
+  );
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -39,11 +47,6 @@ export const InsertFile: React.FC<Props> = ({ onInsert, values }) => {
     setFile('');
     setFileName('');
   };
-
-  const files = [
-    ...(values.files?.map((x) => x.split('/')[1] ?? x) ?? []),
-    ...(values.newFiles?.map((x) => x.name) ?? []),
-  ];
 
   return (
     <>

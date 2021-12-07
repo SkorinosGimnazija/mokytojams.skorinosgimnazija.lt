@@ -13,13 +13,12 @@ import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SaveButton } from '../../components/buttons/SaveButton';
 import { TextEditor } from '../../components/editor/TextEditor';
 import { CircularSpinner } from '../../components/loadingSpinners/CircularSpinner';
-import { FileUploader } from '../../components/uploader/FileUploader';
-import { ImageUploader } from '../../components/uploader/ImageUploader';
+import { FileUploader } from '../../components/modals/FileUploader';
+import { ImageUploader } from '../../components/modals/ImageUploader';
 import { slugify } from '../../lib/slugify';
 import {
   useCreatePostMutation,

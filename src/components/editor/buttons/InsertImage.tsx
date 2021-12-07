@@ -25,6 +25,15 @@ export const InsertImage: React.FC<Props> = ({ onInsert, values }) => {
   const [imageAlign, setImageAlign] = useState('center');
   const { getImageDimensions } = useImageInfo();
 
+  const files = React.useMemo(
+    () =>
+      [
+        ...(values.files?.map((x) => ({ file: x, fileName: x, name: x.split('/')[1] ?? x })) ?? []),
+        ...(values.newFiles?.map((x) => ({ file: x, fileName: x.name, name: x.name })) ?? []),
+      ].filter((x) => /.(jpg|jpeg|png|gif)$/i.test(x.name)),
+    [values.newFiles, values.files]
+  );
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -66,7 +75,10 @@ export const InsertImage: React.FC<Props> = ({ onInsert, values }) => {
       return;
     }
 
-    const src = `src="${FILE_REPLACE_TEMPLATE}/${image}"`;
+    const isStatic = typeof files.find((x) => x.fileName === image)?.file === 'string';
+    const src = `src="${
+      isStatic ? process.env.REACT_APP_STATIC_URL : FILE_REPLACE_TEMPLATE
+    }/${image}"`;
     const width = `width="${imageWidth}"`;
     const height = `height="${imageHeight}"`;
     const style = `style="${
@@ -82,11 +94,6 @@ export const InsertImage: React.FC<Props> = ({ onInsert, values }) => {
     setImageWidth(0);
     setImageHeight(0);
   };
-
-  const files = [
-    ...(values.files?.map((x) => ({ file: x, fileName: x, name: x.split('/')[1] ?? x })) ?? []),
-    ...(values.newFiles?.map((x) => ({ file: x, fileName: x.name, name: x.name })) ?? []),
-  ].filter((x) => /.(jpg|jpeg|png|gif)$/i.test(x.name));
 
   return (
     <>
