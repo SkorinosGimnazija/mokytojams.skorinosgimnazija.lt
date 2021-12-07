@@ -104,6 +104,7 @@ export default function EditPost() {
           });
         } else {
           createPostMutation({ body: formData as any }).then((response: any) => {
+            setSubmitting(false);
             const postData = response.data as PostDetailsDto;
             if (postData) {
               navigate({ pathname: `/posts/edit/${postData.id}`, search: 'new' });
@@ -181,6 +182,7 @@ export default function EditPost() {
                     <FormControl>
                       <InputLabel id="languageId-label">Language</InputLabel>
                       <Select
+                        required
                         labelId="languageId-label"
                         id="languageId"
                         name="languageId"

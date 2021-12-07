@@ -5,12 +5,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useDeletePostMutation, usePatchPostMutation } from '../../../services/api';
-import { PostDto, PostPatchDto } from '../../../services/generatedApi';
-import { DeleteButton } from '../../buttons/DeleteButton';
-import { FeatureButton } from '../../buttons/FeatureButton';
-import { PublishButton } from '../../buttons/PublishButton';
-import { DefaultTable, DefaultTableProps } from '../../table/DefaultTable';
+import { useDeletePostMutation, usePatchPostMutation } from '../../services/api';
+import { PostDto, PostPatchDto } from '../../services/generatedApi';
+import { DeleteButton } from '../buttons/DeleteButton';
+import { FeatureButton } from '../buttons/FeatureButton';
+import { PublishButton } from '../buttons/PublishButton';
+import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
 interface Props extends DefaultTableProps {
   data?: PostDto[];

@@ -32,14 +32,14 @@ export const routes: RoutesGroup[] = [
             slug: '/',
             lazyElement: lazy(() => import('../pages/menus/ViewMenus')),
           },
-          // {
-          //   slug: '/create',
-          //   component: EditMenu,
-          // },
-          // {
-          //   slug: '/edit/:id',
-          //   component: EditMenu,
-          // },
+          {
+            slug: '/create',
+            lazyElement: lazy(() => import('../pages/menus/EditMenu')),
+          },
+          {
+            slug: '/edit/:id',
+            lazyElement: lazy(() => import('../pages/menus/EditMenu')),
+          },
         ],
       },
     ],

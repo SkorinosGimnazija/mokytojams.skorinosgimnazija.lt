@@ -1,9 +1,12 @@
 import { generatedApi } from './generatedApi';
 
 const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ['Post'],
+  addTagTypes: ['Post', 'Menu'],
   endpoints: {
     getPublicLanguages: {
+      keepUnusedDataFor: 600,
+    },
+    getMenuLocations: {
       keepUnusedDataFor: 600,
     },
     searchPosts: {
@@ -27,6 +30,24 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deletePost: {
       invalidatesTags: ['Post'],
     },
+    getMenuById: {
+      providesTags: ['Menu'],
+    },
+    getMenus: {
+      providesTags: ['Menu'],
+    },
+    searchMenus: {
+      providesTags: ['Menu'],
+    },
+    editMenu: {
+      invalidatesTags: ['Menu'],
+    },
+    createMenu: {
+      invalidatesTags: ['Menu'],
+    },
+    deleteMenu: {
+      invalidatesTags: ['Menu'],
+    },
   },
 });
 
@@ -44,8 +65,10 @@ export const {
   useGetMenusQuery,
   useCreateMenuMutation,
   useEditMenuMutation,
+  useGetMenuLocationsQuery,
   useGetMenuByIdQuery,
   useDeleteMenuMutation,
+  useSearchMenusQuery,
   useGetPublicMenusByLanguageAndLocationQuery,
   useGetPostsQuery,
   useCreatePostMutation,

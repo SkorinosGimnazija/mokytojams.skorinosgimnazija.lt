@@ -1,25 +1,45 @@
+import { Stack } from '@mui/material';
+import { Box } from '@mui/system';
 import React from 'react';
-import { CircularSpinner } from '../../components/loadingSpinners/CircularSpinner';
-import { useGetMenusQuery } from '../../services/api';
+import { json } from 'stream/consumers';
+import { SearchForm } from '../../components/forms/SearchForm';
+import { CreateItemLink } from '../../components/links/CreateItemLink';
+import { MenusList } from '../../components/list/MenusList';
+import { PostsList } from '../../components/list/PostsList';
+import { useGetMenusQuery, useSearchMenusQuery } from '../../services/api';
 
 export default function ViewMenus() {
-  const menusQuery = useGetMenusQuery(undefined, { refetchOnMountOrArgChange: true });
-
-  if (menusQuery.isLoading) {
-    return <CircularSpinner />;
-  }
+  const [search, setSearch] = React.useState('');
+  const [pageNumber, setPageNumber] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+  const menuQuery = useGetMenusQuery({ items: pageSize, page: pageNumber }, { skip: !!search });
+  const searchQuery = useSearchMenusQuery(
+    { text: search, items: pageSize, page: pageNumber },
+    { skip: !search }
+  );
 
   return (
-    <div>
-      {menusQuery.data
-        ?.filter((x) => !x.parentMenuId)
-        ?.map((x) => {
-          return (
-            <li key={x.id}>
-              {x.title} {x.order}
-            </li>
-          );
-        })}
-    </div>
+    <Box>
+      <Stack direction="row" gap={4}>
+        <CreateItemLink to="/menus/create" />
+        <SearchForm
+          onChange={(e) => {
+            setPageNumber(0);
+            setSearch(e);
+          }}
+        />
+      </Stack>
+      <Box mt={4}>
+        <MenusList
+          data={search ? searchQuery.data?.items : menuQuery.data?.items}
+          totalCount={search ? searchQuery.data?.totalCount : menuQuery.data?.totalCount}
+          itemsPerPage={pageSize}
+          pageNumber={pageNumber}
+          isLoading={menuQuery.isFetching || searchQuery.isFetching}
+          onPageChange={(e) => setPageNumber(e)}
+          onRowsPerPageChange={(e) => setPageSize(e)}
+        />
+      </Box>
+    </Box>
   );
 }

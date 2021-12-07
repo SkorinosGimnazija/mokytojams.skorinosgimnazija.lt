@@ -33,7 +33,10 @@ const injectedRtkApi = api.injectEndpoints({
       query: () => ({ url: `/public` }),
     }),
     getMenus: build.query<GetMenusApiResponse, GetMenusApiArg>({
-      query: () => ({ url: `/Menus` }),
+      query: (queryArg) => ({
+        url: `/Menus`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
     }),
     createMenu: build.mutation<CreateMenuApiResponse, CreateMenuApiArg>({
       query: (queryArg) => ({ url: `/Menus`, method: 'POST', body: queryArg.menuCreateDto }),
@@ -41,11 +44,20 @@ const injectedRtkApi = api.injectEndpoints({
     editMenu: build.mutation<EditMenuApiResponse, EditMenuApiArg>({
       query: (queryArg) => ({ url: `/Menus`, method: 'PUT', body: queryArg.menuEditDto }),
     }),
+    getMenuLocations: build.query<GetMenuLocationsApiResponse, GetMenuLocationsApiArg>({
+      query: () => ({ url: `/locations` }),
+    }),
     getMenuById: build.query<GetMenuByIdApiResponse, GetMenuByIdApiArg>({
       query: (queryArg) => ({ url: `/Menus/${queryArg.id}` }),
     }),
     deleteMenu: build.mutation<DeleteMenuApiResponse, DeleteMenuApiArg>({
       query: (queryArg) => ({ url: `/Menus/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    searchMenus: build.query<SearchMenusApiResponse, SearchMenusApiArg>({
+      query: (queryArg) => ({
+        url: `/Menus/search/${queryArg.text}`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
     }),
     getPublicMenusByLanguageAndLocation: build.query<
       GetPublicMenusByLanguageAndLocationApiResponse,
@@ -149,8 +161,11 @@ export type GetPublicBannersByLanguageApiArg = {
 };
 export type GetPublicLanguagesApiResponse = /** status 200 Success */ LanguageDto[];
 export type GetPublicLanguagesApiArg = void;
-export type GetMenusApiResponse = /** status 200 Success */ MenuDto[];
-export type GetMenusApiArg = void;
+export type GetMenusApiResponse = /** status 200 Success */ MenuDtoPaginatedList;
+export type GetMenusApiArg = {
+  items?: number;
+  page?: number;
+};
 export type CreateMenuApiResponse = /** status 201 Success */ MenuDto;
 export type CreateMenuApiArg = {
   menuCreateDto: MenuCreateDto;
@@ -159,6 +174,8 @@ export type EditMenuApiResponse = /** status 200 Success */ undefined;
 export type EditMenuApiArg = {
   menuEditDto: MenuEditDto;
 };
+export type GetMenuLocationsApiResponse = /** status 200 Success */ MenuLocationDto[];
+export type GetMenuLocationsApiArg = void;
 export type GetMenuByIdApiResponse = /** status 200 Success */ MenuDto;
 export type GetMenuByIdApiArg = {
   id: number;
@@ -166,6 +183,12 @@ export type GetMenuByIdApiArg = {
 export type DeleteMenuApiResponse = /** status 204 Success */ undefined;
 export type DeleteMenuApiArg = {
   id: number;
+};
+export type SearchMenusApiResponse = /** status 200 Success */ MenuDtoPaginatedList;
+export type SearchMenusApiArg = {
+  text: string;
+  items?: number;
+  page?: number;
 };
 export type GetPublicMenusByLanguageAndLocationApiResponse = /** status 200 Success */ MenuDto[];
 export type GetPublicMenusByLanguageAndLocationApiArg = {
@@ -314,6 +337,14 @@ export type MenuDto = {
   parentMenuId?: number | null;
   childMenus: MenuDto[];
 };
+export type MenuDtoPaginatedList = {
+  items: MenuDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
 export type MenuCreateDto = {
   order: number;
   title: string;
@@ -325,15 +356,17 @@ export type MenuCreateDto = {
   parentMenuId?: number | null;
 };
 export type MenuEditDto = {
-  order: number;
+  id: number;
   title: string;
-  isPublished: boolean;
   slug: string;
+
+  order: number;
   languageId: number;
   menuLocationId: number;
+  isPublished: boolean;
   linkedPostId?: number | null;
+
   parentMenuId?: number | null;
-  id: number;
 };
 export type PostDtoPaginatedList = {
   items: PostDto[];

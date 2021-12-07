@@ -20,6 +20,8 @@ export const Markdown: React.FC<Props> = ({ children }) => {
         '& img': {
           maxWidth: '100%',
           objectFit: 'contain',
+        },
+        '& img[src^="{"]': {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundImage:
