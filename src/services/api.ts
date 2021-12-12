@@ -1,7 +1,7 @@
 import { generatedApi } from './generatedApi';
 
 const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ['Post', 'Menu'],
+  addTagTypes: ['Post', 'Menu', 'Banner'],
   endpoints: {
     getPublicLanguages: {
       keepUnusedDataFor: 600,
@@ -16,6 +16,15 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       providesTags: ['Post'],
     },
     getPostById: {
+      providesTags: ['Post'],
+    },
+    getPublicPostById: {
+      providesTags: ['Post'],
+    },
+    getPublicPostsByLanguage: {
+      providesTags: ['Post'],
+    },
+    searchPublicPosts: {
       providesTags: ['Post'],
     },
     patchPost: {
@@ -36,6 +45,9 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getMenus: {
       providesTags: ['Menu'],
     },
+    getPublicMenusByLanguageAndLocation: {
+      providesTags: ['Menu'],
+    },
     searchMenus: {
       providesTags: ['Menu'],
     },
@@ -47,6 +59,27 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     },
     deleteMenu: {
       invalidatesTags: ['Menu'],
+    },
+    getBannerById: {
+      providesTags: ['Banner'],
+    },
+    getBanners: {
+      providesTags: ['Banner'],
+    },
+    searchBanners: {
+      providesTags: ['Banner'],
+    },
+    getPublicBannersByLanguage: {
+      providesTags: ['Banner'],
+    },
+    createBanner: {
+      invalidatesTags: ['Banner'],
+    },
+    editBanner: {
+      invalidatesTags: ['Banner'],
+    },
+    deleteBanner: {
+      invalidatesTags: ['Banner'],
     },
   },
 });
@@ -60,6 +93,7 @@ export const {
   useEditBannerMutation,
   useGetBannerByIdQuery,
   useDeleteBannerMutation,
+  useSearchBannersQuery,
   useGetPublicBannersByLanguageQuery,
   useGetPublicLanguagesQuery,
   useGetMenusQuery,

@@ -42,6 +42,24 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'Banners',
+        slug: '/banners',
+        innerRoutes: [
+          {
+            slug: '/',
+            lazyElement: lazy(() => import('../pages/banners/ViewBanners')),
+          },
+          {
+            slug: '/create',
+            lazyElement: lazy(() => import('../pages/banners/EditBanner')),
+          },
+          {
+            slug: '/edit/:id',
+            lazyElement: lazy(() => import('../pages/banners/EditBanner')),
+          },
+        ],
+      },
     ],
   },
 ];

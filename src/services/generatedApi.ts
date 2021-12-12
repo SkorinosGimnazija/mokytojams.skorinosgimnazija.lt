@@ -9,7 +9,10 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     getBanners: build.query<GetBannersApiResponse, GetBannersApiArg>({
-      query: () => ({ url: `/Banners` }),
+      query: (queryArg) => ({
+        url: `/Banners`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
     }),
     createBanner: build.mutation<CreateBannerApiResponse, CreateBannerApiArg>({
       query: (queryArg) => ({ url: `/Banners`, method: 'POST', body: queryArg.body }),
@@ -22,6 +25,12 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     deleteBanner: build.mutation<DeleteBannerApiResponse, DeleteBannerApiArg>({
       query: (queryArg) => ({ url: `/Banners/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    searchBanners: build.query<SearchBannersApiResponse, SearchBannersApiArg>({
+      query: (queryArg) => ({
+        url: `/Banners/search/${queryArg.text}`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
     }),
     getPublicBannersByLanguage: build.query<
       GetPublicBannersByLanguageApiResponse,
@@ -122,8 +131,11 @@ export type AuthorizeApiResponse = /** status 200 Success */ UserAuthDto;
 export type AuthorizeApiArg = {
   googleAuthDto: GoogleAuthDto;
 };
-export type GetBannersApiResponse = /** status 200 Success */ BannerDto[];
-export type GetBannersApiArg = void;
+export type GetBannersApiResponse = /** status 200 Success */ BannerDtoPaginatedList;
+export type GetBannersApiArg = {
+  items?: number;
+  page?: number;
+};
 export type CreateBannerApiResponse = /** status 201 Success */ BannerDto;
 export type CreateBannerApiArg = {
   body: {
@@ -154,6 +166,12 @@ export type GetBannerByIdApiArg = {
 export type DeleteBannerApiResponse = /** status 204 Success */ undefined;
 export type DeleteBannerApiArg = {
   id: number;
+};
+export type SearchBannersApiResponse = /** status 200 Success */ BannerDtoPaginatedList;
+export type SearchBannersApiArg = {
+  text: string;
+  items?: number;
+  page?: number;
 };
 export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerDto[];
 export type GetPublicBannersByLanguageApiArg = {
@@ -292,6 +310,11 @@ export type ProblemDetails = {
 export type GoogleAuthDto = {
   token: string;
 };
+export type LanguageDto = {
+  id: number;
+  name: string;
+  slug: string;
+};
 export type BannerDto = {
   id: number;
   title: string;
@@ -299,12 +322,15 @@ export type BannerDto = {
   isPublished: boolean;
   pictureUrl: string;
   order: number;
-  languageId: number;
+  language: LanguageDto;
 };
-export type LanguageDto = {
-  id: number;
-  name: string;
-  slug: string;
+export type BannerDtoPaginatedList = {
+  items: BannerDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };
 export type MenuLocationDto = {
   id: number;
@@ -356,17 +382,15 @@ export type MenuCreateDto = {
   parentMenuId?: number | null;
 };
 export type MenuEditDto = {
-  id: number;
-  title: string;
-  slug: string;
-
   order: number;
+  title: string;
+  isPublished: boolean;
+  slug: string;
   languageId: number;
   menuLocationId: number;
-  isPublished: boolean;
   linkedPostId?: number | null;
-
   parentMenuId?: number | null;
+  id: number;
 };
 export type PostDtoPaginatedList = {
   items: PostDto[];
