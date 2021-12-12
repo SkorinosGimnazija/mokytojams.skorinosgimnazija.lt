@@ -9,10 +9,10 @@ import React, { useEffect, useState } from 'react';
 
 interface Props {
   values: { images?: string[] | null; newImages?: File[] | null };
-  setFieldValue: (field: string, value: any) => void;
+  setValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export const ImageUploader: React.FC<Props> = ({ setFieldValue, values }) => {
+export const ImageUploader: React.FC<Props> = ({ values, setValues }) => {
   const [open, setOpen] = React.useState(false);
   const [imagePriviews, setImagePreviews] = useState<{ url: string; file: File }[]>([]);
 
@@ -52,7 +52,7 @@ export const ImageUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                 const existingImages = values.newImages ?? [];
                 const newImages = uniqBy([...existingImages, ...addedImages], (x) => x.name);
 
-                setFieldValue('newImages', newImages);
+                setValues((x: any) => ({ ...x, newImages }));
                 setImagePreviews(newImages.map((x) => ({ url: URL.createObjectURL(x), file: x })));
               }}
             />
@@ -75,7 +75,7 @@ export const ImageUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                   onClick={() => {
                     const newImages = values.newImages!.filter((z) => z.name !== image.name);
 
-                    setFieldValue('newImages', newImages);
+                    setValues((x: any) => ({ ...x, newImages }));
                     setImagePreviews(
                       newImages.map((x) => ({ url: URL.createObjectURL(x), file: x }))
                     );
@@ -95,10 +95,10 @@ export const ImageUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                   color="error"
                   sx={{ position: 'absolute', cursor: 'pointer', right: 0 }}
                   onClick={() => {
-                    setFieldValue(
-                      'images',
-                      values.images?.filter((z) => z !== image)
-                    );
+                    setValues((x: any) => ({
+                      ...x,
+                      images: x.images?.filter((z: string) => z !== image),
+                    }));
                   }}
                 />
               </ImageListItem>

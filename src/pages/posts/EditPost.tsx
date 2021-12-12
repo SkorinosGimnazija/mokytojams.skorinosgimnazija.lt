@@ -7,16 +7,15 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
-import { Field, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SaveButton } from '../../components/buttons/SaveButton';
-import { TextEditor } from '../../components/editor/TextEditor';
-import { CircularSpinner } from '../../components/loadingSpinners/CircularSpinner';
+import { PostEditor } from '../../components/editor/PostEditor';
 import { FileUploader } from '../../components/modals/FileUploader';
 import { ImageUploader } from '../../components/modals/ImageUploader';
 import { slugify } from '../../lib/slugify';
@@ -29,251 +28,274 @@ import {
 import { PostDetailsDto } from '../../services/generatedApi';
 
 export default function EditPost() {
-  const params = useParams();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [priviewMode, setPriviewMode] = useState(false);
-
+  const navigate = useNavigate();
+  const params = useParams();
   const postId = Number(params.id);
   const isNewPost = searchParams.has('new');
 
-  const [skipPost, setSkipPost] = useState(false);
+  const [priviewMode, setPriviewMode] = useState(false);
+
+  const [skipPostFetch, setSkipPostFetch] = useState(false);
+
   const languageQuery = useGetPublicLanguagesQuery();
-  const postQuery = useGetPostByIdQuery({ id: postId }, { skip: !postId || skipPost });
+  const postQuery = useGetPostByIdQuery({ id: postId }, { skip: !postId || skipPostFetch });
 
-  const [createPostMutation] = useCreatePostMutation();
-  const [editPostMutation] = useEditPostMutation();
+  const [createPostMutation, createPostStatus] = useCreatePostMutation();
+  const [editPostMutation, editPostStatus] = useEditPostMutation();
 
-  if (postQuery.isFetching || languageQuery.isFetching) {
-    return <CircularSpinner />;
-  }
+  const [formData, setFormData] = useState({
+    id: postId,
+    images: null as string[] | null,
+    files: null as string[] | null,
+    newImages: null as File[] | null,
+    newFiles: null as File[] | null,
+    title: '',
+    slug: '',
+    introText: '',
+    text: '',
+    meta: '',
+    isFeatured: false,
+    isPublished: true,
+    showInFeed: true,
+    optimizeImages: true,
+    languageId: 0,
+    publishDate: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+    modifiedDate: !postId || isNewPost ? '' : format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+  });
+
+  useEffect(() => {
+    if (postId || !languageQuery.isSuccess || !languageQuery.data?.length) {
+      return;
+    }
+
+    setFormData((x) => ({ ...x, languageId: languageQuery.data[0].id }));
+  }, [languageQuery, postId, setFormData]);
+
+  useEffect(() => {
+    if (!postQuery.isSuccess) {
+      return;
+    }
+
+    setFormData((x) => ({
+      ...x,
+      images: postQuery.data.images,
+      files: postQuery.data.files,
+      title: postQuery.data.title,
+      slug: postQuery.data.slug,
+      introText: postQuery.data.introText ?? '',
+      text: postQuery.data.text ?? '',
+      meta: postQuery.data.meta ?? '',
+      isFeatured: postQuery.data.isFeatured,
+      isPublished: postQuery.data.isPublished,
+      showInFeed: postQuery.data.showInFeed,
+      languageId: postQuery.data.language.id,
+      publishDate: format(new Date(postQuery.data.publishDate), "yyyy-MM-dd'T'HH:mm"),
+    }));
+  }, [postQuery, setFormData]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setSkipPostFetch(true);
+
+    const form = new FormData();
+
+    for (const [key, value] of Object.entries(formData)) {
+      if (key === 'publishDate' || key === 'modifiedDate') {
+        if (value) form.set(key, new Date(value as string).toISOString());
+      } else if (Array.isArray(value)) {
+        Array.from(value as []).forEach((arrayItem) => {
+          form.append(key, arrayItem);
+        });
+      } else {
+        form.set(key, value as string);
+      }
+    }
+
+    if (postId) {
+      editPostMutation({ body: form as any }).then((response: any) => {
+        if (!response.error) {
+          setSkipPostFetch(false);
+        }
+      });
+    } else {
+      createPostMutation({ body: form as any }).then((response: any) => {
+        const postData = response.data as PostDetailsDto;
+        if (postData) {
+          navigate({ pathname: `/posts/edit/${postData.id}`, search: 'new' });
+        }
+      });
+    }
+  };
+
+  const handleChange = (
+    e: SelectChangeEvent<any> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((x) => ({ ...x, [e.target.name]: e.target.value }));
+  };
+
+  const handleNullableChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((x) => ({ ...x, [e.target.name]: e.target.value || null }));
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    setFormData((x) => ({ ...x, [e.target.name]: value }));
+  };
 
   return (
-    <Formik
-      enableReinitialize={false}
-      initialValues={{
-        id: postId,
-        images: postQuery.data?.images,
-        files: postQuery.data?.files,
-        newImages: null as File[] | null,
-        newFiles: null as File[] | null,
-        title: postQuery.data?.title ?? '',
-        slug: postQuery.data?.slug ?? '',
-        introText: postQuery.data?.introText ?? '',
-        text: postQuery.data?.text ?? '',
-        meta: postQuery.data?.meta ?? '',
-        isFeatured: postQuery.data?.isFeatured ?? false,
-        isPublished: postQuery.data?.isPublished ?? true,
-        showInFeed: postQuery.data?.showInFeed ?? true,
-        optimizeImages: true,
-        languageId: languageQuery.data
-          ? postQuery.data?.language?.id ?? languageQuery.data[0].id
-          : '',
-        publishDate: format(
-          new Date(postQuery.data?.publishDate ?? new Date()),
-          "yyyy-MM-dd'T'HH:mm"
-        ),
-        modifiedDate: !postId || isNewPost ? '' : format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        const formData = new FormData();
+    <form onSubmit={handleSubmit}>
+      <Grid container gap={4} direction="column" wrap="nowrap">
+        <Grid item>
+          <Grid container gap={4}>
+            <TextField
+              id="title"
+              name="title"
+              label="Title"
+              autoComplete="off"
+              required
+              sx={{ flex: '1 1 300px' }}
+              value={formData.title}
+              onChange={handleChange}
+              onBlur={(e) => setFormData((x) => ({ ...x, slug: slugify(e.target.value) }))}
+            />
 
-        for (const key in values) {
-          // @ts-ignore
-          const value = values[key];
+            <TextField
+              id="slug"
+              name="slug"
+              label="Slug"
+              autoComplete="off"
+              required
+              sx={{ flex: '1 1 300px' }}
+              value={formData.slug}
+              onChange={handleChange}
+            />
+          </Grid>
+        </Grid>
 
-          if (key === 'publishDate' || key === 'modifiedDate') {
-            if (value) formData.set(key, new Date(value).toISOString());
-          } else if (Array.isArray(value)) {
-            Array.from(value).forEach((file) => {
-              formData.append(key, file as Blob);
-            });
-          } else {
-            formData.set(key, value);
-          }
-        }
-
-        if (postId) {
-          setSkipPost(true);
-
-          editPostMutation({ body: formData as any }).then((response: any) => {
-            setSubmitting(false);
-            if (!response.error) {
-              setSkipPost(false);
-            }
-          });
-        } else {
-          createPostMutation({ body: formData as any }).then((response: any) => {
-            setSubmitting(false);
-            const postData = response.data as PostDetailsDto;
-            if (postData) {
-              navigate({ pathname: `/posts/edit/${postData.id}`, search: 'new' });
-            }
-          });
-        }
-      }}
-    >
-      {({ isSubmitting, setFieldValue, values, handleChange }) => (
-        <Form>
-          <Grid container gap={4} direction="column" wrap="nowrap">
-            <Grid item>
-              <Grid container gap={4}>
-                <Field
-                  id="title"
-                  label="Title"
-                  autoComplete="off"
-                  required
-                  sx={{ flex: '1 1 300px' }}
-                  value={values.title}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    handleChange(e);
-                    setFieldValue('slug', slugify(e.target.value));
-                  }}
-                  component={TextField}
-                />
-
-                <Field
-                  id="slug"
-                  label="Slug"
-                  autoComplete="off"
-                  required
-                  sx={{ flex: '1 1 300px' }}
-                  value={values.slug}
-                  onChange={handleChange}
-                  component={TextField}
-                />
+        <Grid item>
+          <Grid container direction="row" gap={4}>
+            <Grid item sx={{ flex: '2 1 400px' }}>
+              <Grid container gap={4} direction="column">
+                <PostEditor previewMode={priviewMode} values={formData} setValues={setFormData} />
               </Grid>
             </Grid>
+            <Grid item sx={{ flex: '1' }}>
+              <Grid container direction="column" gap={2}>
+                <TextField
+                  id="publishDate"
+                  name="publishDate"
+                  type="datetime-local"
+                  label="Publish date"
+                  required
+                  value={formData.publishDate}
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleChange}
+                />
 
-            <Grid item>
-              <Grid container direction="row" gap={4}>
-                <Grid item sx={{ flex: '2 1 400px' }}>
-                  <Grid container gap={4} direction="column">
-                    <TextEditor
-                      previewMode={priviewMode}
-                      values={values}
-                      setFieldValue={setFieldValue}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item sx={{ flex: '1' }}>
-                  <Grid container direction="column" gap={2}>
-                    <Field
-                      type="datetime-local"
-                      id="publishDate"
-                      label="Publish date"
-                      required
-                      value={values.publishDate}
-                      onChange={handleChange}
-                      component={TextField}
-                      InputLabelProps={{ shrink: true }}
-                    />
+                <TextField
+                  id="modifiedDate"
+                  name="modifiedDate"
+                  type="datetime-local"
+                  label="Modified date"
+                  value={formData.modifiedDate}
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleChange}
+                />
 
-                    <Field
-                      type="datetime-local"
-                      id="modifiedDate"
-                      label="Modified date"
-                      value={values.modifiedDate}
-                      onChange={handleChange}
-                      component={TextField}
-                      InputLabelProps={{ shrink: true }}
-                    />
+                <FormControl>
+                  <InputLabel id="languageId-label">Language</InputLabel>
+                  <Select
+                    id="languageId"
+                    name="languageId"
+                    labelId="languageId-label"
+                    label="Language"
+                    required
+                    value={formData.languageId || ''}
+                    onChange={handleChange}
+                  >
+                    {languageQuery.data?.map((x) => {
+                      return (
+                        <MenuItem key={x.id} value={x.id}>
+                          {x.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
 
-                    <FormControl>
-                      <InputLabel id="languageId-label">Language</InputLabel>
-                      <Select
-                        required
-                        labelId="languageId-label"
-                        id="languageId"
-                        name="languageId"
-                        value={values.languageId}
-                        label="Language"
-                        onChange={handleChange}
-                      >
-                        {languageQuery.data?.map((x) => {
-                          return (
-                            <MenuItem key={x.id} value={x.id}>
-                              {x.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-
-                    <FormGroup
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="isPublished"
-                            checked={Boolean(values.isPublished)}
-                            onChange={handleChange}
-                          />
-                        }
-                        label="Published"
+                <FormGroup
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <FormControlLabel
+                    label="Published"
+                    control={
+                      <Checkbox
+                        name="isPublished"
+                        checked={formData.isPublished}
+                        onChange={handleCheckboxChange}
                       />
+                    }
+                  />
 
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="showInFeed"
-                            checked={Boolean(values.showInFeed)}
-                            onChange={handleChange}
-                          />
-                        }
-                        label="Show in feed"
+                  <FormControlLabel
+                    label="Show in feed"
+                    control={
+                      <Checkbox
+                        name="showInFeed"
+                        checked={formData.showInFeed}
+                        onChange={handleCheckboxChange}
                       />
+                    }
+                  />
 
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="isFeatured"
-                            checked={Boolean(values.isFeatured)}
-                            onChange={handleChange}
-                          />
-                        }
-                        label="Featured"
+                  <FormControlLabel
+                    label="Featured"
+                    control={
+                      <Checkbox
+                        name="isFeatured"
+                        checked={formData.isFeatured}
+                        onChange={handleCheckboxChange}
                       />
+                    }
+                  />
 
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name="optimizeImages"
-                            checked={Boolean(values.optimizeImages)}
-                            onChange={handleChange}
-                          />
-                        }
-                        label="Optimize gallery"
+                  <FormControlLabel
+                    label="Optimize gallery"
+                    control={
+                      <Checkbox
+                        name="optimizeImages"
+                        checked={formData.optimizeImages}
+                        onChange={handleCheckboxChange}
                       />
-                    </FormGroup>
+                    }
+                  />
+                </FormGroup>
 
-                    <ImageUploader setFieldValue={setFieldValue} values={values} />
+                <ImageUploader setValues={setFormData} values={formData} />
 
-                    <FileUploader setFieldValue={setFieldValue} values={values} />
+                <FileUploader setValues={setFormData} values={formData} />
 
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      color="primary"
-                      component="span"
-                      onClick={() => setPriviewMode((x) => !x)}
-                    >
-                      Priview
-                    </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  component="span"
+                  onClick={() => setPriviewMode((x) => !x)}
+                >
+                  Priview
+                </Button>
 
-                    <SaveButton disabled={isSubmitting} />
-                  </Grid>
-                </Grid>
+                <SaveButton disabled={createPostStatus.isLoading || editPostStatus.isLoading} />
               </Grid>
             </Grid>
           </Grid>
-        </Form>
-      )}
-    </Formik>
+        </Grid>
+      </Grid>
+    </form>
   );
 }

@@ -9,10 +9,10 @@ import React from 'react';
 
 interface Props {
   values: { files?: string[] | null; newFiles?: File[] | null };
-  setFieldValue: (field: string, value: any) => void;
+  setValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export const FileUploader: React.FC<Props> = ({ setFieldValue, values }) => {
+export const FileUploader: React.FC<Props> = ({ values, setValues }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -42,7 +42,7 @@ export const FileUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                 const existingFiles = values.newFiles ?? [];
                 const newFiles = uniqBy([...existingFiles, ...addedFiles], (x) => x.name);
 
-                setFieldValue('newFiles', newFiles);
+                setValues((x: any) => ({ ...x, newFiles }));
               }}
             />
             <Button fullWidth variant="contained" component="span">
@@ -59,10 +59,10 @@ export const FileUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                       <IconButton
                         edge="end"
                         onClick={() => {
-                          setFieldValue(
-                            'newFiles',
-                            values.newFiles?.filter((x) => x.name !== file.name)
-                          );
+                          setValues((x: any) => ({
+                            ...x,
+                            newFiles: x.newFiles?.filter((z: File) => z.name !== file.name),
+                          }));
                         }}
                       >
                         <DeleteIcon color="error" />
@@ -83,10 +83,10 @@ export const FileUploader: React.FC<Props> = ({ setFieldValue, values }) => {
                       <IconButton
                         edge="end"
                         onClick={() => {
-                          setFieldValue(
-                            'files',
-                            values.files?.filter((x) => x !== file)
-                          );
+                          setValues((x: any) => ({
+                            ...x,
+                            files: x.files?.filter((z: string) => z !== file),
+                          }));
                         }}
                       >
                         <DeleteIcon color="error" />
