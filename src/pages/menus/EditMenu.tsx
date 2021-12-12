@@ -41,6 +41,7 @@ export default function EditMenu() {
   const menuQuery = useGetMenuByIdQuery({ id: menuId }, { skip: !menuId || skipMenuFetch });
   const postSearchQuery = useSearchPostsQuery({ text: postSearch }, { skip: !postSearch });
   const menuSearchQuery = useSearchMenusQuery({ text: menuSearch }, { skip: !menuSearch });
+
   const [createMenuMutation, createMenuStatus] = useCreateMenuMutation();
   const [editMenuMutation, editMenuStatus] = useEditMenuMutation();
 
@@ -121,8 +122,8 @@ export default function EditMenu() {
     setFormData((x) => ({ ...x, [e.target.name]: e.target.value || null }));
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, v: boolean) => {
-    setFormData((x) => ({ ...x, [e.target.name]: v }));
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    setFormData((x) => ({ ...x, [e.target.name]: value }));
   };
 
   return (
@@ -162,9 +163,9 @@ export default function EditMenu() {
               id="menuLocationId"
               name="menuLocationId"
               labelId="menuLocationId-label"
+              label="Location"
               required
               value={formData.menuLocationId || ''}
-              label="Location"
               onChange={handleChange}
             >
               {locationsQuery.data?.map((x) => {
@@ -181,9 +182,9 @@ export default function EditMenu() {
             id="order"
             name="order"
             label="Order"
+            type="number"
             required
             value={formData.order}
-            type="number"
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
           />
@@ -194,9 +195,9 @@ export default function EditMenu() {
               id="languageId"
               name="languageId"
               labelId="languageId-label"
+              label="Language"
               required
               value={formData.languageId || ''}
-              label="Language"
               onChange={handleChange}
             >
               {languageQuery.data?.map((x) => {
@@ -237,8 +238,8 @@ export default function EditMenu() {
               id="linkedPostId"
               name="linkedPostId"
               label="Post id"
-              value={formData.linkedPostId || ''}
               type="number"
+              value={formData.linkedPostId || ''}
               onChange={handleNullableChange}
               InputLabelProps={{ shrink: true }}
             />
@@ -272,8 +273,8 @@ export default function EditMenu() {
               id="parentMenuId"
               name="parentMenuId"
               label="Parent menu id"
-              value={formData.parentMenuId || ''}
               type="number"
+              value={formData.parentMenuId || ''}
               onChange={handleNullableChange}
               InputLabelProps={{ shrink: true }}
             />

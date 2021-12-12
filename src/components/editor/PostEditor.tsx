@@ -1,11 +1,10 @@
-import { Button, ButtonGroup, Divider, TextField } from '@mui/material';
-import { Field } from 'formik';
-import { Markdown } from '../markdown/Markdown';
-import React, { useEffect, useState, useRef } from 'react';
+import { ButtonGroup, Divider, TextField } from '@mui/material';
+import React, { useRef } from 'react';
 import { htmlToMarkdown, normalizeHtml } from '../../lib/parser';
+import { Markdown } from '../markdown/Markdown';
 import { InsertFile } from './buttons/InsertFile';
-import { InsertLink } from './buttons/InsertLink';
 import { InsertImage } from './buttons/InsertImage';
+import { InsertLink } from './buttons/InsertLink';
 
 interface Props {
   previewMode: boolean;
@@ -16,11 +15,11 @@ interface Props {
     files?: string[] | null;
     newFiles?: File[] | null;
   };
-  setFieldValue: (field: string, value: any) => void;
+  setValues: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue }) => {
-  const textRef = useRef<HTMLTextAreaElement>();
+export const PostEditor: React.FC<Props> = ({ previewMode, values, setValues }) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>();
 
   if (previewMode) {
     return (
@@ -33,20 +32,20 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
   }
 
   const handleInsert = (value: string) => {
-    const input = textRef.current;
-    if (!input) {
+    const textArea = textAreaRef.current;
+    if (!textArea) {
       return;
     }
 
-    const startText = input.value.slice(0, input.selectionStart);
-    const endText = input.value.slice(input.selectionEnd);
+    const startText = textArea.value.slice(0, textArea.selectionStart);
+    const endText = textArea.value.slice(textArea.selectionEnd);
 
-    setFieldValue('text', startText + value + endText);
+    setValues((x: any) => ({ ...x, text: startText + value + endText }));
   };
 
   return (
     <>
-      <Field
+      <TextField
         id="introText"
         label="Intro"
         autoComplete="off"
@@ -54,9 +53,8 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
         rows={3}
         value={values.introText}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setFieldValue('introText', e.target.value);
+          setValues((x: any) => ({ ...x, introText: e.target.value }));
         }}
-        component={TextField}
         sx={{
           '& .MuiInputBase-root': {
             padding: '15px 5px',
@@ -73,8 +71,8 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
         <InsertLink onInsert={handleInsert} />
       </ButtonGroup>
 
-      <Field
-        inputRef={textRef}
+      <TextField
+        inputRef={textAreaRef}
         id="text"
         label="Full article"
         autoComplete="off"
@@ -82,9 +80,8 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
         rows={10}
         value={values.text}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setFieldValue('text', e.target.value);
+          setValues((x: any) => ({ ...x, text: e.target.value }));
         }}
-        component={TextField}
         sx={{
           '& .MuiInputBase-root': {
             padding: '15px 5px',
@@ -93,7 +90,7 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
             padding: '0px 20px',
           },
         }}
-        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        onPaste={(e: React.ClipboardEvent<HTMLDivElement>) => {
           const html = e.clipboardData.getData('text/html');
           if (!html) {
             return;
@@ -111,18 +108,18 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
           handleInsert(markdown);
 
           if (!values.introText && firstParagraph) {
-            setFieldValue('introText', htmlToMarkdown(firstParagraph.innerHTML));
+            setValues((x: any) => ({ ...x, introText: htmlToMarkdown(firstParagraph.innerHTML) }));
           }
 
           if (!values.meta && firstParagraph) {
-            setFieldValue('meta', firstParagraph.textContent);
+            setValues((x: any) => ({ ...x, meta: firstParagraph.textContent }));
           }
 
           e.preventDefault();
         }}
       />
 
-      <Field
+      <TextField
         id="meta"
         label="Meta description"
         autoComplete="off"
@@ -130,9 +127,8 @@ export const TextEditor: React.FC<Props> = ({ previewMode, values, setFieldValue
         rows={3}
         value={values.meta}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setFieldValue('meta', e.target.value);
+          setValues((x: any) => ({ ...x, meta: e.target.value }));
         }}
-        component={TextField}
         sx={{
           '& .MuiInputBase-root': {
             padding: '15px 5px',
