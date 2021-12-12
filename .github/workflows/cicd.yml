@@ -16,8 +16,9 @@ jobs:
       - uses: actions/setup-node@v2
 
       - name: Build
-        run: npm ci
-        run: npm run build
+        run: |
+          npm ci
+          npm run build
 
       - name: Test
         run: npm run test --if-present
