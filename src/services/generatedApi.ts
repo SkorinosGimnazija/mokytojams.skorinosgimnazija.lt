@@ -38,8 +38,14 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
     }),
+    getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
+      query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
+    }),
+    getPublicDayEvents: build.query<GetPublicDayEventsApiResponse, GetPublicDayEventsApiArg>({
+      query: () => ({ url: `/Events/public/today` }),
+    }),
     getPublicLanguages: build.query<GetPublicLanguagesApiResponse, GetPublicLanguagesApiArg>({
-      query: () => ({ url: `/public` }),
+      query: () => ({ url: `/Languages/public` }),
     }),
     getMenus: build.query<GetMenusApiResponse, GetMenusApiArg>({
       query: (queryArg) => ({
@@ -177,6 +183,12 @@ export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ Ba
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
 };
+export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
+export type GetPublicEventsApiArg = {
+  week: number;
+};
+export type GetPublicDayEventsApiResponse = /** status 200 Success */ EventDto[];
+export type GetPublicDayEventsApiArg = void;
 export type GetPublicLanguagesApiResponse = /** status 200 Success */ LanguageDto[];
 export type GetPublicLanguagesApiArg = void;
 export type GetMenusApiResponse = /** status 200 Success */ MenuDtoPaginatedList;
@@ -332,6 +344,14 @@ export type BannerDtoPaginatedList = {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
 };
+export type EventDto = {
+  id: string;
+  title: string;
+  startDate?: string | null;
+  startDateTime?: string | null;
+  endDate?: string | null;
+  endDateTime?: string | null;
+};
 export type MenuLocationDto = {
   id: number;
   name: string;
@@ -353,6 +373,7 @@ export type PostDto = {
 export type MenuDto = {
   id: number;
   order: number;
+  url?: string | null;
   title: string;
   slug: string;
   path: string;
@@ -374,6 +395,7 @@ export type MenuDtoPaginatedList = {
 export type MenuCreateDto = {
   order: number;
   title: string;
+  url?: string | null;
   isPublished: boolean;
   slug: string;
   languageId: number;
@@ -384,6 +406,7 @@ export type MenuCreateDto = {
 export type MenuEditDto = {
   order: number;
   title: string;
+  url?: string | null;
   isPublished: boolean;
   slug: string;
   languageId: number;

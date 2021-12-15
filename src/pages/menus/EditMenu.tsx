@@ -39,8 +39,8 @@ export default function EditMenu() {
   const languageQuery = useGetPublicLanguagesQuery();
   const locationsQuery = useGetMenuLocationsQuery();
   const menuQuery = useGetMenuByIdQuery({ id: menuId }, { skip: !menuId || skipMenuFetch });
-  const postSearchQuery = useSearchPostsQuery({ text: postSearch }, { skip: !postSearch });
-  const menuSearchQuery = useSearchMenusQuery({ text: menuSearch }, { skip: !menuSearch });
+  const postSearchQuery = useSearchPostsQuery({ text: postSearch || '*' });
+  const menuSearchQuery = useSearchMenusQuery({ text: menuSearch || '*' });
 
   const [createMenuMutation, createMenuStatus] = useCreateMenuMutation();
   const [editMenuMutation, editMenuStatus] = useEditMenuMutation();
@@ -53,6 +53,7 @@ export default function EditMenu() {
     isPublished: true,
     languageId: 0,
     menuLocationId: 0,
+    url: null as string | undefined | null,
     linkedPostId: null as number | undefined | null,
     parentMenuId: null as number | undefined | null,
   });
@@ -88,6 +89,7 @@ export default function EditMenu() {
       menuLocationId: menuQuery.data.menuLocation.id,
       linkedPostId: menuQuery.data.linkedPost?.id,
       parentMenuId: menuQuery.data.parentMenuId,
+      url: menuQuery.data.url,
     }));
   }, [menuQuery, setFormData]);
 
@@ -279,6 +281,18 @@ export default function EditMenu() {
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
+        </Grid>
+
+        <Grid item>
+          <TextField
+            id="url"
+            name="url"
+            label="Url"
+            autoComplete="off"
+            value={formData.url ?? ''}
+            sx={{ width: 300 }}
+            onChange={handleNullableChange}
+          />
         </Grid>
 
         <Grid item>

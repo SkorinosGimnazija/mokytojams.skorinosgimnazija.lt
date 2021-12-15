@@ -5,15 +5,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  useDeleteBannerMutation,
-  useDeleteMenuMutation,
-  useDeletePostMutation,
-  usePatchPostMutation,
-} from '../../services/api';
-import { BannerDto, MenuDto, PostDto, PostPatchDto } from '../../services/generatedApi';
+import { useDeleteBannerMutation } from '../../services/api';
+import { BannerDto } from '../../services/generatedApi';
 import { DeleteButton } from '../buttons/DeleteButton';
-import { FeatureButton } from '../buttons/FeatureButton';
 import { PublishButton } from '../buttons/PublishButton';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
@@ -57,11 +51,10 @@ export const BannersList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 <Typography variant="caption">{banner.url}</Typography>
               </TableCell>
               <TableCell align="right">
-                {/* <Typography> {banner.language?.name}</Typography> */}
+                <Typography> {banner.language.name}</Typography>
               </TableCell>
               <TableCell align="center">
-                {/* <Typography>{banner.menuLocation.name}</Typography> */}
-                <Typography variant="caption">{banner.order}</Typography>
+                <Typography>{banner.order}</Typography>
               </TableCell>
               <TableCell align="right">
                 <DeleteButton onConfirm={() => handleDelete(banner.id)} />
