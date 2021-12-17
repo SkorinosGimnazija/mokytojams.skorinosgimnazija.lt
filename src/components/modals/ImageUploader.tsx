@@ -14,15 +14,15 @@ interface Props {
 
 export const ImageUploader: React.FC<Props> = ({ values, setValues }) => {
   const [open, setOpen] = React.useState(false);
-  const [imagePriviews, setImagePreviews] = useState<{ url: string; file: File }[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<{ url: string; file: File }[]>([]);
 
   useEffect(() => {
     return () => {
-      imagePriviews.forEach((x) => {
+      imagePreviews.forEach((x) => {
         URL.revokeObjectURL(x.url);
       });
     };
-  }, [imagePriviews]);
+  }, [imagePreviews]);
 
   return (
     <>
@@ -65,7 +65,7 @@ export const ImageUploader: React.FC<Props> = ({ values, setValues }) => {
             {values.newImages?.map((image) => (
               <ImageListItem key={image.name}>
                 <img
-                  src={imagePriviews.find((x) => x.file.name === image.name)?.url}
+                  src={imagePreviews.find((x) => x.file.name === image.name)?.url}
                   alt="preview"
                   style={{ aspectRatio: '16/9' }}
                 />

@@ -34,7 +34,7 @@ export default function EditPost() {
   const postId = Number(params.id);
   const isNewPost = searchParams.has('new');
 
-  const [priviewMode, setPriviewMode] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
 
   const [skipPostFetch, setSkipPostFetch] = useState(false);
 
@@ -79,6 +79,8 @@ export default function EditPost() {
 
     setFormData((x) => ({
       ...x,
+      newFiles: null,
+      newImages: null,
       images: postQuery.data.images,
       files: postQuery.data.files,
       title: postQuery.data.title,
@@ -177,7 +179,7 @@ export default function EditPost() {
           <Grid container direction="row" gap={4}>
             <Grid item sx={{ flex: '2 1 400px' }}>
               <Grid container gap={4} direction="column">
-                <PostEditor previewMode={priviewMode} values={formData} setValues={setFormData} />
+                <PostEditor previewMode={previewMode} values={formData} setValues={setFormData} />
               </Grid>
             </Grid>
             <Grid item sx={{ flex: '1' }}>
@@ -285,9 +287,9 @@ export default function EditPost() {
                   variant="outlined"
                   color="primary"
                   component="span"
-                  onClick={() => setPriviewMode((x) => !x)}
+                  onClick={() => setPreviewMode((x) => !x)}
                 >
-                  Priview
+                  Preview
                 </Button>
 
                 <SaveButton disabled={createPostStatus.isLoading || editPostStatus.isLoading} />

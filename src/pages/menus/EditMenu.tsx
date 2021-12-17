@@ -39,8 +39,14 @@ export default function EditMenu() {
   const languageQuery = useGetPublicLanguagesQuery();
   const locationsQuery = useGetMenuLocationsQuery();
   const menuQuery = useGetMenuByIdQuery({ id: menuId }, { skip: !menuId || skipMenuFetch });
-  const postSearchQuery = useSearchPostsQuery({ text: postSearch || '*' });
-  const menuSearchQuery = useSearchMenusQuery({ text: menuSearch || '*' });
+  const postSearchQuery = useSearchPostsQuery(
+    { text: postSearch || '*' },
+    { refetchOnMountOrArgChange: true }
+  );
+  const menuSearchQuery = useSearchMenusQuery(
+    { text: menuSearch || '*' },
+    { refetchOnMountOrArgChange: true }
+  );
 
   const [createMenuMutation, createMenuStatus] = useCreateMenuMutation();
   const [editMenuMutation, editMenuStatus] = useEditMenuMutation();

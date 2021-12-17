@@ -35,7 +35,7 @@ export default function EditBanner() {
   const params = useParams();
   const bannerId = Number(params.id);
 
-  const [imagePriview, setImagePreview] = useState<string>();
+  const [imagePreview, setImagePreview] = useState<string>();
   const [skipBannerFetch, setSkipBannerFetch] = useState(false);
 
   const languageQuery = useGetPublicLanguagesQuery();
@@ -59,11 +59,11 @@ export default function EditBanner() {
 
   useEffect(() => {
     return () => {
-      if (imagePriview) {
-        URL.revokeObjectURL(imagePriview);
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
       }
     };
-  }, [imagePriview]);
+  }, [imagePreview]);
 
   useEffect(() => {
     if (bannerId || !languageQuery.isSuccess || !languageQuery.data?.length) {
@@ -220,7 +220,7 @@ export default function EditBanner() {
             <Box marginLeft={4}>
               <img
                 src={
-                  imagePriview ??
+                  imagePreview ??
                   (bannerQuery.data?.pictureUrl
                     ? `${process.env.REACT_APP_STATIC_URL}/${bannerQuery.data?.pictureUrl}`
                     : '')
