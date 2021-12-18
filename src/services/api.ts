@@ -95,6 +95,8 @@ export const {
   useDeleteBannerMutation,
   useSearchBannersQuery,
   useGetPublicBannersByLanguageQuery,
+  useGetPublicEventsQuery,
+  useGetPublicDayEventsQuery,
   useGetPublicLanguagesQuery,
   useGetMenusQuery,
   useCreateMenuMutation,
@@ -112,6 +114,7 @@ export const {
   useDeletePostMutation,
   useSearchPostsQuery,
   useGetPublicPostByIdQuery,
+  useGetPublicPostByMenuPathQuery,
   useGetPublicPostsByLanguageQuery,
   useSearchPublicPostsQuery,
 } = enhancedApi;

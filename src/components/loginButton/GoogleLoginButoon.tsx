@@ -29,7 +29,7 @@ export const GoogleLoginButoon = () => {
       theme: 'outline',
       size: 'large',
       text: 'signin_with',
-      // locale: 'lt',
+      locale: 'lt',
     });
 
     window.google.accounts.id.prompt();

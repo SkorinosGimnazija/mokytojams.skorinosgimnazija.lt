@@ -60,7 +60,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({ url: `/Menus`, method: 'PUT', body: queryArg.menuEditDto }),
     }),
     getMenuLocations: build.query<GetMenuLocationsApiResponse, GetMenuLocationsApiArg>({
-      query: () => ({ url: `/locations` }),
+      query: () => ({ url: `/Menus/locations` }),
     }),
     getMenuById: build.query<GetMenuByIdApiResponse, GetMenuByIdApiArg>({
       query: (queryArg) => ({ url: `/Menus/${queryArg.id}` }),
@@ -114,12 +114,18 @@ const injectedRtkApi = api.injectEndpoints({
     getPublicPostById: build.query<GetPublicPostByIdApiResponse, GetPublicPostByIdApiArg>({
       query: (queryArg) => ({ url: `/Posts/public/${queryArg.id}` }),
     }),
+    getPublicPostByMenuPath: build.query<
+      GetPublicPostByMenuPathApiResponse,
+      GetPublicPostByMenuPathApiArg
+    >({
+      query: (queryArg) => ({ url: `/Posts/public/path/${queryArg.path}` }),
+    }),
     getPublicPostsByLanguage: build.query<
       GetPublicPostsByLanguageApiResponse,
       GetPublicPostsByLanguageApiArg
     >({
       query: (queryArg) => ({
-        url: `/Posts/public/${queryArg.language}`,
+        url: `/Posts/public/language/${queryArg.language}`,
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
@@ -191,7 +197,7 @@ export type GetPublicDayEventsApiResponse = /** status 200 Success */ EventDto[]
 export type GetPublicDayEventsApiArg = void;
 export type GetPublicLanguagesApiResponse = /** status 200 Success */ LanguageDto[];
 export type GetPublicLanguagesApiArg = void;
-export type GetMenusApiResponse = /** status 200 Success */ MenuDtoPaginatedList;
+export type GetMenusApiResponse = /** status 200 Success */ MenuDetailsDtoPaginatedList;
 export type GetMenusApiArg = {
   items?: number;
   page?: number;
@@ -206,7 +212,7 @@ export type EditMenuApiArg = {
 };
 export type GetMenuLocationsApiResponse = /** status 200 Success */ MenuLocationDto[];
 export type GetMenuLocationsApiArg = void;
-export type GetMenuByIdApiResponse = /** status 200 Success */ MenuDto;
+export type GetMenuByIdApiResponse = /** status 200 Success */ MenuDetailsDto;
 export type GetMenuByIdApiArg = {
   id: number;
 };
@@ -214,7 +220,7 @@ export type DeleteMenuApiResponse = /** status 204 Success */ undefined;
 export type DeleteMenuApiArg = {
   id: number;
 };
-export type SearchMenusApiResponse = /** status 200 Success */ MenuDtoPaginatedList;
+export type SearchMenusApiResponse = /** status 200 Success */ MenuDetailsDtoPaginatedList;
 export type SearchMenusApiArg = {
   text: string;
   items?: number;
@@ -294,6 +300,10 @@ export type GetPublicPostByIdApiResponse = /** status 200 Success */ PostDetails
 export type GetPublicPostByIdApiArg = {
   id: number;
 };
+export type GetPublicPostByMenuPathApiResponse = /** status 200 Success */ PostDetailsDto;
+export type GetPublicPostByMenuPathApiArg = {
+  path: string;
+};
 export type GetPublicPostsByLanguageApiResponse = /** status 200 Success */ PostDto[];
 export type GetPublicPostsByLanguageApiArg = {
   language: string;
@@ -352,12 +362,23 @@ export type EventDto = {
   endDate?: string | null;
   endDateTime?: string | null;
 };
+export type MenuDto = {
+  id: number;
+  order: number;
+  url?: string | null;
+  title: string;
+  slug: string;
+  path: string;
+  isPublished: boolean;
+  parentMenuId?: number | null;
+  childMenus: MenuDto[];
+};
 export type MenuLocationDto = {
   id: number;
   name: string;
   slug: string;
 };
-export type PostDto = {
+export type PostDetailsDto = {
   id: number;
   isFeatured: boolean;
   isPublished: boolean;
@@ -369,8 +390,11 @@ export type PostDto = {
   title: string;
   introText?: string | null;
   meta?: string | null;
+  files: string[];
+  images: string[];
+  text?: string | null;
 };
-export type MenuDto = {
+export type MenuDetailsDto = {
   id: number;
   order: number;
   url?: string | null;
@@ -378,14 +402,14 @@ export type MenuDto = {
   slug: string;
   path: string;
   isPublished: boolean;
-  language: LanguageDto;
-  menuLocation: MenuLocationDto;
-  linkedPost: PostDto;
   parentMenuId?: number | null;
   childMenus: MenuDto[];
+  language: LanguageDto;
+  menuLocation: MenuLocationDto;
+  linkedPost: PostDetailsDto;
 };
-export type MenuDtoPaginatedList = {
-  items: MenuDto[];
+export type MenuDetailsDtoPaginatedList = {
+  items: MenuDetailsDto[];
   pageNumber: number;
   totalPages: number;
   totalCount: number;
@@ -415,15 +439,7 @@ export type MenuEditDto = {
   parentMenuId?: number | null;
   id: number;
 };
-export type PostDtoPaginatedList = {
-  items: PostDto[];
-  pageNumber: number;
-  totalPages: number;
-  totalCount: number;
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
-};
-export type PostDetailsDto = {
+export type PostDto = {
   id: number;
   isFeatured: boolean;
   isPublished: boolean;
@@ -435,9 +451,14 @@ export type PostDetailsDto = {
   title: string;
   introText?: string | null;
   meta?: string | null;
-  files: string[];
-  images: string[];
-  text?: string | null;
+};
+export type PostDtoPaginatedList = {
+  items: PostDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };
 export type PostPatchDto = {
   isFeatured?: boolean | null;

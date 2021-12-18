@@ -5,19 +5,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  useDeleteMenuMutation,
-  useDeletePostMutation,
-  usePatchPostMutation,
-} from '../../services/api';
-import { MenuDto, PostDto, PostPatchDto } from '../../services/generatedApi';
+import { useDeleteMenuMutation } from '../../services/api';
+import { MenuDetailsDto } from '../../services/generatedApi';
 import { DeleteButton } from '../buttons/DeleteButton';
-import { FeatureButton } from '../buttons/FeatureButton';
 import { PublishButton } from '../buttons/PublishButton';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
 interface Props extends DefaultTableProps {
-  data?: MenuDto[];
+  data?: MenuDetailsDto[];
 }
 
 export const MenusList: React.FC<Props> = ({ data, isLoading, ...props }) => {
