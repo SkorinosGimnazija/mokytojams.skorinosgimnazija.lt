@@ -12,8 +12,8 @@ import { store } from './store/store';
 import theme from './theme';
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
       <PersistGate persistor={persistStore(store)}>
         <BrowserRouter>
           <AuthProvider>
@@ -23,7 +23,7 @@ ReactDOM.render(
           </AuthProvider>
         </BrowserRouter>
       </PersistGate>
-    </Provider>
-  </ThemeProvider>,
+    </ThemeProvider>
+  </Provider>,
   document.querySelector('#root')
 );

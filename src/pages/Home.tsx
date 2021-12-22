@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import React from 'react';
 import { CircularSpinner } from '../components/loadingSpinners/CircularSpinner';
-import { GoogleLoginButoon } from '../components/loginButton/GoogleLoginButoon';
+import { GoogleLoginButton } from '../components/loginButton/GoogleLoginButoon';
 import { useAuth } from '../hooks/useAuth';
 
 export const Home = () => {
@@ -10,7 +10,7 @@ export const Home = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       {auth.isLoading && <CircularSpinner />}
-      {!auth.isLoading && !auth.isAuthenticated && <GoogleLoginButoon />}
+      {!auth.isLoading && !auth.isAuthenticated && <GoogleLoginButton />}
     </Box>
   );
 };

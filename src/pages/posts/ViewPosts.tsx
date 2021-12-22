@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import React from 'react';
 import { SearchForm } from '../../components/forms/SearchForm';
 import { CreateItemLink } from '../../components/links/CreateItemLink';
-import { PostsList } from '../../components/list/PostsList';
+import { PostsList } from '../../components/lists/PostsList';
 import { useGetPostsQuery, useSearchPostsQuery } from '../../services/api';
 
 export default function ViewPosts() {

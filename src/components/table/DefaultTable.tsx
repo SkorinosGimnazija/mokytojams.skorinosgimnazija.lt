@@ -8,10 +8,10 @@ import React from 'react';
 export interface DefaultTableProps {
   isLoading?: boolean;
   totalCount?: number;
-  pageNumber: number;
-  itemsPerPage: number;
-  onPageChange: (value: number) => void;
-  onRowsPerPageChange: (value: number) => void;
+  pageNumber?: number;
+  itemsPerPage?: number;
+  onPageChange?: (value: number) => void;
+  onRowsPerPageChange?: (value: number) => void;
 }
 
 export const DefaultTable: React.FC<DefaultTableProps> = ({
@@ -23,6 +23,29 @@ export const DefaultTable: React.FC<DefaultTableProps> = ({
   onPageChange,
   onRowsPerPageChange,
 }) => {
+  const Pagination = () => {
+    if (!onPageChange || !onRowsPerPageChange) {
+      return null;
+    }
+
+    return (
+      <TablePagination
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
+        labelRowsPerPage={'Eilučių per puslapį:'}
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={totalCount ?? 0}
+        rowsPerPage={itemsPerPage ?? 0}
+        page={pageNumber ?? 0}
+        onPageChange={(_, page) => {
+          window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+          onPageChange(page);
+        }}
+        onRowsPerPageChange={(e) => onRowsPerPageChange(Number(e.target.value))}
+      />
+    );
+  };
+
   return (
     <>
       <TableContainer component={Paper} sx={{ position: 'relative' }}>
@@ -39,19 +62,7 @@ export const DefaultTable: React.FC<DefaultTableProps> = ({
         )}
         <Table sx={{ 'td > a': { textDecoration: 'none' } }}>{children}</Table>
       </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 20]}
-        component="div"
-        count={totalCount ?? 0}
-        rowsPerPage={itemsPerPage}
-        page={pageNumber}
-        onPageChange={(_, page) => {
-          window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
-          onPageChange(page);
-        }}
-        onRowsPerPageChange={(e) => onRowsPerPageChange(Number(e.target.value))}
-      />
+      <Pagination />
     </>
   );
 };

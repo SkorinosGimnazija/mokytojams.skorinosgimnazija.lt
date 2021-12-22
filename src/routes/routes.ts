@@ -62,6 +62,46 @@ export const routes: RoutesGroup[] = [
       },
     ],
   },
+  {
+    name: 'Mokytojams',
+    accessRole: 'Teacher',
+    routes: [
+      {
+        name: 'Kvalifikacijos kursai',
+        slug: '/courses',
+        innerRoutes: [
+          {
+            slug: '/',
+            lazyElement: lazy(() => import('../pages/courses/ViewCourses')),
+          },
+          {
+            slug: '/create',
+            lazyElement: lazy(() => import('../pages/courses/EditCourse')),
+          },
+          {
+            slug: '/edit/:id',
+            lazyElement: lazy(() => import('../pages/courses/EditCourse')),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Administracija',
+    accessRole: 'Mod',
+    routes: [
+      {
+        name: 'Kvalifikacijos kursai',
+        slug: '/admin/courses',
+        innerRoutes: [
+          {
+            slug: '/',
+            lazyElement: lazy(() => import('../pages/admin/ViewAllCourses')),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 interface RoutesGroup {

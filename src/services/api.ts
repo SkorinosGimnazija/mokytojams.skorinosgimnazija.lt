@@ -1,12 +1,16 @@
 import { generatedApi } from './generatedApi';
 
 const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ['Post', 'Menu', 'Banner'],
+  addTagTypes: ['Post', 'Menu', 'Banner', 'Course'],
   endpoints: {
+    authorize: {},
     getPublicLanguages: {
       keepUnusedDataFor: 600,
     },
     getMenuLocations: {
+      keepUnusedDataFor: 600,
+    },
+    getPublicTeachers: {
       keepUnusedDataFor: 600,
     },
     searchPosts: {
@@ -25,6 +29,9 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       providesTags: ['Post'],
     },
     searchPublicPosts: {
+      providesTags: ['Post'],
+    },
+    getPublicPostByMenuLanguageAndPath: {
       providesTags: ['Post'],
     },
     patchPost: {
@@ -81,6 +88,24 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteBanner: {
       invalidatesTags: ['Banner'],
     },
+    createCourse: {
+      invalidatesTags: ['Course'],
+    },
+    deleteCourse: {
+      invalidatesTags: ['Course'],
+    },
+    editCourse: {
+      invalidatesTags: ['Course'],
+    },
+    getAllCoursesByDate: {
+      providesTags: ['Course'],
+    },
+    getCourseById: {
+      providesTags: ['Course'],
+    },
+    getMyCourses: {
+      providesTags: ['Course'],
+    },
   },
 });
 
@@ -95,6 +120,12 @@ export const {
   useDeleteBannerMutation,
   useSearchBannersQuery,
   useGetPublicBannersByLanguageQuery,
+  useGetAllCoursesByDateQuery,
+  useGetMyCoursesQuery,
+  useCreateCourseMutation,
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+  useDeleteCourseMutation,
   useGetPublicEventsQuery,
   useGetPublicDayEventsQuery,
   useGetPublicLanguagesQuery,
@@ -114,7 +145,8 @@ export const {
   useDeletePostMutation,
   useSearchPostsQuery,
   useGetPublicPostByIdQuery,
-  useGetPublicPostByMenuPathQuery,
+  useGetPublicPostByMenuLanguageAndPathQuery,
   useGetPublicPostsByLanguageQuery,
   useSearchPublicPostsQuery,
+  useGetPublicTeachersQuery,
 } = enhancedApi;

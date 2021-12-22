@@ -4,19 +4,16 @@ import React from 'react';
 import { json } from 'stream/consumers';
 import { SearchForm } from '../../components/forms/SearchForm';
 import { CreateItemLink } from '../../components/links/CreateItemLink';
-import { BannersList } from '../../components/list/BannersList';
-import { MenusList } from '../../components/list/MenusList';
-import { PostsList } from '../../components/list/PostsList';
+import { BannersList } from '../../components/lists/BannersList';
+import { MenusList } from '../../components/lists/MenusList';
+import { PostsList } from '../../components/lists/PostsList';
 import { useGetBannersQuery, useGetMenusQuery, useSearchBannersQuery } from '../../services/api';
 
 export default function ViewBanners() {
   const [search, setSearch] = React.useState('');
   const [pageNumber, setPageNumber] = React.useState(0);
   const [pageSize, setPageSize] = React.useState(10);
-  const bannersQuery = useGetBannersQuery(
-    { items: pageSize, page: pageNumber },
-    { skip: !!search }
-  );
+  const bannersQuery = useGetBannersQuery({ items: pageSize, page: pageNumber }, { skip: !!search });
   const searchQuery = useSearchBannersQuery(
     { text: search, items: pageSize, page: pageNumber },
     { skip: !search }

@@ -2,17 +2,10 @@ import { baseApi as api } from './baseApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     authorize: build.mutation<AuthorizeApiResponse, AuthorizeApiArg>({
-      query: (queryArg) => ({
-        url: `/Auth/authorize`,
-        method: 'POST',
-        body: queryArg.googleAuthDto,
-      }),
+      query: (queryArg) => ({ url: `/Auth/authorize`, method: 'POST', body: queryArg.googleAuthDto }),
     }),
     getBanners: build.query<GetBannersApiResponse, GetBannersApiArg>({
-      query: (queryArg) => ({
-        url: `/Banners`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
+      query: (queryArg) => ({ url: `/Banners`, params: { Items: queryArg.items, Page: queryArg.page } }),
     }),
     createBanner: build.mutation<CreateBannerApiResponse, CreateBannerApiArg>({
       query: (queryArg) => ({ url: `/Banners`, method: 'POST', body: queryArg.body }),
@@ -38,6 +31,24 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
     }),
+    getAllCoursesByDate: build.query<GetAllCoursesByDateApiResponse, GetAllCoursesByDateApiArg>({
+      query: (queryArg) => ({ url: `/Courses/all`, params: { start: queryArg.start, end: queryArg.end } }),
+    }),
+    getMyCourses: build.query<GetMyCoursesApiResponse, GetMyCoursesApiArg>({
+      query: (queryArg) => ({ url: `/Courses`, params: { Items: queryArg.items, Page: queryArg.page } }),
+    }),
+    createCourse: build.mutation<CreateCourseApiResponse, CreateCourseApiArg>({
+      query: (queryArg) => ({ url: `/Courses`, method: 'POST', body: queryArg.courseCreateDto }),
+    }),
+    editCourse: build.mutation<EditCourseApiResponse, EditCourseApiArg>({
+      query: (queryArg) => ({ url: `/Courses`, method: 'PUT', body: queryArg.courseEditDto }),
+    }),
+    getCourseById: build.query<GetCourseByIdApiResponse, GetCourseByIdApiArg>({
+      query: (queryArg) => ({ url: `/Courses/${queryArg.id}` }),
+    }),
+    deleteCourse: build.mutation<DeleteCourseApiResponse, DeleteCourseApiArg>({
+      query: (queryArg) => ({ url: `/Courses/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
       query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
     }),
@@ -48,10 +59,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: () => ({ url: `/Languages/public` }),
     }),
     getMenus: build.query<GetMenusApiResponse, GetMenusApiArg>({
-      query: (queryArg) => ({
-        url: `/Menus`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
+      query: (queryArg) => ({ url: `/Menus`, params: { Items: queryArg.items, Page: queryArg.page } }),
     }),
     createMenu: build.mutation<CreateMenuApiResponse, CreateMenuApiArg>({
       query: (queryArg) => ({ url: `/Menus`, method: 'POST', body: queryArg.menuCreateDto }),
@@ -81,10 +89,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({ url: `/Menus/public/${queryArg.language}/${queryArg.location}` }),
     }),
     getPosts: build.query<GetPostsApiResponse, GetPostsApiArg>({
-      query: (queryArg) => ({
-        url: `/Posts`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
+      query: (queryArg) => ({ url: `/Posts`, params: { Items: queryArg.items, Page: queryArg.page } }),
     }),
     createPost: build.mutation<CreatePostApiResponse, CreatePostApiArg>({
       query: (queryArg) => ({ url: `/Posts`, method: 'POST', body: queryArg.body }),
@@ -114,18 +119,18 @@ const injectedRtkApi = api.injectEndpoints({
     getPublicPostById: build.query<GetPublicPostByIdApiResponse, GetPublicPostByIdApiArg>({
       query: (queryArg) => ({ url: `/Posts/public/${queryArg.id}` }),
     }),
-    getPublicPostByMenuPath: build.query<
-      GetPublicPostByMenuPathApiResponse,
-      GetPublicPostByMenuPathApiArg
+    getPublicPostByMenuLanguageAndPath: build.query<
+      GetPublicPostByMenuLanguageAndPathApiResponse,
+      GetPublicPostByMenuLanguageAndPathApiArg
     >({
-      query: (queryArg) => ({ url: `/Posts/public/path/${queryArg.path}` }),
+      query: (queryArg) => ({ url: `/Posts/public/${queryArg.language}/${queryArg.path}` }),
     }),
     getPublicPostsByLanguage: build.query<
       GetPublicPostsByLanguageApiResponse,
       GetPublicPostsByLanguageApiArg
     >({
       query: (queryArg) => ({
-        url: `/Posts/public/language/${queryArg.language}`,
+        url: `/Posts/public/${queryArg.language}/all`,
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
@@ -134,6 +139,9 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/Posts/public/search/${queryArg.text}`,
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
+    }),
+    getPublicTeachers: build.query<GetPublicTeachersApiResponse, GetPublicTeachersApiArg>({
+      query: () => ({ url: `/Users/public/teachers` }),
     }),
   }),
   overrideExisting: false,
@@ -188,6 +196,32 @@ export type SearchBannersApiArg = {
 export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerDto[];
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
+};
+export type GetAllCoursesByDateApiResponse = /** status 200 Success */ CourseDto[];
+export type GetAllCoursesByDateApiArg = {
+  start?: string;
+  end?: string;
+};
+export type GetMyCoursesApiResponse = /** status 200 Success */ CourseDtoPaginatedList;
+export type GetMyCoursesApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateCourseApiResponse = /** status 201 Success */ CourseDto;
+export type CreateCourseApiArg = {
+  courseCreateDto: CourseCreateDto;
+};
+export type EditCourseApiResponse = /** status 200 Success */ undefined;
+export type EditCourseApiArg = {
+  courseEditDto: CourseEditDto;
+};
+export type GetCourseByIdApiResponse = /** status 200 Success */ CourseDto;
+export type GetCourseByIdApiArg = {
+  id: number;
+};
+export type DeleteCourseApiResponse = /** status 204 Success */ undefined;
+export type DeleteCourseApiArg = {
+  id: number;
 };
 export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
 export type GetPublicEventsApiArg = {
@@ -300,8 +334,9 @@ export type GetPublicPostByIdApiResponse = /** status 200 Success */ PostDetails
 export type GetPublicPostByIdApiArg = {
   id: number;
 };
-export type GetPublicPostByMenuPathApiResponse = /** status 200 Success */ PostDetailsDto;
-export type GetPublicPostByMenuPathApiArg = {
+export type GetPublicPostByMenuLanguageAndPathApiResponse = /** status 200 Success */ PostDetailsDto;
+export type GetPublicPostByMenuLanguageAndPathApiArg = {
+  language: string;
   path: string;
 };
 export type GetPublicPostsByLanguageApiResponse = /** status 200 Success */ PostDto[];
@@ -316,6 +351,8 @@ export type SearchPublicPostsApiArg = {
   items?: number;
   page?: number;
 };
+export type GetPublicTeachersApiResponse = /** status 200 Success */ TeacherDto[];
+export type GetPublicTeachersApiArg = void;
 export type UserAuthDto = {
   token: string;
   displayName: string;
@@ -353,6 +390,49 @@ export type BannerDtoPaginatedList = {
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type UserDto = {
+  id: number;
+  userName: string;
+  displayName: string;
+  email: string;
+};
+export type CourseDto = {
+  id: number;
+  title: string;
+  organizer: string;
+  startDate: string;
+  endDate: string;
+  modifyDate: string;
+  durationInHours: number;
+  certificateNr?: string | null;
+  user: UserDto;
+  userId: number;
+};
+export type CourseDtoPaginatedList = {
+  items: CourseDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type CourseCreateDto = {
+  title: string;
+  organizer: string;
+  startDate: string;
+  endDate: string;
+  durationInHours: number;
+  certificateNr?: string | null;
+};
+export type CourseEditDto = {
+  title: string;
+  organizer: string;
+  startDate: string;
+  endDate: string;
+  durationInHours: number;
+  certificateNr?: string | null;
+  id: number;
 };
 export type EventDto = {
   id: string;
@@ -463,4 +543,8 @@ export type PostDtoPaginatedList = {
 export type PostPatchDto = {
   isFeatured?: boolean | null;
   isPublished?: boolean | null;
+};
+export type TeacherDto = {
+  userName: string;
+  displayName: string;
 };

@@ -1,12 +1,13 @@
 import toast from 'react-hot-toast';
 
-const loadImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve) => {
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve) => {
     const img = new Image();
     img.addEventListener('load', () => resolve(img));
     img.addEventListener('error', (err) => toast.error(err.message));
     img.src = url;
   });
+};
 
 export const useImageInfo = () => {
   const getImageDimensions = async (image: string | File) => {
@@ -15,8 +16,7 @@ export const useImageInfo = () => {
         return { width: x.naturalWidth, height: x.naturalHeight };
       });
     } else {
-      const url = URL.createObjectURL(image);
-      return loadImage(url).then((x) => {
+      return loadImage(URL.createObjectURL(image)).then((x) => {
         URL.revokeObjectURL(x.src);
         return { width: x.naturalWidth, height: x.naturalHeight };
       });
