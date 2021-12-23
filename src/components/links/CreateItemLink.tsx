@@ -8,7 +8,7 @@ interface Props {
 
 export const CreateItemLink: React.FC<Props> = ({ to }) => {
   return (
-    <Button component={Link} to={to} variant="outlined">
+    <Button component={Link} to={to} variant="contained">
       Naujas įrašas
     </Button>
   );

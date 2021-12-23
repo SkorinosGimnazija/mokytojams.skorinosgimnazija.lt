@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { api } from '../services/api';
 import { RootState } from './store';
 
-export type AuthRole = 'Admin' | 'Mod' | 'Teacher' | 'Bully';
+export type AuthRole = 'Admin' | 'Manager' | 'Teacher' | 'Bully';
 
 interface State {
   userName: string | null;

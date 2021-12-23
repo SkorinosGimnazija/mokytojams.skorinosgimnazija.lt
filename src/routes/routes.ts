@@ -4,11 +4,11 @@ import { AuthRole } from '../store/authSlice';
 export const routes: RoutesGroup[] = [
   {
     name: 'CMS',
-    accessRole: 'Admin',
     routes: [
       {
         name: 'Posts',
         slug: '/posts',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             slug: '/',
@@ -27,6 +27,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Menus',
         slug: '/menus',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             slug: '/',
@@ -45,6 +46,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Banners',
         slug: '/banners',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             slug: '/',
@@ -64,11 +66,11 @@ export const routes: RoutesGroup[] = [
   },
   {
     name: 'Mokytojams',
-    accessRole: 'Teacher',
     routes: [
       {
         name: 'Kvalifikacijos kursai',
         slug: '/courses',
+        accessRole: 'Teacher',
         innerRoutes: [
           {
             slug: '/',
@@ -88,11 +90,11 @@ export const routes: RoutesGroup[] = [
   },
   {
     name: 'Administracija',
-    accessRole: 'Mod',
     routes: [
       {
         name: 'Kvalifikacijos kursai',
         slug: '/admin/courses',
+        accessRole: 'Manager',
         innerRoutes: [
           {
             slug: '/',
@@ -107,12 +109,12 @@ export const routes: RoutesGroup[] = [
 interface RoutesGroup {
   name: string;
   routes: Route[];
-  accessRole: AuthRole;
 }
 
 interface Route {
   name: string;
   slug: string;
+  accessRole: AuthRole;
   innerRoutes: InnerRoute[];
 }
 

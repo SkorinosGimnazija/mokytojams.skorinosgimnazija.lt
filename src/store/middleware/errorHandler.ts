@@ -4,9 +4,9 @@ import { resetAuthState } from '../authSlice';
 
 export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) => (action) => {
   if (isRejectedWithValue(action)) {
-    if (action?.payload?.status === 401) {
-      api.dispatch(resetAuthState());
-    }
+    // if (action?.payload?.status === 401) {
+    //   api.dispatch(resetAuthState());
+    // }
 
     const errorData = action?.payload?.data;
     if (errorData) {

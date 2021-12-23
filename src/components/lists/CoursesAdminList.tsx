@@ -79,7 +79,11 @@ export const CoursesAdminList: React.FC<Props> = ({ coursesData, teachersData, .
           {teachersData?.map((teacher) => {
             return (
               <React.Fragment key={teacher.userName}>
-                <TableRow hover sx={{ cursor: 'pointer' }} onClick={() => handleExpand(teacher.userName)}>
+                <TableRow
+                  hover
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => handleExpand(teacher.userName)}
+                >
                   <TableCell>
                     <Typography>{teacher.displayName}</Typography>
                   </TableCell>

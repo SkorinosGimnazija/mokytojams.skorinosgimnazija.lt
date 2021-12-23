@@ -5,7 +5,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SaveButton } from '../../components/buttons/SaveButton';
 import { itemSavedToast } from '../../lib/toasts';
-import { useCreateCourseMutation, useEditCourseMutation, useGetCourseByIdQuery } from '../../services/api';
+import {
+  useCreateCourseMutation,
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from '../../services/api';
 import { CourseDto } from '../../services/generatedApi';
 
 export default function EditCourse() {

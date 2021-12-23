@@ -8,5 +8,6 @@ export const useAuth = () => {
   return {
     ...context,
     hasRole: (role: AuthRole) => context.roles?.includes(role),
+    hasAnyRole: (roles: AuthRole[]) => roles.some((x) => context.roles?.includes(x)),
   };
 };

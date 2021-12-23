@@ -30,7 +30,7 @@ export const App = () => {
                     key={slug}
                     path={slug}
                     element={
-                      <ProtectedRoute authRole={group.accessRole}>
+                      <ProtectedRoute authRole={route.accessRole}>
                         <React.Suspense fallback={null}>
                           <innerRoute.lazyElement />
                         </React.Suspense>
