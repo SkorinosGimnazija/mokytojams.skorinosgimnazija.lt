@@ -5,6 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { toLocalDate } from '../../lib/dateFormat';
 import { useDeletePostMutation, usePatchPostMutation } from '../../services/api';
 import { PostDto, PostPatchDto } from '../../services/generatedApi';
 import { DeleteButton } from '../buttons/DeleteButton';
@@ -68,10 +69,8 @@ export const PostsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 <Typography variant="caption">{post.showInFeed && <>In feed</>}</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography>{new Date(post.publishDate).toLocaleDateString('lt')}</Typography>
-                <Typography variant="caption">
-                  {post.modifiedDate && new Date(post.modifiedDate).toLocaleDateString('lt')}
-                </Typography>
+                <Typography>{toLocalDate(post.publishedAt)}</Typography>
+                <Typography variant="caption">{toLocalDate(post.modifiedAt)}</Typography>
               </TableCell>
               <TableCell align="right">
                 <DeleteButton onConfirm={() => handleDelete(post.id)} />

@@ -32,7 +32,10 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
     }),
     getAllCoursesByDate: build.query<GetAllCoursesByDateApiResponse, GetAllCoursesByDateApiArg>({
-      query: (queryArg) => ({ url: `/Courses/all`, params: { start: queryArg.start, end: queryArg.end } }),
+      query: (queryArg) => ({
+        url: `/Courses/all`,
+        params: { start: queryArg.start, end: queryArg.end },
+      }),
     }),
     getMyCourses: build.query<GetMyCoursesApiResponse, GetMyCoursesApiArg>({
       query: (queryArg) => ({ url: `/Courses`, params: { Items: queryArg.items, Page: queryArg.page } }),
@@ -276,8 +279,8 @@ export type CreatePostApiArg = {
     IsFeatured?: boolean;
     NewFiles?: Blob[];
     NewImages?: Blob[];
-    PublishDate?: string;
-    ModifiedDate?: string;
+    PublishedAt?: string;
+    ModifiedAt?: string;
     IntroText?: string;
     IsPublished?: boolean;
     ShowInFeed?: boolean;
@@ -298,8 +301,8 @@ export type EditPostApiArg = {
     IsFeatured?: boolean;
     NewFiles?: Blob[];
     NewImages?: Blob[];
-    PublishDate?: string;
-    ModifiedDate?: string;
+    PublishedAt?: string;
+    ModifiedAt?: string;
     IntroText?: string;
     IsPublished?: boolean;
     ShowInFeed?: boolean;
@@ -403,7 +406,7 @@ export type CourseDto = {
   organizer: string;
   startDate: string;
   endDate: string;
-  modifyDate: string;
+  createdAt: string;
   durationInHours: number;
   certificateNr?: string | null;
   user: UserDto;
@@ -463,8 +466,8 @@ export type PostDetailsDto = {
   isFeatured: boolean;
   isPublished: boolean;
   showInFeed: boolean;
-  publishDate: string;
-  modifiedDate?: string | null;
+  publishedAt: string;
+  modifiedAt?: string | null;
   language: LanguageDto;
   slug: string;
   title: string;
@@ -524,8 +527,8 @@ export type PostDto = {
   isFeatured: boolean;
   isPublished: boolean;
   showInFeed: boolean;
-  publishDate: string;
-  modifiedDate?: string | null;
+  publishedAt: string;
+  modifiedAt?: string | null;
   language: LanguageDto;
   slug: string;
   title: string;

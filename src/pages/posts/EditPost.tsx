@@ -60,8 +60,8 @@ export default function EditPost() {
     showInFeed: true,
     optimizeImages: true,
     languageId: 0,
-    publishDate: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-    modifiedDate: !postId || isNewPost ? '' : format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+    publishedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+    modifiedAt: !postId || isNewPost ? '' : format(new Date(), "yyyy-MM-dd'T'HH:mm"),
   });
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function EditPost() {
       isPublished: postQuery.data.isPublished,
       showInFeed: postQuery.data.showInFeed,
       languageId: postQuery.data.language.id,
-      publishDate: format(new Date(postQuery.data.publishDate), "yyyy-MM-dd'T'HH:mm"),
+      publishedAt: format(new Date(postQuery.data.publishedAt), "yyyy-MM-dd'T'HH:mm"),
     }));
   }, [postQuery, setFormData]);
 
@@ -104,7 +104,7 @@ export default function EditPost() {
     const form = new FormData();
 
     for (const [key, value] of Object.entries(formData)) {
-      if (key === 'publishDate' || key === 'modifiedDate') {
+      if (key === 'publishedAt' || key === 'modifiedAt') {
         if (value) form.set(key, new Date(value as string).toISOString());
       } else if (Array.isArray(value)) {
         Array.from(value as []).forEach((arrayItem) => {
@@ -185,22 +185,22 @@ export default function EditPost() {
             <Grid item sx={{ flex: '1' }}>
               <Grid container direction="column" gap={2}>
                 <TextField
-                  id="publishDate"
-                  name="publishDate"
+                  id="publishedAt"
+                  name="publishedAt"
                   type="datetime-local"
                   label="Publish date"
                   required
-                  value={formData.publishDate}
+                  value={formData.publishedAt}
                   InputLabelProps={{ shrink: true }}
                   onChange={handleChange}
                 />
 
                 <TextField
-                  id="modifiedDate"
-                  name="modifiedDate"
+                  id="modifiedAt"
+                  name="modifiedAt"
                   type="datetime-local"
                   label="Modified date"
-                  value={formData.modifiedDate}
+                  value={formData.modifiedAt}
                   InputLabelProps={{ shrink: true }}
                   onChange={handleChange}
                 />

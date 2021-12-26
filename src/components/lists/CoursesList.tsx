@@ -5,6 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { toLocalDate } from '../../lib/dateFormat';
 import { useDeleteCourseMutation } from '../../services/api';
 import { CourseDto } from '../../services/generatedApi';
 import { DeleteButton } from '../buttons/DeleteButton';
@@ -55,10 +56,8 @@ export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...prop
                 <Typography variant="body2">{course.durationInHours} val.</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography>{new Date(course.startDate).toLocaleDateString('lt')}</Typography>
-                <Typography variant="caption">
-                  {new Date(course.endDate).toLocaleDateString('lt')}
-                </Typography>
+                <Typography>{toLocalDate(course.startDate)}</Typography>
+                <Typography variant="caption">{toLocalDate(course.endDate)}</Typography>
               </TableCell>
               {!preview && (
                 <TableCell align="right">
