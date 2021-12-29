@@ -65,6 +65,33 @@ export const routes: RoutesGroup[] = [
     ],
   },
   {
+    name: 'Administracija',
+    routes: [
+      {
+        name: 'Patyčių dėžutė',
+        path: '/bullies',
+        accessRole: 'Bully',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/bullies/ViewBullies')),
+          },
+        ],
+      },
+      {
+        name: 'Kvalifikacijos kursai',
+        path: '/admin/courses',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/ViewAllCourses')),
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: 'Mokytojams',
     routes: [
       {
@@ -83,22 +110,6 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/courses/EditCourse')),
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Administracija',
-    routes: [
-      {
-        name: 'Kvalifikacijos kursai',
-        path: '/admin/courses',
-        accessRole: 'Manager',
-        innerRoutes: [
-          {
-            path: '',
-            lazyElement: lazy(() => import('../pages/admin/ViewAllCourses')),
           },
         ],
       },

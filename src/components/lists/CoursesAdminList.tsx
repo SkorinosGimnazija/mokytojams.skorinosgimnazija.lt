@@ -5,6 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Box } from '@mui/system';
 import { differenceInCalendarDays } from 'date-fns';
+import groupBy from 'lodash/groupBy';
 import React, { useMemo, useState } from 'react';
 import { toLocalDate } from '../../lib/dateFormat';
 import { CourseDto, TeacherDto } from '../../services/generatedApi';
@@ -17,43 +18,36 @@ interface Props extends DefaultTableProps {
 }
 
 export const CoursesAdminList: React.FC<Props> = ({ coursesData, teachersData, ...props }) => {
-  const [expanded, setExpanded] = useState<{ [key: string]: boolean | undefined }>({});
+  const [expanded, setExpanded] = useState<Record<string, boolean | undefined>>({});
 
   const normalizedCourses = useMemo(() => {
-    const normalized = {} as {
-      [userName: string]:
-        | {
-            courses: CourseDto[];
-            hours: number;
-            days: number;
-            lastUpdate: Date;
-          }
-        | undefined;
-    };
-
-    for (const course of coursesData ?? []) {
-      const userName = course.user.userName;
-      const createDate = new Date(course.createdAt);
-      const startDate = new Date(course.startDate);
-      const endDate = new Date(course.endDate);
-
-      const saved = normalized[userName];
-
-      if (saved) {
-        saved.hours += course.durationInHours;
-        saved.days += differenceInCalendarDays(endDate, startDate) + 1;
-        saved.courses.push(course);
-        if (createDate > saved.lastUpdate) {
-          saved.lastUpdate = createDate;
-        }
-      } else {
-        normalized[userName] = {
-          hours: course.durationInHours,
-          days: differenceInCalendarDays(endDate, startDate) + 1,
-          courses: [course],
-          lastUpdate: createDate,
-        };
+    const normalized: Record<
+      string,
+      {
+        courses: CourseDto[];
+        hours: number;
+        days: number;
+        lastUpdate: Date;
       }
+    > = {};
+
+    for (const [userName, courses] of Object.entries(groupBy(coursesData, (x) => x.user.userName))) {
+      const totals = courses.reduce(
+        (acc, cur) => {
+          const createDate = new Date(cur.createdAt);
+          const startDate = new Date(cur.startDate);
+          const endDate = new Date(cur.endDate);
+
+          return {
+            hours: acc.hours + cur.durationInHours,
+            days: acc.days + differenceInCalendarDays(endDate, startDate) + 1,
+            lastUpdate: createDate > acc.lastUpdate ? createDate : acc.lastUpdate,
+          };
+        },
+        { hours: 0, days: 0, lastUpdate: new Date(0) }
+      );
+
+      normalized[userName] = { courses, ...totals };
     }
 
     return normalized;

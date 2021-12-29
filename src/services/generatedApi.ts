@@ -31,6 +31,28 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
     }),
+    getBullyReports: build.query<GetBullyReportsApiResponse, GetBullyReportsApiArg>({
+      query: (queryArg) => ({
+        url: `/BullyReports`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    getBullyReportById: build.query<GetBullyReportByIdApiResponse, GetBullyReportByIdApiArg>({
+      query: (queryArg) => ({ url: `/BullyReports/${queryArg.id}` }),
+    }),
+    deleteBullyReport: build.mutation<DeleteBullyReportApiResponse, DeleteBullyReportApiArg>({
+      query: (queryArg) => ({ url: `/BullyReports/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    createPublicBullyReport: build.mutation<
+      CreatePublicBullyReportApiResponse,
+      CreatePublicBullyReportApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/BullyReports/public`,
+        method: 'POST',
+        body: queryArg.bullyReportCreateDto,
+      }),
+    }),
     getAllCoursesByDate: build.query<GetAllCoursesByDateApiResponse, GetAllCoursesByDateApiArg>({
       query: (queryArg) => ({
         url: `/Courses/all`,
@@ -199,6 +221,23 @@ export type SearchBannersApiArg = {
 export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerDto[];
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
+};
+export type GetBullyReportsApiResponse = /** status 200 Success */ BullyReportDtoPaginatedList;
+export type GetBullyReportsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type GetBullyReportByIdApiResponse = /** status 200 Success */ BullyReportDto;
+export type GetBullyReportByIdApiArg = {
+  id: number;
+};
+export type DeleteBullyReportApiResponse = /** status 204 Success */ undefined;
+export type DeleteBullyReportApiArg = {
+  id: number;
+};
+export type CreatePublicBullyReportApiResponse = /** status 201 Success */ BullyReportDto;
+export type CreatePublicBullyReportApiArg = {
+  bullyReportCreateDto: BullyReportCreateDto;
 };
 export type GetAllCoursesByDateApiResponse = /** status 200 Success */ CourseDto[];
 export type GetAllCoursesByDateApiArg = {
@@ -393,6 +432,31 @@ export type BannerDtoPaginatedList = {
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type BullyReportDto = {
+  id: number;
+  bullyInfo: string;
+  victimInfo: string;
+  details?: string | null;
+  location: string;
+  date: string;
+  createdAt: string;
+};
+export type BullyReportDtoPaginatedList = {
+  items: BullyReportDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type BullyReportCreateDto = {
+  bullyInfo: string;
+  victimInfo: string;
+  details?: string | null;
+  location: string;
+  captchaToken: string;
+  date: string;
 };
 export type UserDto = {
   id: number;

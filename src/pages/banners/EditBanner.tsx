@@ -191,58 +191,61 @@ export default function EditBanner() {
           </FormControl>
         </Grid>
 
-        <Grid item>
-          <Grid container alignItems={'center'}>
-            <label htmlFor="images">
-              <input
-                id="images"
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={(e) => {
-                  const image = e.target.files?.[0];
-                  if (!image) {
-                    return;
+        <Grid container gap={10}>
+          <Grid item>
+            <Grid container gap={4} direction="column">
+              <label htmlFor="images">
+                <input
+                  id="images"
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={(e) => {
+                    const image = e.target.files?.[0];
+                    if (!image) {
+                      return;
+                    }
+
+                    setImagePreview(URL.createObjectURL(image));
+                    setFormData((x) => ({ ...x, picture: image }));
+                  }}
+                />
+                <Button variant="outlined" component="span">
+                  Picture
+                </Button>
+              </label>
+              <Grid item>
+                <FormControlLabel
+                  label="Published"
+                  control={
+                    <Checkbox
+                      name="isPublished"
+                      checked={formData.isPublished}
+                      onChange={handleCheckboxChange}
+                    />
                   }
+                />
+              </Grid>
 
-                  setImagePreview(URL.createObjectURL(image));
-                  setFormData((x) => ({ ...x, picture: image }));
-                }}
-              />
+              <Grid item>
+                <SaveButton disabled={createBannerStatus.isLoading || editBannerStatus.isLoading} />
+              </Grid>
+            </Grid>
+          </Grid>
 
-              <Button variant="outlined" component="span">
-                Picture
-              </Button>
-            </label>
-            <Box marginLeft={4}>
+          <Grid item>
+            <Box marginLeft={4} maxWidth={400}>
               <img
+                style={{ maxWidth: 400, maxHeight: 200 }}
                 src={
                   imagePreview ??
                   (bannerQuery.data?.pictureUrl
                     ? `${process.env.REACT_APP_STATIC_URL}/${bannerQuery.data?.pictureUrl}`
                     : '')
                 }
-                height={175}
               />
             </Box>
           </Grid>
-        </Grid>
-
-        <Grid item>
-          <FormControlLabel
-            label="Published"
-            control={
-              <Checkbox
-                name="isPublished"
-                checked={formData.isPublished}
-                onChange={handleCheckboxChange}
-              />
-            }
-          />
-        </Grid>
-
-        <Grid item>
-          <SaveButton disabled={createBannerStatus.isLoading || editBannerStatus.isLoading} />
         </Grid>
       </Grid>
     </form>

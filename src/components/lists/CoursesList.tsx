@@ -52,7 +52,7 @@ export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...prop
                 <Typography variant="caption">{course.organizer}</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography> {course.certificateNr}</Typography>
+                <Typography>{course.certificateNr}</Typography>
                 <Typography variant="body2">{course.durationInHours} val.</Typography>
               </TableCell>
               <TableCell align="center">

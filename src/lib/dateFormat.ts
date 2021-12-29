@@ -1,9 +1,9 @@
 const ltDateFormat = new Intl.DateTimeFormat('lt', {
-  dateStyle: 'medium',
+  dateStyle: 'short',
 });
 
 const ltDateTimeFormat = new Intl.DateTimeFormat('lt', {
-  dateStyle: 'medium',
+  dateStyle: 'short',
   timeStyle: 'short',
 });
 
