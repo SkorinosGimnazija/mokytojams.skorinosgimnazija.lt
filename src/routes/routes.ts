@@ -7,58 +7,58 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Posts',
-        path: '/posts',
+        path: '/cms/posts',
         accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/posts/ViewPosts')),
+            lazyElement: lazy(() => import('../pages/cms/posts/ViewPosts')),
           },
           {
             path: 'create',
-            lazyElement: lazy(() => import('../pages/posts/EditPost')),
+            lazyElement: lazy(() => import('../pages/cms/posts/EditPost')),
           },
           {
             path: ':id',
-            lazyElement: lazy(() => import('../pages/posts/EditPost')),
+            lazyElement: lazy(() => import('../pages/cms/posts/EditPost')),
           },
         ],
       },
       {
         name: 'Menus',
-        path: '/menus',
+        path: '/cms/menus',
         accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/menus/ViewMenus')),
+            lazyElement: lazy(() => import('../pages/cms/menus/ViewMenus')),
           },
           {
             path: 'create',
-            lazyElement: lazy(() => import('../pages/menus/EditMenu')),
+            lazyElement: lazy(() => import('../pages/cms/menus/EditMenu')),
           },
           {
             path: ':id',
-            lazyElement: lazy(() => import('../pages/menus/EditMenu')),
+            lazyElement: lazy(() => import('../pages/cms/menus/EditMenu')),
           },
         ],
       },
       {
         name: 'Banners',
-        path: '/banners',
+        path: '/cms/banners',
         accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/banners/ViewBanners')),
+            lazyElement: lazy(() => import('../pages/cms/banners/ViewBanners')),
           },
           {
             path: 'create',
-            lazyElement: lazy(() => import('../pages/banners/EditBanner')),
+            lazyElement: lazy(() => import('../pages/cms/banners/EditBanner')),
           },
           {
             path: ':id',
-            lazyElement: lazy(() => import('../pages/banners/EditBanner')),
+            lazyElement: lazy(() => import('../pages/cms/banners/EditBanner')),
           },
         ],
       },
@@ -69,12 +69,16 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Patyčių dėžutė',
-        path: '/bullies',
+        path: '/admin/bullies',
         accessRole: 'Bully',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/bullies/ViewBullies')),
+            lazyElement: lazy(() => import('../pages/admin/bullies/ViewBullies')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/bullies/EditBully')),
           },
         ],
       },
@@ -85,7 +89,7 @@ export const routes: RoutesGroup[] = [
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/admin/ViewAllCourses')),
+            lazyElement: lazy(() => import('../pages/admin/courses/ViewAllCourses')),
           },
         ],
       },
@@ -96,20 +100,20 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Kvalifikacijos kursai',
-        path: '/courses',
+        path: '/teacher/courses',
         accessRole: 'Teacher',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/courses/ViewCourses')),
+            lazyElement: lazy(() => import('../pages/teacher/courses/ViewCourses')),
           },
           {
             path: 'create',
-            lazyElement: lazy(() => import('../pages/courses/EditCourse')),
+            lazyElement: lazy(() => import('../pages/teacher/courses/EditCourse')),
           },
           {
             path: ':id',
-            lazyElement: lazy(() => import('../pages/courses/EditCourse')),
+            lazyElement: lazy(() => import('../pages/teacher/courses/EditCourse')),
           },
         ],
       },

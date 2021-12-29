@@ -1,7 +1,7 @@
 import { generatedApi } from './generatedApi';
 
 const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ['Post', 'Menu', 'Banner', 'Course'],
+  addTagTypes: ['Post', 'Menu', 'Banner', 'Course', 'Bully'],
   endpoints: {
     authorize: {},
     getPublicLanguages: {
@@ -105,6 +105,18 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     },
     getMyCourses: {
       providesTags: ['Course'],
+    },
+    getBullyReports: {
+      providesTags: ['Bully'],
+    },
+    getBullyReportById: {
+      providesTags: ['Bully'],
+    },
+    createPublicBullyReport: {
+      invalidatesTags: ['Bully'],
+    },
+    deleteBullyReport: {
+      invalidatesTags: ['Bully'],
     },
   },
 });

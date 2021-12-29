@@ -1,10 +1,10 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { SearchForm } from '../../components/forms/SearchForm';
-import { CreateItemButton } from '../../components/links/CreateItemButton';
-import { PostsList } from '../../components/lists/PostsList';
-import { useGetPostsQuery, useSearchPostsQuery } from '../../services/api';
+import { SearchForm } from '../../../components/forms/SearchForm';
+import { CreateItemButton } from '../../../components/links/CreateItemButton';
+import { PostsList } from '../../../components/lists/PostsList';
+import { useGetPostsQuery, useSearchPostsQuery } from '../../../services/api';
 
 export default function ViewPosts() {
   const [search, setSearch] = React.useState('');
@@ -12,7 +12,7 @@ export default function ViewPosts() {
   const [pageSize, setPageSize] = React.useState(10);
   const postsQuery = useGetPostsQuery({ items: pageSize, page: pageNumber }, { skip: !!search });
   const searchQuery = useSearchPostsQuery(
-    { text: search, items: pageSize, page: pageNumber },
+    { text: encodeURIComponent(search), items: pageSize, page: pageNumber },
     { skip: !search }
   );
 

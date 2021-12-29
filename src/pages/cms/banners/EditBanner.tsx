@@ -14,8 +14,8 @@ import Grid from '@mui/material/Grid';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SaveButton } from '../../components/buttons/SaveButton';
-import { slugify } from '../../lib/slugify';
+import { SaveButton } from '../../../components/buttons/SaveButton';
+import { slugify } from '../../../lib/slugify';
 import {
   useCreateBannerMutation,
   useCreateMenuMutation,
@@ -27,8 +27,8 @@ import {
   useGetPublicLanguagesQuery,
   useSearchMenusQuery,
   useSearchPostsQuery,
-} from '../../services/api';
-import { BannerDto, MenuDto } from '../../services/generatedApi';
+} from '../../../services/api';
+import { BannerDto, MenuDto } from '../../../services/generatedApi';
 
 export default function EditBanner() {
   const navigate = useNavigate();

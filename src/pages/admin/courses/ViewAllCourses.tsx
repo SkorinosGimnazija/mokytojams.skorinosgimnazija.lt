@@ -5,8 +5,8 @@ import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { addDays, addYears, format } from 'date-fns';
 import React, { useState } from 'react';
-import { CoursesAdminList } from '../../components/lists/CoursesAdminList';
-import { useGetAllCoursesByDateQuery, useGetPublicTeachersQuery } from '../../services/api';
+import { CoursesAdminList } from '../../../components/lists/CoursesAdminList';
+import { useGetAllCoursesByDateQuery, useGetPublicTeachersQuery } from '../../../services/api';
 
 export default function ViewAllCourses() {
   const [year, setYear] = useState(addDays(new Date(), -30));

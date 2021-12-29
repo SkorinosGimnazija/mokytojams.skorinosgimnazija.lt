@@ -13,19 +13,19 @@ import {
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { SaveButton } from '../../components/buttons/SaveButton';
-import { PostEditor } from '../../components/editor/PostEditor';
-import { FileUploader } from '../../components/modals/FileUploader';
-import { ImageUploader } from '../../components/modals/ImageUploader';
-import { slugify } from '../../lib/slugify';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { SaveButton } from '../../../components/buttons/SaveButton';
+import { PostEditor } from '../../../components/editor/PostEditor';
+import { FileUploader } from '../../../components/modals/FileUploader';
+import { ImageUploader } from '../../../components/modals/ImageUploader';
+import { slugify } from '../../../lib/slugify';
 import {
   useCreatePostMutation,
   useEditPostMutation,
   useGetPostByIdQuery,
   useGetPublicLanguagesQuery,
-} from '../../services/api';
-import { PostDetailsDto } from '../../services/generatedApi';
+} from '../../../services/api';
+import { PostDetailsDto } from '../../../services/generatedApi';
 
 export default function EditPost() {
   const [searchParams] = useSearchParams();
@@ -33,7 +33,6 @@ export default function EditPost() {
   const params = useParams();
   const postId = Number(params.id);
   const isNewPost = searchParams.has('new');
-  const hhh = useLocation();
 
   const [previewMode, setPreviewMode] = useState(false);
 

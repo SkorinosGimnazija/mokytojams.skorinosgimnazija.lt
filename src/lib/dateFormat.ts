@@ -7,9 +7,15 @@ const ltDateTimeFormat = new Intl.DateTimeFormat('lt', {
   timeStyle: 'short',
 });
 
-export const toLocalDate = (date?: Date | string | null) => {
+type LocalDate = {
+  (date: null | undefined): null;
+  (date: Date | string): Date;
+  (date: Date | string | null | undefined): Date | null;
+};
+
+export const toLocalDate: LocalDate = (date?: Date | string | null) => {
   if (!date) {
-    return null;
+    return null as any;
   }
 
   if (typeof date === 'string') {
@@ -19,9 +25,9 @@ export const toLocalDate = (date?: Date | string | null) => {
   return ltDateFormat.format(date);
 };
 
-export const toLocalDateTime = (date?: Date | string | null) => {
+export const toLocalDateTime: LocalDate = (date?: Date | string | null) => {
   if (!date) {
-    return null;
+    return null as any;
   }
 
   if (typeof date === 'string') {

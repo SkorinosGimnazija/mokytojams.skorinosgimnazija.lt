@@ -13,15 +13,18 @@ interface Props {
 export const DeleteButton: React.FC<Props> = ({ onConfirm }) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     setOpen(false);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     setOpen(false);
     onConfirm();
   };

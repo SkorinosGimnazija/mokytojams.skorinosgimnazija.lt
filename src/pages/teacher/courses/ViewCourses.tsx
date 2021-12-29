@@ -1,19 +1,22 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { CreateItemButton } from '../../components/links/CreateItemButton';
-import { BullyReportsList } from '../../components/lists/BullyReportsList';
-import { useGetBullyReportsQuery } from '../../services/api';
+import { CreateItemButton } from '../../../components/links/CreateItemButton';
+import { CoursesList } from '../../../components/lists/CoursesList';
+import { useGetMyCoursesQuery } from '../../../services/api';
 
-export default function ViewBullyReports() {
+export default function ViewCourses() {
   const [pageNumber, setPageNumber] = React.useState(0);
   const [pageSize, setPageSize] = React.useState(10);
-  const courseQuery = useGetBullyReportsQuery({ items: pageSize, page: pageNumber });
+  const courseQuery = useGetMyCoursesQuery({ items: pageSize, page: pageNumber });
 
   return (
     <Box>
+      <Stack direction="row" gap={4}>
+        <CreateItemButton />
+      </Stack>
       <Box mt={4}>
-        <BullyReportsList
+        <CoursesList
           data={courseQuery.data?.items}
           totalCount={courseQuery.data?.totalCount}
           itemsPerPage={pageSize}

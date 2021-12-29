@@ -3,14 +3,14 @@ import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SaveButton } from '../../components/buttons/SaveButton';
-import { itemSavedToast } from '../../lib/toasts';
+import { SaveButton } from '../../../components/buttons/SaveButton';
+import { itemSavedToast } from '../../../lib/toasts';
 import {
   useCreateCourseMutation,
   useEditCourseMutation,
   useGetCourseByIdQuery,
-} from '../../services/api';
-import { CourseDto } from '../../services/generatedApi';
+} from '../../../services/api';
+import { CourseDto } from '../../../services/generatedApi';
 
 export default function EditCourse() {
   const navigate = useNavigate();

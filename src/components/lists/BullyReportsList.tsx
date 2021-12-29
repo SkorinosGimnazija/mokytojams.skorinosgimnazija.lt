@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { toLocalDateTime } from '../../lib/dateFormat';
 import { useDeleteBullyReportMutation } from '../../services/api';
@@ -17,8 +17,9 @@ interface Props extends DefaultTableProps {
 }
 
 export const BullyReportsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
-  const auth = useAuth();
   const [deleteBullyReport, { isLoading: deleteLoading }] = useDeleteBullyReportMutation();
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleDelete = (id: number) => {
     deleteBullyReport({ id });
@@ -38,11 +39,14 @@ export const BullyReportsList: React.FC<Props> = ({ data, isLoading, ...props })
         </TableHead>
         <TableBody>
           {data?.map((bullyReport) => (
-            <TableRow hover key={bullyReport.id}>
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              hover
+              key={bullyReport.id}
+              onClick={() => navigate(`${bullyReport.id}`)}
+            >
               <TableCell>
-                <Link component={RouterLink} to={`${bullyReport.id}`}>
-                  <Typography>{bullyReport.victimInfo}</Typography>
-                </Link>
+                <Typography>{bullyReport.victimInfo}</Typography>
               </TableCell>
               <TableCell align="center">
                 <Typography>{bullyReport.bullyInfo}</Typography>
