@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import React from 'react';
 import { json } from 'stream/consumers';
 import { SearchForm } from '../../components/forms/SearchForm';
-import { CreateItemLink } from '../../components/links/CreateItemLink';
+import { CreateItemButton } from '../../components/links/CreateItemButton';
 import { BannersList } from '../../components/lists/BannersList';
 import { MenusList } from '../../components/lists/MenusList';
 import { PostsList } from '../../components/lists/PostsList';
@@ -22,7 +22,7 @@ export default function ViewBanners() {
   return (
     <Box>
       <Stack direction="row" gap={4}>
-        <CreateItemLink to="/banners/create" />
+        <CreateItemButton />
         <SearchForm
           onChange={(e) => {
             setPageNumber(0);

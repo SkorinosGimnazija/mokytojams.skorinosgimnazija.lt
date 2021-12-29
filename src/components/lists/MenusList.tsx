@@ -45,7 +45,7 @@ export const MenusList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 <PublishButton active={menu.isPublished} onClick={() => {}} />
               </TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/menus/edit/${menu.id}`}>
+                <Link component={RouterLink} to={`${menu.id}`}>
                   <Typography>{menu.title}</Typography>
                 </Link>
                 <Typography variant="caption">{menu.path}</Typography>

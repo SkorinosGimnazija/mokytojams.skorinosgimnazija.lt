@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { CreateItemLink } from '../../components/links/CreateItemLink';
+import { CreateItemButton } from '../../components/links/CreateItemButton';
 import { CoursesList } from '../../components/lists/CoursesList';
 import { useGetMyCoursesQuery } from '../../services/api';
 
@@ -13,7 +13,7 @@ export default function ViewCourses() {
   return (
     <Box>
       <Stack direction="row" gap={4}>
-        <CreateItemLink to="create" />
+        <CreateItemButton />
       </Stack>
       <Box mt={4}>
         <CoursesList

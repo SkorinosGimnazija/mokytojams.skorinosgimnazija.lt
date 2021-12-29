@@ -57,7 +57,7 @@ export default function EditCourse() {
       editCourseMutation({ courseEditDto: formData }).then((response: any) => {
         if (!response.error) {
           itemSavedToast();
-          navigate(`/courses`);
+          navigate(`../`);
         }
       });
     } else {
@@ -65,7 +65,7 @@ export default function EditCourse() {
         const courseData = response.data as CourseDto;
         if (courseData) {
           itemSavedToast();
-          navigate(`/courses`);
+          navigate(`../`);
         }
       });
     }

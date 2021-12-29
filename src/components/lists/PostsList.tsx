@@ -59,7 +59,7 @@ export const PostsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 />
               </TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/posts/edit/${post.id}`}>
+                <Link component={RouterLink} to={`${post.id}`}>
                   <Typography>{post.title}</Typography>
                 </Link>
                 <Typography variant="caption">{post.slug}</Typography>

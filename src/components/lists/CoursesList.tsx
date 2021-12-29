@@ -45,7 +45,7 @@ export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...prop
                 {preview ? (
                   <Typography>{course.title}</Typography>
                 ) : (
-                  <Link component={RouterLink} to={`edit/${course.id}`}>
+                  <Link component={RouterLink} to={`${course.id}`}>
                     <Typography>{course.title}</Typography>
                   </Link>
                 )}

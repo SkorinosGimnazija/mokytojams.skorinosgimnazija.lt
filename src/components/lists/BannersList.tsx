@@ -45,7 +45,7 @@ export const BannersList: React.FC<Props> = ({ data, isLoading, ...props }) => {
                 <PublishButton active={banner.isPublished} onClick={() => {}} />
               </TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/banners/edit/${banner.id}`}>
+                <Link component={RouterLink} to={`${banner.id}`}>
                   <Typography>{banner.title}</Typography>
                 </Link>
                 <Typography variant="caption">{banner.url}</Typography>

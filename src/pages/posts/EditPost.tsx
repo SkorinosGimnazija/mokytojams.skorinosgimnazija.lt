@@ -13,7 +13,7 @@ import {
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SaveButton } from '../../components/buttons/SaveButton';
 import { PostEditor } from '../../components/editor/PostEditor';
 import { FileUploader } from '../../components/modals/FileUploader';
@@ -33,6 +33,7 @@ export default function EditPost() {
   const params = useParams();
   const postId = Number(params.id);
   const isNewPost = searchParams.has('new');
+  const hhh = useLocation();
 
   const [previewMode, setPreviewMode] = useState(false);
 
@@ -125,7 +126,7 @@ export default function EditPost() {
       createPostMutation({ body: form as any }).then((response: any) => {
         const postData = response.data as PostDetailsDto;
         if (postData) {
-          navigate({ pathname: `/posts/edit/${postData.id}`, search: 'new' });
+          navigate({ pathname: `../${postData.id}`, search: 'new' });
         }
       });
     }

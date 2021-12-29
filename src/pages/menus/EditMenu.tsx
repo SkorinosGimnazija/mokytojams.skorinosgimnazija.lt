@@ -114,7 +114,7 @@ export default function EditMenu() {
       createMenuMutation({ menuCreateDto: formData }).then((response: any) => {
         const menuData = response.data as MenuDto;
         if (menuData) {
-          navigate(`/menus/edit/${menuData.id}`);
+          navigate(`../${menuData.id}`);
         }
       });
     }

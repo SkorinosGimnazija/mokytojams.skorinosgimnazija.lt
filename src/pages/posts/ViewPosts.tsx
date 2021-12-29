@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { SearchForm } from '../../components/forms/SearchForm';
-import { CreateItemLink } from '../../components/links/CreateItemLink';
+import { CreateItemButton } from '../../components/links/CreateItemButton';
 import { PostsList } from '../../components/lists/PostsList';
 import { useGetPostsQuery, useSearchPostsQuery } from '../../services/api';
 
@@ -19,7 +19,7 @@ export default function ViewPosts() {
   return (
     <Box>
       <Stack direction="row" gap={4}>
-        <CreateItemLink to="/posts/create" />
+        <CreateItemButton />
         <SearchForm
           onChange={(e) => {
             setPageNumber(0);

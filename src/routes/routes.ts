@@ -7,57 +7,57 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Posts',
-        slug: '/posts',
+        path: '/posts',
         accessRole: 'Admin',
         innerRoutes: [
           {
-            slug: '/',
+            path: '',
             lazyElement: lazy(() => import('../pages/posts/ViewPosts')),
           },
           {
-            slug: '/create',
+            path: 'create',
             lazyElement: lazy(() => import('../pages/posts/EditPost')),
           },
           {
-            slug: '/edit/:id',
+            path: ':id',
             lazyElement: lazy(() => import('../pages/posts/EditPost')),
           },
         ],
       },
       {
         name: 'Menus',
-        slug: '/menus',
+        path: '/menus',
         accessRole: 'Admin',
         innerRoutes: [
           {
-            slug: '/',
+            path: '',
             lazyElement: lazy(() => import('../pages/menus/ViewMenus')),
           },
           {
-            slug: '/create',
+            path: 'create',
             lazyElement: lazy(() => import('../pages/menus/EditMenu')),
           },
           {
-            slug: '/edit/:id',
+            path: ':id',
             lazyElement: lazy(() => import('../pages/menus/EditMenu')),
           },
         ],
       },
       {
         name: 'Banners',
-        slug: '/banners',
+        path: '/banners',
         accessRole: 'Admin',
         innerRoutes: [
           {
-            slug: '/',
+            path: '',
             lazyElement: lazy(() => import('../pages/banners/ViewBanners')),
           },
           {
-            slug: '/create',
+            path: 'create',
             lazyElement: lazy(() => import('../pages/banners/EditBanner')),
           },
           {
-            slug: '/edit/:id',
+            path: ':id',
             lazyElement: lazy(() => import('../pages/banners/EditBanner')),
           },
         ],
@@ -69,19 +69,19 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Kvalifikacijos kursai',
-        slug: '/courses',
+        path: '/courses',
         accessRole: 'Teacher',
         innerRoutes: [
           {
-            slug: '/',
+            path: '',
             lazyElement: lazy(() => import('../pages/courses/ViewCourses')),
           },
           {
-            slug: '/create',
+            path: 'create',
             lazyElement: lazy(() => import('../pages/courses/EditCourse')),
           },
           {
-            slug: '/edit/:id',
+            path: ':id',
             lazyElement: lazy(() => import('../pages/courses/EditCourse')),
           },
         ],
@@ -93,11 +93,11 @@ export const routes: RoutesGroup[] = [
     routes: [
       {
         name: 'Kvalifikacijos kursai',
-        slug: '/admin/courses',
+        path: '/admin/courses',
         accessRole: 'Manager',
         innerRoutes: [
           {
-            slug: '/',
+            path: '',
             lazyElement: lazy(() => import('../pages/admin/ViewAllCourses')),
           },
         ],
@@ -113,12 +113,12 @@ interface RoutesGroup {
 
 interface Route {
   name: string;
-  slug: string;
+  path: string;
   accessRole: AuthRole;
   innerRoutes: InnerRoute[];
 }
 
 interface InnerRoute {
-  slug: string;
+  path: string;
   lazyElement: React.LazyExoticComponent<() => JSX.Element>;
 }

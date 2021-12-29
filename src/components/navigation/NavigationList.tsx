@@ -29,7 +29,7 @@ export const NavigationList = () => {
                 {group.routes
                   .filter((x) => auth.hasRole(x.accessRole))
                   .map((route) => {
-                    return <NavigationButton key={route.slug} name={route.name} slug={route.slug} />;
+                    return <NavigationButton key={route.path} name={route.name} slug={route.path} />;
                   })}
               </List>
             </React.Fragment>

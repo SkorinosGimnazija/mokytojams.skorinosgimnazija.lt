@@ -39,10 +39,7 @@ export default function EditBanner() {
   const [skipBannerFetch, setSkipBannerFetch] = useState(false);
 
   const languageQuery = useGetPublicLanguagesQuery();
-  const bannerQuery = useGetBannerByIdQuery(
-    { id: bannerId },
-    { skip: !bannerId || skipBannerFetch }
-  );
+  const bannerQuery = useGetBannerByIdQuery({ id: bannerId }, { skip: !bannerId || skipBannerFetch });
 
   const [createBannerMutation, createBannerStatus] = useCreateBannerMutation();
   const [editBannerMutation, editBannerStatus] = useEditBannerMutation();
@@ -110,7 +107,7 @@ export default function EditBanner() {
       createBannerMutation({ body: form as any }).then((response: any) => {
         const bannerData = response.data as BannerDto;
         if (bannerData) {
-          navigate(`/banners/edit/${bannerData.id}`);
+          navigate(`../${bannerData.id}`);
         }
       });
     }

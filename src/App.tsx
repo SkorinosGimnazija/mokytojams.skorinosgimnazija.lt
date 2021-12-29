@@ -23,22 +23,25 @@ export const App = () => {
 
           {routes.map((group) => {
             return group.routes.map((route) => {
-              return route.innerRoutes.map((innerRoute) => {
-                const slug = `${route.slug}${innerRoute.slug}`;
-                return (
-                  <Route
-                    key={slug}
-                    path={slug}
-                    element={
-                      <ProtectedRoute authRole={route.accessRole}>
-                        <React.Suspense fallback={null}>
-                          <innerRoute.lazyElement />
-                        </React.Suspense>
-                      </ProtectedRoute>
-                    }
-                  />
-                );
-              });
+              return (
+                <Route key={route.path} path={route.path}>
+                  {route.innerRoutes.map((innerRoute) => {
+                    return (
+                      <Route
+                        key={innerRoute.path}
+                        path={innerRoute.path}
+                        element={
+                          <ProtectedRoute authRole={route.accessRole}>
+                            <React.Suspense fallback={null}>
+                              <innerRoute.lazyElement />
+                            </React.Suspense>
+                          </ProtectedRoute>
+                        }
+                      />
+                    );
+                  })}
+                </Route>
+              );
             });
           })}
 
