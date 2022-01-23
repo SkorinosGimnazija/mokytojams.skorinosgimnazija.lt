@@ -8,30 +8,21 @@ import { differenceInCalendarDays } from 'date-fns';
 import groupBy from 'lodash/groupBy';
 import React, { useMemo, useState } from 'react';
 import { toLocalDate } from '../../lib/dateFormat';
-import { CourseDto, TeacherDto } from '../../services/generatedApi';
+import { CourseDto } from '../../services/generatedApi';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 import { CoursesList } from './CoursesList';
 
 interface Props extends DefaultTableProps {
   coursesData?: CourseDto[];
-  teachersData?: TeacherDto[];
 }
 
-export const CoursesAdminList: React.FC<Props> = ({ coursesData, teachersData, ...props }) => {
+export const CoursesAdminList: React.FC<Props> = ({ coursesData, ...props }) => {
   const [expanded, setExpanded] = useState<Record<string, boolean | undefined>>({});
 
   const normalizedCourses = useMemo(() => {
-    const normalized: Record<
-      string,
-      {
-        courses: CourseDto[];
-        hours: number;
-        days: number;
-        lastUpdate: Date;
-      }
-    > = {};
+    const data = Object.values(groupBy(coursesData, (x) => x.user.id)).map((courses) => {
+      const user = courses[0].user;
 
-    for (const [userName, courses] of Object.entries(groupBy(coursesData, (x) => x.user.userName))) {
       const totals = courses.reduce(
         (acc, cur) => {
           const createDate = new Date(cur.createdAt);
@@ -47,14 +38,14 @@ export const CoursesAdminList: React.FC<Props> = ({ coursesData, teachersData, .
         { hours: 0, days: 0, lastUpdate: new Date(0) }
       );
 
-      normalized[userName] = { courses, ...totals };
-    }
+      return { displayName: user.displayName, userId: user.id, courses: courses, ...totals };
+    });
 
-    return normalized;
+    return data;
   }, [coursesData]);
 
-  const handleExpand = (userName: string) => {
-    setExpanded((state) => ({ ...state, [userName]: !state[userName] }));
+  const handleExpand = (userId: number) => {
+    setExpanded((state) => ({ ...state, [userId]: !state[userId] }));
   };
 
   return (
@@ -78,41 +69,35 @@ export const CoursesAdminList: React.FC<Props> = ({ coursesData, teachersData, .
           </TableRow>
         </TableHead>
         <TableBody>
-          {teachersData?.map((teacher) => {
+          {normalizedCourses?.map((teacher) => {
             return (
-              <React.Fragment key={teacher.userName}>
-                <TableRow
-                  hover
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => handleExpand(teacher.userName)}
-                >
+              <React.Fragment key={teacher.userId}>
+                <TableRow hover sx={{ cursor: 'pointer' }} onClick={() => handleExpand(teacher.userId)}>
                   <TableCell>
                     <Typography>{teacher.displayName}</Typography>
                   </TableCell>
 
                   <TableCell align="center">
-                    <Typography>{normalizedCourses[teacher.userName]?.courses.length ?? 0}</Typography>
+                    <Typography>{teacher.courses.length}</Typography>
                   </TableCell>
 
                   <TableCell align="center">
-                    <Typography>{normalizedCourses[teacher.userName]?.days ?? 0} d.</Typography>
+                    <Typography>{teacher.days} d.</Typography>
                   </TableCell>
 
                   <TableCell align="center">
-                    <Typography>{normalizedCourses[teacher.userName]?.hours ?? 0} val.</Typography>
+                    <Typography>{teacher.hours} val.</Typography>
                   </TableCell>
 
                   <TableCell align="center">
-                    <Typography>
-                      {toLocalDate(normalizedCourses[teacher.userName]?.lastUpdate)}
-                    </Typography>
+                    <Typography>{toLocalDate(teacher.lastUpdate)}</Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
-                    <Collapse in={expanded[teacher.userName]} timeout="auto" unmountOnExit>
+                    <Collapse in={expanded[teacher.userId]} timeout="auto" unmountOnExit>
                       <Box sx={{ margin: 2 }}>
-                        <CoursesList data={normalizedCourses[teacher.userName]?.courses} preview />
+                        <CoursesList data={teacher.courses} preview />
                       </Box>
                     </Collapse>
                   </TableCell>

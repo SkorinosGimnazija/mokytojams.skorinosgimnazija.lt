@@ -124,6 +124,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
 export { enhancedApi as api };
 
 export const {
+  useGetAllAppointmentsQuery,
+  useGetMyAppointmentsQuery,
+  useEditAppointmentTypeMutation,
+  useGetAppointmentByIdQuery,
+  useDeleteAppointmentMutation,
+  useDeleteAppointmentTypeMutation,
+  useGetAppointmentTypeByIdQuery,
+  useGetAppointmentTypesQuery,
+  useCreateAppointmentTypeMutation,
+  useCreateAppointmentMutation,
+  useGetAppointmentDatesQuery,
+  useGetAppointmentAvailableDatesQuery,
+  useGetPublicAppointmentTypeBySlugQuery,
+  useGetPublicAppointmentAvailableDatesQuery,
+  useCreatePublicAppointmentMutation,
   useAuthorizeMutation,
   useGetBannersQuery,
   useCreateBannerMutation,
@@ -142,6 +157,7 @@ export const {
   useEditCourseMutation,
   useGetCourseByIdQuery,
   useDeleteCourseMutation,
+  useGetPublicTeachersQuery,
   useGetPublicEventsQuery,
   useGetPublicDayEventsQuery,
   useGetPublicLanguagesQuery,
@@ -164,5 +180,4 @@ export const {
   useGetPublicPostByMenuLanguageAndPathQuery,
   useGetPublicPostsByLanguageQuery,
   useSearchPublicPostsQuery,
-  useGetPublicTeachersQuery,
 } = enhancedApi;

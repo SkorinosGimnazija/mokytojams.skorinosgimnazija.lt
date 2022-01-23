@@ -6,11 +6,10 @@ import { Box } from '@mui/system';
 import { addDays, addYears, format } from 'date-fns';
 import React, { useState } from 'react';
 import { CoursesAdminList } from '../../../components/lists/CoursesAdminList';
-import { useGetAllCoursesByDateQuery, useGetPublicTeachersQuery } from '../../../services/api';
+import { useGetAllCoursesByDateQuery } from '../../../services/api';
 
 export default function ViewAllCourses() {
   const [year, setYear] = useState(addDays(new Date(), -30));
-  const teachersQuery = useGetPublicTeachersQuery();
   const courseQuery = useGetAllCoursesByDateQuery({
     start: format(year, 'yyyy-01-01'),
     end: format(year, 'yyyy-12-31'),
@@ -30,11 +29,7 @@ export default function ViewAllCourses() {
         </LocalizationProvider>
       </Stack>
       <Box mt={4}>
-        <CoursesAdminList
-          teachersData={teachersQuery.data}
-          coursesData={courseQuery.data}
-          isLoading={courseQuery.isFetching || teachersQuery.isFetching}
-        />
+        <CoursesAdminList coursesData={courseQuery.data} isLoading={courseQuery.isFetching} />
       </Box>
     </Box>
   );

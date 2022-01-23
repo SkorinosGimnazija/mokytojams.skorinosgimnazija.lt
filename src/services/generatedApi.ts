@@ -1,6 +1,93 @@
 import { baseApi as api } from './baseApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/all`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    getMyAppointments: build.query<GetMyAppointmentsApiResponse, GetMyAppointmentsApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    editAppointmentType: build.mutation<EditAppointmentTypeApiResponse, EditAppointmentTypeApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments`,
+        method: 'PUT',
+        body: queryArg.appointmentTypeEditDto,
+      }),
+    }),
+    getAppointmentById: build.query<GetAppointmentByIdApiResponse, GetAppointmentByIdApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}` }),
+    }),
+    deleteAppointment: build.mutation<DeleteAppointmentApiResponse, DeleteAppointmentApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    deleteAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>(
+      {
+        query: (queryArg) => ({ url: `/Appointments/type/${queryArg.id}`, method: 'DELETE' }),
+      }
+    ),
+    getAppointmentTypeById: build.query<GetAppointmentTypeByIdApiResponse, GetAppointmentTypeByIdApiArg>(
+      {
+        query: (queryArg) => ({ url: `/Appointments/type/${queryArg.id}` }),
+      }
+    ),
+    getAppointmentTypes: build.query<GetAppointmentTypesApiResponse, GetAppointmentTypesApiArg>({
+      query: () => ({ url: `/Appointments/types` }),
+    }),
+    createAppointmentType: build.mutation<CreateAppointmentTypeApiResponse, CreateAppointmentTypeApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/Appointments/type`,
+          method: 'POST',
+          body: queryArg.appointmentTypeCreateDto,
+        }),
+      }
+    ),
+    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/create`,
+        method: 'POST',
+        body: queryArg.appointmentCreateDto,
+      }),
+    }),
+    getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/time/${queryArg['type']}` }),
+    }),
+    getAppointmentAvailableDates: build.query<
+      GetAppointmentAvailableDatesApiResponse,
+      GetAppointmentAvailableDatesApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/time/${queryArg['type']}/${queryArg.userName}` }),
+    }),
+    getPublicAppointmentTypeBySlug: build.query<
+      GetPublicAppointmentTypeBySlugApiResponse,
+      GetPublicAppointmentTypeBySlugApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/public/type/${queryArg.slug}` }),
+    }),
+    getPublicAppointmentAvailableDates: build.query<
+      GetPublicAppointmentAvailableDatesApiResponse,
+      GetPublicAppointmentAvailableDatesApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Appointments/public/time/${queryArg['type']}/${queryArg.userName}`,
+      }),
+    }),
+    createPublicAppointment: build.mutation<
+      CreatePublicAppointmentApiResponse,
+      CreatePublicAppointmentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Appointments/public/create`,
+        method: 'POST',
+        body: queryArg.appointmentPublicCreateDto,
+      }),
+    }),
     authorize: build.mutation<AuthorizeApiResponse, AuthorizeApiArg>({
       query: (queryArg) => ({ url: `/Auth/authorize`, method: 'POST', body: queryArg.googleAuthDto }),
     }),
@@ -73,6 +160,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     deleteCourse: build.mutation<DeleteCourseApiResponse, DeleteCourseApiArg>({
       query: (queryArg) => ({ url: `/Courses/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    getPublicTeachers: build.query<GetPublicTeachersApiResponse, GetPublicTeachersApiArg>({
+      query: () => ({ url: `/Employees/public/teachers` }),
     }),
     getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
       query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
@@ -165,13 +255,73 @@ const injectedRtkApi = api.injectEndpoints({
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
-    getPublicTeachers: build.query<GetPublicTeachersApiResponse, GetPublicTeachersApiArg>({
-      query: () => ({ url: `/Users/public/teachers` }),
-    }),
   }),
   overrideExisting: false,
 });
 export { injectedRtkApi as generatedApi };
+export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetAllAppointmentsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type GetMyAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetMyAppointmentsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type EditAppointmentTypeApiResponse = /** status 200 Success */ undefined;
+export type EditAppointmentTypeApiArg = {
+  appointmentTypeEditDto: AppointmentTypeEditDto;
+};
+export type GetAppointmentByIdApiResponse = /** status 200 Success */ AppointmentDetailsDto;
+export type GetAppointmentByIdApiArg = {
+  id: number;
+};
+export type DeleteAppointmentApiResponse = /** status 204 Success */ undefined;
+export type DeleteAppointmentApiArg = {
+  id: number;
+};
+export type DeleteAppointmentTypeApiResponse = /** status 204 Success */ undefined;
+export type DeleteAppointmentTypeApiArg = {
+  id: number;
+};
+export type GetAppointmentTypeByIdApiResponse = /** status 200 Success */ AppointmentTypeDto;
+export type GetAppointmentTypeByIdApiArg = {
+  id: number;
+};
+export type GetAppointmentTypesApiResponse = /** status 200 Success */ AppointmentTypeDto[];
+export type GetAppointmentTypesApiArg = void;
+export type CreateAppointmentTypeApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreateAppointmentTypeApiArg = {
+  appointmentTypeCreateDto: AppointmentTypeCreateDto;
+};
+export type CreateAppointmentApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreateAppointmentApiArg = {
+  appointmentCreateDto: AppointmentCreateDto;
+};
+export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
+export type GetAppointmentDatesApiArg = {
+  type: string;
+};
+export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
+export type GetAppointmentAvailableDatesApiArg = {
+  type: string;
+  userName: string;
+};
+export type GetPublicAppointmentTypeBySlugApiResponse = /** status 200 Success */ AppointmentTypeDto;
+export type GetPublicAppointmentTypeBySlugApiArg = {
+  slug: string;
+};
+export type GetPublicAppointmentAvailableDatesApiResponse =
+  /** status 200 Success */ AppointmentDateDto[];
+export type GetPublicAppointmentAvailableDatesApiArg = {
+  type: string;
+  userName: string;
+};
+export type CreatePublicAppointmentApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreatePublicAppointmentApiArg = {
+  appointmentPublicCreateDto: AppointmentPublicCreateDto;
+};
 export type AuthorizeApiResponse = /** status 200 Success */ UserAuthDto;
 export type AuthorizeApiArg = {
   googleAuthDto: GoogleAuthDto;
@@ -187,6 +337,8 @@ export type CreateBannerApiArg = {
     Title?: string;
     Url?: string;
     IsPublished?: boolean;
+    Width?: number;
+    Height?: number;
     Picture?: Blob;
     Order?: number;
     LanguageId?: number;
@@ -200,6 +352,8 @@ export type EditBannerApiArg = {
     Title?: string;
     Url?: string;
     IsPublished?: boolean;
+    Width?: number;
+    Height?: number;
     Order?: number;
     LanguageId?: number;
   };
@@ -265,6 +419,8 @@ export type DeleteCourseApiResponse = /** status 204 Success */ undefined;
 export type DeleteCourseApiArg = {
   id: number;
 };
+export type GetPublicTeachersApiResponse = /** status 200 Success */ EmployeeDto[];
+export type GetPublicTeachersApiArg = void;
 export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
 export type GetPublicEventsApiArg = {
   week: number;
@@ -393,12 +549,38 @@ export type SearchPublicPostsApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicTeachersApiResponse = /** status 200 Success */ TeacherDto[];
-export type GetPublicTeachersApiArg = void;
-export type UserAuthDto = {
-  token: string;
-  displayName: string;
-  roles: string[];
+export type AppointmentTypeDto = {
+  id: number;
+  name: string;
+  slug: string;
+  durationInMinutes: number;
+  invitePrincipal: boolean;
+  isPublic: boolean;
+  start: string;
+  end: string;
+  registrationEnd: string;
+};
+export type AppointmentDateDto = {
+  id: number;
+  date: string;
+  type: AppointmentTypeDto;
+};
+export type AppointmentDetailsDto = {
+  id: number;
+  eventId: string;
+  dateId: number;
+  userName: string;
+  attendeeName: string;
+  attendeeEmail: string;
+  date: AppointmentDateDto;
+};
+export type AppointmentDetailsDtoPaginatedList = {
+  items: AppointmentDetailsDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };
 export type ProblemDetails = {
   type?: string | null;
@@ -407,6 +589,51 @@ export type ProblemDetails = {
   detail?: string | null;
   instance?: string | null;
   [key: string]: any;
+};
+export type AppointmentTypeEditDto = {
+  name: string;
+  slug: string;
+  durationInMinutes: number;
+  invitePrincipal: boolean;
+  isPublic: boolean;
+  start: string;
+  end: string;
+  registrationEnd: string;
+  id: number;
+};
+export type AppointmentDto = {
+  id: number;
+  eventId: string;
+  dateId: number;
+  userName: string;
+  attendeeName: string;
+  attendeeEmail: string;
+};
+export type AppointmentTypeCreateDto = {
+  name: string;
+  slug: string;
+  durationInMinutes: number;
+  invitePrincipal: boolean;
+  isPublic: boolean;
+  start: string;
+  end: string;
+  registrationEnd: string;
+};
+export type AppointmentCreateDto = {
+  dateId: number;
+  userName: string;
+};
+export type AppointmentPublicCreateDto = {
+  captchaToken: string;
+  dateId: number;
+  userName: string;
+  attendeeName: string;
+  attendeeEmail: string;
+};
+export type UserAuthDto = {
+  token: string;
+  displayName: string;
+  roles: string[];
 };
 export type GoogleAuthDto = {
   token: string;
@@ -420,6 +647,8 @@ export type BannerDto = {
   id: number;
   title: string;
   url: string;
+  width: number;
+  height: number;
   isPublished: boolean;
   pictureUrl: string;
   order: number;
@@ -473,6 +702,8 @@ export type CourseDto = {
   createdAt: string;
   durationInHours: number;
   certificateNr?: string | null;
+  price?: number | null;
+  isUseful: boolean;
   user: UserDto;
   userId: number;
 };
@@ -490,6 +721,8 @@ export type CourseCreateDto = {
   startDate: string;
   endDate: string;
   durationInHours: number;
+  price?: number | null;
+  isUseful: boolean;
   certificateNr?: string | null;
 };
 export type CourseEditDto = {
@@ -498,8 +731,14 @@ export type CourseEditDto = {
   startDate: string;
   endDate: string;
   durationInHours: number;
+  price?: number | null;
+  isUseful: boolean;
   certificateNr?: string | null;
   id: number;
+};
+export type EmployeeDto = {
+  userName: string;
+  displayName: string;
 };
 export type EventDto = {
   id: string;
@@ -610,8 +849,4 @@ export type PostDtoPaginatedList = {
 export type PostPatchDto = {
   isFeatured?: boolean | null;
   isPublished?: boolean | null;
-};
-export type TeacherDto = {
-  userName: string;
-  displayName: string;
 };

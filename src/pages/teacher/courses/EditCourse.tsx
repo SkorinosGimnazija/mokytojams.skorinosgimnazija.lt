@@ -31,6 +31,8 @@ export default function EditCourse() {
     startDate: '',
     endDate: '',
     durationInHours: 0,
+    isUseful: false,
+    price: null as number | undefined | null,
     certificateNr: null as string | undefined | null,
   });
 
@@ -43,6 +45,8 @@ export default function EditCourse() {
       ...x,
       title: courseQuery.data.title,
       organizer: courseQuery.data.organizer,
+      price: courseQuery.data.price,
+      isUseful: courseQuery.data.isUseful,
       startDate: format(new Date(courseQuery.data.startDate), 'yyyy-MM-dd'),
       endDate: format(new Date(courseQuery.data.endDate), 'yyyy-MM-dd'),
       durationInHours: courseQuery.data.durationInHours,
