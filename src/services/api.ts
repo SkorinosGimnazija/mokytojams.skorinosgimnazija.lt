@@ -97,7 +97,10 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     editCourse: {
       invalidatesTags: ['Course'],
     },
-    getAllCoursesByDate: {
+    getTeacherCoursesByIdAndDate: {
+      providesTags: ['Course'],
+    },
+    getCoursesStatsByDate: {
       providesTags: ['Course'],
     },
     getCourseById: {
@@ -151,7 +154,8 @@ export const {
   useGetBullyReportByIdQuery,
   useDeleteBullyReportMutation,
   useCreatePublicBullyReportMutation,
-  useGetAllCoursesByDateQuery,
+  useGetCoursesStatsByDateQuery,
+  useGetTeacherCoursesByIdAndDateQuery,
   useGetMyCoursesQuery,
   useCreateCourseMutation,
   useEditCourseMutation,

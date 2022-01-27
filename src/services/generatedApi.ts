@@ -140,9 +140,18 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.bullyReportCreateDto,
       }),
     }),
-    getAllCoursesByDate: build.query<GetAllCoursesByDateApiResponse, GetAllCoursesByDateApiArg>({
+    getCoursesStatsByDate: build.query<GetCoursesStatsByDateApiResponse, GetCoursesStatsByDateApiArg>({
       query: (queryArg) => ({
-        url: `/Courses/all`,
+        url: `/Courses/stats`,
+        params: { start: queryArg.start, end: queryArg.end },
+      }),
+    }),
+    getTeacherCoursesByIdAndDate: build.query<
+      GetTeacherCoursesByIdAndDateApiResponse,
+      GetTeacherCoursesByIdAndDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Courses/teacher/${queryArg.id}`,
         params: { start: queryArg.start, end: queryArg.end },
       }),
     }),
@@ -393,8 +402,14 @@ export type CreatePublicBullyReportApiResponse = /** status 201 Success */ Bully
 export type CreatePublicBullyReportApiArg = {
   bullyReportCreateDto: BullyReportCreateDto;
 };
-export type GetAllCoursesByDateApiResponse = /** status 200 Success */ CourseDto[];
-export type GetAllCoursesByDateApiArg = {
+export type GetCoursesStatsByDateApiResponse = /** status 200 Success */ CourseStatsDto[];
+export type GetCoursesStatsByDateApiArg = {
+  start?: string;
+  end?: string;
+};
+export type GetTeacherCoursesByIdAndDateApiResponse = /** status 200 Success */ CourseDto[];
+export type GetTeacherCoursesByIdAndDateApiArg = {
+  id: number;
   start?: string;
   end?: string;
 };
@@ -686,6 +701,15 @@ export type BullyReportCreateDto = {
   location: string;
   captchaToken: string;
   date: string;
+};
+export type CourseStatsDto = {
+  userId: number;
+  userDisplayName: string;
+  hours: number;
+  count: number;
+  usefulCount: number;
+  price: number;
+  lastUpdate: string;
 };
 export type UserDto = {
   id: number;

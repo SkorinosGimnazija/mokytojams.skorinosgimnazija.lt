@@ -1,16 +1,19 @@
 import { YearPicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Stack } from '@mui/material';
+import { Checkbox, FormControlLabel, Stack, Switch } from '@mui/material';
 import { Box } from '@mui/system';
 import { addDays, addYears, format } from 'date-fns';
 import React, { useState } from 'react';
 import { CoursesAdminList } from '../../../components/lists/CoursesAdminList';
-import { useGetAllCoursesByDateQuery } from '../../../services/api';
+import {
+  useGetTeacherCoursesByIdAndDateQuery,
+  useGetCoursesStatsByDateQuery,
+} from '../../../services/api';
 
 export default function ViewAllCourses() {
   const [year, setYear] = useState(addDays(new Date(), -30));
-  const courseQuery = useGetAllCoursesByDateQuery({
+  const courseQuery = useGetCoursesStatsByDateQuery({
     start: format(year, 'yyyy-01-01'),
     end: format(year, 'yyyy-12-31'),
   });

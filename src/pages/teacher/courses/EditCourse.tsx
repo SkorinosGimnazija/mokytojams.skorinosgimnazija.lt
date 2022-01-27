@@ -1,4 +1,4 @@
-import { SelectChangeEvent, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import React, { useEffect, useRef, useState } from 'react';
@@ -79,6 +79,10 @@ export default function EditCourse() {
     e: SelectChangeEvent<any> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData((x) => ({ ...x, [e.target.name]: e.target.value }));
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
+    setFormData((x) => ({ ...x, [e.target.name]: value }));
   };
 
   const handleNullableChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -168,13 +172,55 @@ export default function EditCourse() {
               required
               value={formData.durationInHours || ''}
               onChange={handleChange}
+              inputProps={{ min: '0.1', step: '0.1' }}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>
 
         <Grid item>
-          <SaveButton disabled={createCourseStatus.isLoading || editCourseStatus.isLoading} />
+          <Grid container gap={4} minHeight={'3.5rem'}>
+            <FormControlLabel
+              label="Mokymai buvo finansuoti mokyklos kvalifikacijos lėšomis"
+              control={
+                <Checkbox
+                  checked={formData.price != null}
+                  onChange={(e) => setFormData((x) => ({ ...x, price: e.target.checked ? 0 : null }))}
+                />
+              }
+            />
+
+            {formData.price != null && (
+              <TextField
+                id="price"
+                name="price"
+                label="Kaina"
+                type="number"
+                required
+                value={formData.price || ''}
+                onChange={handleChange}
+                inputProps={{ min: '0.1', step: '0.1' }}
+                InputLabelProps={{ shrink: true }}
+              />
+            )}
+          </Grid>
+        </Grid>
+
+        <Grid item>
+          <FormControlLabel
+            label="Mokymai buvo naudingi"
+            control={
+              <Checkbox name="isUseful" checked={formData.isUseful} onChange={handleCheckboxChange} />
+            }
+          />
+        </Grid>
+
+        <Grid item>
+          <SaveButton
+            disabled={
+              createCourseStatus.isLoading || editCourseStatus.isLoading || courseQuery.isLoading
+            }
+          />
         </Grid>
       </Grid>
     </form>

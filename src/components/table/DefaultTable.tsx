@@ -31,7 +31,7 @@ export const DefaultTable: React.FC<DefaultTableProps> = ({
     return (
       <TablePagination
         labelDisplayedRows={({ from, to, count }) => `${from}-${to} iš ${count}`}
-        labelRowsPerPage={'Eilučių per puslapį:'}
+        labelRowsPerPage={'Įrašų per puslapį:'}
         rowsPerPageOptions={[5, 10, 20]}
         component="div"
         count={totalCount ?? 0}
