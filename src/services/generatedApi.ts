@@ -711,12 +711,6 @@ export type CourseStatsDto = {
   price: number;
   lastUpdate: string;
 };
-export type UserDto = {
-  id: number;
-  userName: string;
-  displayName: string;
-  email: string;
-};
 export type CourseDto = {
   id: number;
   title: string;
@@ -728,7 +722,6 @@ export type CourseDto = {
   certificateNr?: string | null;
   price?: number | null;
   isUseful: boolean;
-  user: UserDto;
   userId: number;
 };
 export type CourseDtoPaginatedList = {

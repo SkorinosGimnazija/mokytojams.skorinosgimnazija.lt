@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, SelectChangeEvent, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, InputAdornment, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
 import React, { useEffect, useRef, useState } from 'react';
@@ -167,11 +167,12 @@ export default function EditCourse() {
             <TextField
               id="durationInHours"
               name="durationInHours"
-              label="Mokymų trukmė valandomis"
+              label="Mokymų trukmė"
               type="number"
               required
               value={formData.durationInHours || ''}
               onChange={handleChange}
+              InputProps={{ endAdornment: <InputAdornment position="end">val.</InputAdornment> }}
               inputProps={{ min: '0.1', step: '0.1' }}
               InputLabelProps={{ shrink: true }}
             />
@@ -199,6 +200,7 @@ export default function EditCourse() {
                 required
                 value={formData.price || ''}
                 onChange={handleChange}
+                InputProps={{ endAdornment: <InputAdornment position="end">€</InputAdornment> }}
                 inputProps={{ min: '0.1', step: '0.1' }}
                 InputLabelProps={{ shrink: true }}
               />

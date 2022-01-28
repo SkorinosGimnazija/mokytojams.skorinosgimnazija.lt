@@ -5,18 +5,21 @@ import { Checkbox, FormControlLabel, Stack, Switch } from '@mui/material';
 import { Box } from '@mui/system';
 import { addDays, addYears, format } from 'date-fns';
 import React, { useState } from 'react';
-import { CoursesAdminList } from '../../../components/lists/CoursesAdminList';
+import { CourseStatsList } from '../../../components/lists/CourseStatsList';
 import {
   useGetTeacherCoursesByIdAndDateQuery,
   useGetCoursesStatsByDateQuery,
 } from '../../../services/api';
 
 export default function ViewAllCourses() {
-  const [year, setYear] = useState(addDays(new Date(), -30));
-  const courseQuery = useGetCoursesStatsByDateQuery({
+  const [year, setYear] = useState(addDays(new Date(), -31));
+
+  const dateRange = {
     start: format(year, 'yyyy-01-01'),
     end: format(year, 'yyyy-12-31'),
-  });
+  };
+
+  const courseQuery = useGetCoursesStatsByDateQuery(dateRange);
 
   return (
     <Box>
@@ -32,7 +35,11 @@ export default function ViewAllCourses() {
         </LocalizationProvider>
       </Stack>
       <Box mt={4}>
-        <CoursesAdminList coursesData={courseQuery.data} isLoading={courseQuery.isFetching} />
+        <CourseStatsList
+          coursesData={courseQuery.data}
+          dateRange={dateRange}
+          isLoading={courseQuery.isFetching}
+        />
       </Box>
     </Box>
   );

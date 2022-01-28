@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { toLocalDate } from '../../lib/dateFormat';
 import { useDeleteCourseMutation } from '../../services/api';
 import { CourseDto } from '../../services/generatedApi';
@@ -17,7 +17,6 @@ interface Props extends DefaultTableProps {
 }
 
 export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...props }) => {
-  const navigate = useNavigate();
   const [deleteCourse, { isLoading: deleteLoading }] = useDeleteCourseMutation();
 
   const handleDelete = (id: number) => {
@@ -41,17 +40,12 @@ export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...prop
         </TableHead>
         <TableBody>
           {data?.map((course) => (
-            <TableRow
-              hover
-              key={course.id}
-              sx={{ cursor: 'pointer' }}
-              onClick={() => navigate(`${course.id}`)}
-            >
+            <TableRow hover key={course.id}>
               <TableCell>
                 {preview ? (
                   <Typography>{course.title}</Typography>
                 ) : (
-                  <Link component={RouterLink} to={`${course.id}`} onClick={(e) => e.preventDefault()}>
+                  <Link component={RouterLink} to={`${course.id}`}>
                     <Typography>{course.title}</Typography>
                   </Link>
                 )}
