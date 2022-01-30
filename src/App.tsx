@@ -16,7 +16,7 @@ export const App = () => {
       <Header />
       <NavDrawer />
 
-      <Container component="main" sx={{ p: 3 }} maxWidth="xl">
+      <Container component="main" sx={{ p: 2 }} maxWidth="xl">
         <Toolbar />
         <Routes>
           <Route path="/" element={<Home />} />

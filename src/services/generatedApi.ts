@@ -489,6 +489,7 @@ export type CreatePostApiArg = {
     IsFeatured?: boolean;
     NewFiles?: Blob[];
     NewImages?: Blob[];
+    NewFeaturedImage?: Blob;
     PublishedAt?: string;
     ModifiedAt?: string;
     IntroText?: string;
@@ -508,9 +509,11 @@ export type EditPostApiArg = {
     Id?: number;
     Files?: string[];
     Images?: string[];
+    FeaturedImage?: string;
     IsFeatured?: boolean;
     NewFiles?: Blob[];
     NewImages?: Blob[];
+    NewFeaturedImage?: Blob;
     PublishedAt?: string;
     ModifiedAt?: string;
     IntroText?: string;
@@ -793,8 +796,9 @@ export type PostDetailsDto = {
   title: string;
   introText?: string | null;
   meta?: string | null;
-  files: string[];
-  images: string[];
+  featuredImage?: string | null;
+  files?: string[] | null;
+  images?: string[] | null;
   text?: string | null;
 };
 export type MenuDetailsDto = {
@@ -854,6 +858,7 @@ export type PostDto = {
   title: string;
   introText?: string | null;
   meta?: string | null;
+  featuredImage?: string | null;
 };
 export type PostDtoPaginatedList = {
   items: PostDto[];

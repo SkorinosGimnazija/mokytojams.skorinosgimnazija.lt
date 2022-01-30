@@ -4,40 +4,42 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import uniqBy from 'lodash/uniqBy';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
+import { useUnmount } from 'react-use';
+import { toArray } from '../../lib/utils';
 
 interface Props {
-  values: { images?: string[] | null; newImages?: File[] | null };
-  setValues: React.Dispatch<React.SetStateAction<any>>;
+  name: string;
+  multiple?: boolean;
+  newImages?: File[] | File | null;
+  oldImages?: string[] | string | null;
+  onDelete?: (imageName: string) => void;
+  onAdd: (images: File[]) => void;
 }
 
-export const ImageUploader: React.FC<Props> = ({ values, setValues }) => {
+export const ImageUploader: React.FC<Props> = ({
+  newImages,
+  oldImages,
+  onDelete,
+  onAdd,
+  multiple,
+  name,
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [imagePreviews, setImagePreviews] = useState<{ url: string; file: File }[]>([]);
+  const imagePreviews = useRef<Record<string, string>>({});
+  const newImagesNormalized = useMemo(() => toArray(newImages), [newImages]);
+  const oldImagesNormalized = useMemo(() => toArray(oldImages), [oldImages]);
 
-  useEffect(() => {
-    return () => {
-      imagePreviews.forEach((x) => {
-        URL.revokeObjectURL(x.url);
-      });
-    };
-  }, [imagePreviews]);
+  useUnmount(() => Object.values(imagePreviews.current).forEach(URL.revokeObjectURL));
 
   return (
     <>
-      <Button
-        fullWidth
-        variant="outlined"
-        color="info"
-        component="span"
-        onClick={() => setOpen(true)}
-      >
-        Gallery
+      <Button fullWidth variant="outlined" color="info" component="span" onClick={() => setOpen(true)}>
+        {name}
       </Button>
 
       <Dialog fullWidth open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Gallery</DialogTitle>
+        <DialogTitle>{name}</DialogTitle>
 
         <DialogContent>
           <label htmlFor="images">
@@ -45,64 +47,61 @@ export const ImageUploader: React.FC<Props> = ({ values, setValues }) => {
               id="images"
               type="file"
               accept="image/*"
-              multiple
               hidden
+              multiple={multiple}
               onChange={(e) => {
                 const addedImages = Array.from(e.target.files ?? []);
-                const existingImages = values.newImages ?? [];
-                const newImages = uniqBy([...existingImages, ...addedImages], (x) => x.name);
+                const images = addedImages.filter((x) =>
+                  newImagesNormalized.every((z) => z.name !== x.name)
+                );
 
-                setValues((x: any) => ({ ...x, newImages }));
-                setImagePreviews(newImages.map((x) => ({ url: URL.createObjectURL(x), file: x })));
+                for (const image of images) {
+                  imagePreviews.current[image.name] = URL.createObjectURL(image);
+                }
+
+                onAdd(multiple ? [...images, ...newImagesNormalized] : images);
               }}
             />
             <Button fullWidth variant="contained" component="span">
-              Add
+              {multiple ? 'Add' : 'Set'}
             </Button>
           </label>
 
           <ImageList cols={3} rowHeight={120} gap={4}>
-            {values.newImages?.map((image) => (
+            {newImagesNormalized.map((image) => (
               <ImageListItem key={image.name}>
                 <img
-                  src={imagePreviews.find((x) => x.file.name === image.name)?.url}
-                  alt="preview"
+                  src={imagePreviews.current[image.name]}
+                  alt="preview new"
                   style={{ aspectRatio: '16/9' }}
                 />
-                <HighlightOffIcon
-                  color="error"
-                  sx={{ position: 'absolute', cursor: 'pointer', right: 0 }}
-                  onClick={() => {
-                    const newImages = values.newImages!.filter((z) => z.name !== image.name);
-
-                    setValues((x: any) => ({ ...x, newImages }));
-                    setImagePreviews(
-                      newImages.map((x) => ({ url: URL.createObjectURL(x), file: x }))
-                    );
-                  }}
-                />
+                {onDelete && (
+                  <HighlightOffIcon
+                    color="error"
+                    sx={{ position: 'absolute', cursor: 'pointer', right: 0 }}
+                    onClick={() => onDelete(image.name)}
+                  />
+                )}
               </ImageListItem>
             ))}
 
-            {values.images?.map((image) => (
-              <ImageListItem key={image}>
-                <img
-                  src={`${process.env.REACT_APP_STATIC_URL}/${image}`}
-                  alt="preview"
-                  style={{ aspectRatio: '16/9' }}
-                />
-                <HighlightOffIcon
-                  color="error"
-                  sx={{ position: 'absolute', cursor: 'pointer', right: 0 }}
-                  onClick={() => {
-                    setValues((x: any) => ({
-                      ...x,
-                      images: x.images?.filter((z: string) => z !== image),
-                    }));
-                  }}
-                />
-              </ImageListItem>
-            ))}
+            {(!newImagesNormalized.length || multiple) &&
+              oldImagesNormalized.map((imageUrl) => (
+                <ImageListItem key={imageUrl}>
+                  <img
+                    src={`${process.env.REACT_APP_STATIC_URL}/${imageUrl}`}
+                    alt="preview old"
+                    style={{ aspectRatio: '16/9' }}
+                  />
+                  {onDelete && (
+                    <HighlightOffIcon
+                      color="error"
+                      sx={{ position: 'absolute', cursor: 'pointer', right: 0 }}
+                      onClick={() => onDelete(imageUrl)}
+                    />
+                  )}
+                </ImageListItem>
+              ))}
           </ImageList>
         </DialogContent>
         <DialogActions>

@@ -28,7 +28,7 @@ export const CoursesList: React.FC<Props> = ({ data, isLoading, preview, ...prop
       <DefaultTable {...props} isLoading={isLoading || deleteLoading}>
         <TableHead>
           <TableRow>
-            <TableCell>{preview ? 'Kursai' : 'Mano kursai'}</TableCell>
+            <TableCell>{preview ? 'Kursai' : 'Jūsų kursai'}</TableCell>
             <TableCell width="250px" align="right">
               Pažymėjimas
             </TableCell>

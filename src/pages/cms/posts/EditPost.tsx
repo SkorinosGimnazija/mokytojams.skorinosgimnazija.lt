@@ -27,6 +27,28 @@ import {
 } from '../../../services/api';
 import { PostDetailsDto } from '../../../services/generatedApi';
 
+interface FormState {
+  id: number;
+  images?: string[] | null;
+  files?: string[] | null;
+  featuredImage?: string | null;
+  newImages?: File[] | null;
+  newFiles?: File[] | null;
+  newFeaturedImage?: File | null;
+  title: string;
+  slug: string;
+  introText: string;
+  text: string;
+  meta: string;
+  isFeatured: boolean;
+  isPublished: boolean;
+  showInFeed: boolean;
+  optimizeImages: boolean;
+  languageId: number;
+  publishedAt: string;
+  modifiedAt: string;
+}
+
 export default function EditPost() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -44,12 +66,10 @@ export default function EditPost() {
   const [createPostMutation, createPostStatus] = useCreatePostMutation();
   const [editPostMutation, editPostStatus] = useEditPostMutation();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     id: postId,
-    images: null as string[] | null,
-    files: null as string[] | null,
-    newImages: null as File[] | null,
-    newFiles: null as File[] | null,
+    newImages: [],
+    newFiles: [],
     title: '',
     slug: '',
     introText: '',
@@ -70,19 +90,21 @@ export default function EditPost() {
     }
 
     setFormData((x) => ({ ...x, languageId: languageQuery.data[0].id }));
-  }, [languageQuery, postId, setFormData]);
+  }, [languageQuery, postId]);
 
   useEffect(() => {
-    if (!postQuery.isSuccess) {
+    if (!postQuery.isSuccess || postQuery.isFetching) {
       return;
     }
 
     setFormData((x) => ({
       ...x,
+      newFeaturedImage: null,
       newFiles: null,
       newImages: null,
       images: postQuery.data.images,
       files: postQuery.data.files,
+      featuredImage: postQuery.data.featuredImage,
       title: postQuery.data.title,
       slug: postQuery.data.slug,
       introText: postQuery.data.introText ?? '',
@@ -94,7 +116,7 @@ export default function EditPost() {
       languageId: postQuery.data.language.id,
       publishedAt: format(new Date(postQuery.data.publishedAt), "yyyy-MM-dd'T'HH:mm"),
     }));
-  }, [postQuery, setFormData]);
+  }, [postQuery]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,15 +125,13 @@ export default function EditPost() {
 
     const form = new FormData();
 
-    for (const [key, value] of Object.entries(formData)) {
+    for (const [key, value] of Object.entries(formData) as [keyof FormState, any][]) {
       if (key === 'publishedAt' || key === 'modifiedAt') {
-        if (value) form.set(key, new Date(value as string).toISOString());
+        if (value) form.set(key, new Date(value).toISOString());
       } else if (Array.isArray(value)) {
-        Array.from(value as []).forEach((arrayItem) => {
-          form.append(key, arrayItem);
-        });
-      } else {
-        form.set(key, value as string);
+        Array.from(value).forEach((x) => form.append(key, x));
+      } else if (value != null) {
+        form.set(key, value);
       }
     }
 
@@ -137,19 +157,15 @@ export default function EditPost() {
     setFormData((x) => ({ ...x, [e.target.name]: e.target.value }));
   };
 
-  const handleNullableChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((x) => ({ ...x, [e.target.name]: e.target.value || null }));
-  };
-
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
     setFormData((x) => ({ ...x, [e.target.name]: value }));
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container gap={4} direction="column" wrap="nowrap">
+      <Grid container gap={2} direction="column" wrap="nowrap">
         <Grid item>
-          <Grid container gap={4}>
+          <Grid container gap={2}>
             <TextField
               id="title"
               name="title"
@@ -176,9 +192,9 @@ export default function EditPost() {
         </Grid>
 
         <Grid item>
-          <Grid container direction="row" gap={4}>
-            <Grid item sx={{ flex: '2 1 400px' }}>
-              <Grid container gap={4} direction="column">
+          <Grid container direction="row" gap={2}>
+            <Grid item sx={{ flex: '3' }}>
+              <Grid container gap={2} direction="column">
                 <PostEditor previewMode={previewMode} values={formData} setValues={setFormData} />
               </Grid>
             </Grid>
@@ -278,21 +294,50 @@ export default function EditPost() {
                   />
                 </FormGroup>
 
-                <ImageUploader setValues={setFormData} values={formData} />
+                <Grid container gap={1} direction="column">
+                  <ImageUploader
+                    name="Featured image"
+                    oldImages={formData.featuredImage}
+                    newImages={formData.newFeaturedImage}
+                    onDelete={() =>
+                      setFormData((x) => ({ ...x, featuredImage: null, newFeaturedImage: null }))
+                    }
+                    onAdd={(files) => setFormData((x) => ({ ...x, newFeaturedImage: files[0] }))}
+                  />
 
-                <FileUploader setValues={setFormData} values={formData} />
+                  <ImageUploader
+                    name="Gallery"
+                    multiple
+                    oldImages={formData.images}
+                    newImages={formData.newImages}
+                    onDelete={(file) =>
+                      setFormData((x) => ({
+                        ...x,
+                        images: x.images?.filter((z) => z !== file),
+                        newImages: x.newImages?.filter((z) => z.name !== file),
+                      }))
+                    }
+                    onAdd={(files) => setFormData((x) => ({ ...x, newImages: files }))}
+                  />
 
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  component="span"
-                  onClick={() => setPreviewMode((x) => !x)}
-                >
-                  Preview
-                </Button>
+                  <FileUploader setValues={setFormData} values={formData} />
 
-                <SaveButton disabled={createPostStatus.isLoading || editPostStatus.isLoading} />
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    component="span"
+                    onClick={() => setPreviewMode((x) => !x)}
+                  >
+                    Preview
+                  </Button>
+                </Grid>
+
+                <SaveButton
+                  disabled={
+                    createPostStatus.isLoading || editPostStatus.isLoading || postQuery.isFetching
+                  }
+                />
               </Grid>
             </Grid>
           </Grid>

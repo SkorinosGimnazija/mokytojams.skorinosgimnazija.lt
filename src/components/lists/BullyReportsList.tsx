@@ -1,10 +1,10 @@
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { toLocalDateTime } from '../../lib/dateFormat';
 import { useDeleteBullyReportMutation } from '../../services/api';

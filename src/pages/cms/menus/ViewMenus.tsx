@@ -1,11 +1,9 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { json } from 'stream/consumers';
 import { SearchForm } from '../../../components/forms/SearchForm';
 import { CreateItemButton } from '../../../components/links/CreateItemButton';
 import { MenusList } from '../../../components/lists/MenusList';
-import { PostsList } from '../../../components/lists/PostsList';
 import { useGetMenusQuery, useSearchMenusQuery } from '../../../services/api';
 
 export default function ViewMenus() {

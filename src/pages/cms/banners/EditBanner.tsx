@@ -1,6 +1,4 @@
 import {
-  Autocomplete,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -11,29 +9,25 @@ import {
   TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SaveButton } from '../../../components/buttons/SaveButton';
+import { ImageUploader } from '../../../components/modals/ImageUploader';
+import { useImageInfo } from '../../../hooks/useImageInfo';
 import { slugify } from '../../../lib/slugify';
 import {
   useCreateBannerMutation,
-  useCreateMenuMutation,
   useEditBannerMutation,
-  useEditMenuMutation,
   useGetBannerByIdQuery,
-  useGetMenuByIdQuery,
-  useGetMenuLocationsQuery,
   useGetPublicLanguagesQuery,
-  useSearchMenusQuery,
-  useSearchPostsQuery,
 } from '../../../services/api';
-import { BannerDto, MenuDto } from '../../../services/generatedApi';
+import { BannerDto } from '../../../services/generatedApi';
 
 export default function EditBanner() {
   const navigate = useNavigate();
   const params = useParams();
   const bannerId = Number(params.id);
+  const { getImageDimensions } = useImageInfo();
 
   const [imagePreview, setImagePreview] = useState<string>();
   const [skipBannerFetch, setSkipBannerFetch] = useState(false);
@@ -50,15 +44,15 @@ export default function EditBanner() {
     title: '',
     url: '',
     languageId: 0,
+    width: 0,
+    height: 0,
     isPublished: true,
     picture: null as File | string | null,
   });
 
   useEffect(() => {
     return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
 
@@ -68,10 +62,10 @@ export default function EditBanner() {
     }
 
     setFormData((x) => ({ ...x, languageId: languageQuery.data[0].id }));
-  }, [languageQuery, bannerId, setFormData]);
+  }, [languageQuery, bannerId]);
 
   useEffect(() => {
-    if (!bannerQuery.isSuccess) {
+    if (!bannerQuery.isSuccess || bannerQuery.isFetching) {
       return;
     }
 
@@ -80,11 +74,13 @@ export default function EditBanner() {
       order: bannerQuery.data.order,
       title: bannerQuery.data.title,
       url: bannerQuery.data.url,
+      width: bannerQuery.data.width,
+      height: bannerQuery.data.height,
       isPublished: bannerQuery.data.isPublished,
       languageId: bannerQuery.data.language.id,
       picture: bannerQuery.data.pictureUrl,
     }));
-  }, [bannerQuery, setFormData]);
+  }, [bannerQuery]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -117,10 +113,6 @@ export default function EditBanner() {
     e: SelectChangeEvent<any> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData((x) => ({ ...x, [e.target.name]: e.target.value }));
-  };
-
-  const handleNullableChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((x) => ({ ...x, [e.target.name]: e.target.value || null }));
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, value: boolean) => {
@@ -191,60 +183,39 @@ export default function EditBanner() {
           </FormControl>
         </Grid>
 
-        <Grid container gap={10}>
-          <Grid item>
-            <Grid container gap={4} direction="column">
-              <label htmlFor="images">
-                <input
-                  id="images"
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={(e) => {
-                    const image = e.target.files?.[0];
-                    if (!image) {
-                      return;
-                    }
-
-                    setImagePreview(URL.createObjectURL(image));
-                    setFormData((x) => ({ ...x, picture: image }));
-                  }}
-                />
-                <Button variant="outlined" component="span">
-                  Picture
-                </Button>
-              </label>
-              <Grid item>
-                <FormControlLabel
-                  label="Published"
-                  control={
-                    <Checkbox
-                      name="isPublished"
-                      checked={formData.isPublished}
-                      onChange={handleCheckboxChange}
-                    />
-                  }
-                />
-              </Grid>
-
-              <Grid item>
-                <SaveButton disabled={createBannerStatus.isLoading || editBannerStatus.isLoading} />
-              </Grid>
-            </Grid>
+        <Grid container gap={4} direction="column">
+          <Grid item sx={{ width: '150px' }}>
+            <ImageUploader
+              name="Picture"
+              newImages={typeof formData.picture !== 'string' ? formData.picture : null}
+              oldImages={typeof formData.picture === 'string' ? formData.picture : null}
+              onAdd={(files) => {
+                getImageDimensions(files[0]).then((dimensions) => {
+                  setFormData((x) => ({ ...x, picture: files[0], ...dimensions }));
+                });
+              }}
+            />
           </Grid>
 
           <Grid item>
-            <Box marginLeft={4} maxWidth={400}>
-              <img
-                style={{ maxWidth: 400, maxHeight: 200 }}
-                src={
-                  imagePreview ??
-                  (bannerQuery.data?.pictureUrl
-                    ? `${process.env.REACT_APP_STATIC_URL}/${bannerQuery.data?.pictureUrl}`
-                    : '')
-                }
-              />
-            </Box>
+            <FormControlLabel
+              label="Published"
+              control={
+                <Checkbox
+                  name="isPublished"
+                  checked={formData.isPublished}
+                  onChange={handleCheckboxChange}
+                />
+              }
+            />
+          </Grid>
+
+          <Grid item>
+            <SaveButton
+              disabled={
+                createBannerStatus.isLoading || editBannerStatus.isLoading || bannerQuery.isFetching
+              }
+            />
           </Grid>
         </Grid>
       </Grid>

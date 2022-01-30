@@ -22,7 +22,7 @@ export default function EditBully() {
   });
 
   useEffect(() => {
-    if (!bullyQuery.isSuccess) {
+    if (!bullyQuery.isSuccess || bullyQuery.isFetching) {
       return;
     }
 
@@ -35,7 +35,7 @@ export default function EditBully() {
       location: bullyQuery.data.location,
       details: bullyQuery.data.details,
     }));
-  }, [bullyQuery, setFormData]);
+  }, [bullyQuery]);
 
   return (
     <form>

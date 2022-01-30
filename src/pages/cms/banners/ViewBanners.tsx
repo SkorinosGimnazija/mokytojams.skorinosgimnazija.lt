@@ -1,13 +1,10 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { json } from 'stream/consumers';
 import { SearchForm } from '../../../components/forms/SearchForm';
 import { CreateItemButton } from '../../../components/links/CreateItemButton';
 import { BannersList } from '../../../components/lists/BannersList';
-import { MenusList } from '../../../components/lists/MenusList';
-import { PostsList } from '../../../components/lists/PostsList';
-import { useGetBannersQuery, useGetMenusQuery, useSearchBannersQuery } from '../../../services/api';
+import { useGetBannersQuery, useSearchBannersQuery } from '../../../services/api';
 
 export default function ViewBanners() {
   const [search, setSearch] = React.useState('');

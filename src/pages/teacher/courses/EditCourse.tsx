@@ -37,7 +37,7 @@ export default function EditCourse() {
   });
 
   useEffect(() => {
-    if (!courseQuery.isSuccess) {
+    if (!courseQuery.isSuccess || courseQuery.isFetching) {
       return;
     }
 
@@ -52,7 +52,7 @@ export default function EditCourse() {
       durationInHours: courseQuery.data.durationInHours,
       certificateNr: courseQuery.data.certificateNr,
     }));
-  }, [courseQuery, setFormData]);
+  }, [courseQuery]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -220,7 +220,7 @@ export default function EditCourse() {
         <Grid item>
           <SaveButton
             disabled={
-              createCourseStatus.isLoading || editCourseStatus.isLoading || courseQuery.isLoading
+              createCourseStatus.isLoading || editCourseStatus.isLoading || courseQuery.isFetching
             }
           />
         </Grid>

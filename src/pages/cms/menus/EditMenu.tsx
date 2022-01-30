@@ -70,7 +70,7 @@ export default function EditMenu() {
     }
 
     setFormData((x) => ({ ...x, languageId: languageQuery.data[0].id }));
-  }, [languageQuery, menuId, setFormData]);
+  }, [languageQuery, menuId]);
 
   useEffect(() => {
     if (menuId || !locationsQuery.isSuccess || !locationsQuery.data?.length) {
@@ -78,10 +78,10 @@ export default function EditMenu() {
     }
 
     setFormData((x) => ({ ...x, menuLocationId: locationsQuery.data[0].id }));
-  }, [locationsQuery, menuId, setFormData]);
+  }, [locationsQuery, menuId]);
 
   useEffect(() => {
-    if (!menuQuery.isSuccess) {
+    if (!menuQuery.isSuccess || menuQuery.isLoading) {
       return;
     }
 
@@ -97,7 +97,7 @@ export default function EditMenu() {
       parentMenuId: menuQuery.data.parentMenuId,
       url: menuQuery.data.url,
     }));
-  }, [menuQuery, setFormData]);
+  }, [menuQuery]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -314,7 +314,9 @@ export default function EditMenu() {
           />
         </Grid>
         <Grid item>
-          <SaveButton disabled={createMenuStatus.isLoading || editMenuStatus.isLoading} />
+          <SaveButton
+            disabled={createMenuStatus.isLoading || editMenuStatus.isLoading || menuQuery.isFetching}
+          />
         </Grid>
       </Grid>
     </form>
