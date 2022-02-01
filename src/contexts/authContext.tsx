@@ -7,7 +7,7 @@ import {
   AuthRole,
   resetAuthState,
   selectIsAuthenticated,
-  selectUserName,
+  selectDisplayName,
   selectUserRoles,
   selectUserToken,
 } from '../store/authSlice';
@@ -17,7 +17,7 @@ interface Context {
   logOut: (callback?: VoidFunction) => void;
   isLoading: boolean;
   isAuthenticated: boolean;
-  userName: string | null;
+  displayName: string | null;
   roles: AuthRole[] | null;
 }
 
@@ -26,7 +26,7 @@ export const AuthContext = React.createContext<Context>({} as Context);
 export const AuthProvider: React.FC = ({ children }) => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const userName = useAppSelector(selectUserName);
+  const displayName = useAppSelector(selectDisplayName);
   const roles = useAppSelector(selectUserRoles);
   const token = useAppSelector(selectUserToken);
 
@@ -62,7 +62,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       value={{
         logIn,
         logOut,
-        userName,
+        displayName,
         roles,
         isAuthenticated,
         isLoading: authStatus.isLoading,

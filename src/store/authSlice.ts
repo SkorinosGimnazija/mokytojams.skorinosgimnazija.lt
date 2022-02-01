@@ -5,14 +5,14 @@ import { RootState } from './store';
 export type AuthRole = 'Admin' | 'Manager' | 'Teacher' | 'Bully';
 
 interface State {
-  userName: string | null;
+  displayName: string | null;
   token: string | null;
   roles: AuthRole[];
   isAuthenticated: boolean;
 }
 
 const initialState: State = {
-  userName: null,
+  displayName: null,
   roles: [],
   isAuthenticated: false,
   token: null,
@@ -30,7 +30,7 @@ const authSlice = createSlice({
     builder.addMatcher(api.endpoints.authorize.matchFulfilled, (state, action) => {
       if (action.payload) {
         state.token = action.payload.token;
-        state.userName = action.payload.displayName;
+        state.displayName = action.payload.displayName;
         state.roles = action.payload.roles as AuthRole[];
         state.isAuthenticated = true;
       }
@@ -41,7 +41,7 @@ const authSlice = createSlice({
 export const { resetAuthState } = authSlice.actions;
 
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
-export const selectUserName = (state: RootState) => state.auth.userName;
+export const selectDisplayName = (state: RootState) => state.auth.displayName;
 export const selectUserRoles = (state: RootState) => state.auth.roles;
 export const selectUserToken = (state: RootState) => state.auth.token;
 

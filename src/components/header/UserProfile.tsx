@@ -37,7 +37,7 @@ export const UserProfile = () => {
       <Box alignItems="center" display="flex">
         <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
           <Avatar sx={{ bgcolor: (theme) => theme.palette.secondary.main }}>
-            {auth.userName?.[0]}
+            {auth.displayName?.[0]}
           </Avatar>
         </IconButton>
       </Box>
@@ -51,7 +51,7 @@ export const UserProfile = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <ListItem>
-          <Typography component="span">{auth.userName}</Typography>
+          <Typography component="span">{auth.displayName}</Typography>
         </ListItem>
         <Divider />
         <MenuItem onClick={logout}>

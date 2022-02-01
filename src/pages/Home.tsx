@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import React from 'react';
 import { CircularSpinner } from '../components/loadingSpinners/CircularSpinner';
-import { GoogleLoginButton } from '../components/loginButton/GoogleLoginButoon';
+import { GoogleLoginButton } from '../components/loginButton/GoogleLoginButton';
 import { useAuth } from '../hooks/useAuth';
 
 export const Home = () => {

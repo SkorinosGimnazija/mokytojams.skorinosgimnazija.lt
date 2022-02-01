@@ -70,7 +70,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Patyčių dėžutė',
         path: '/admin/bullies',
-        accessRole: 'Bully',
+        accessRole: 'Admin', // 'Bully',
         innerRoutes: [
           {
             path: '',
