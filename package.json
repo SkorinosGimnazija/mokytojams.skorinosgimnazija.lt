@@ -44,7 +44,7 @@
   "scripts": {
     "dev:client": "react-scripts start",
     "dev:static": "node dev-static-server.js",
-    "dev:api": "dotnet run --project \"../api.skorinosgimnazija.lt/src/API\"",
+    "dev:api": "dotnet run --project ../api.skorinosgimnazija.lt/src/API",
     "build": "react-scripts build",
     "serve": "npx serve -s build -p 3000",
     "generate:api": "npx @rtk-query/codegen-openapi openapi-config.js"
