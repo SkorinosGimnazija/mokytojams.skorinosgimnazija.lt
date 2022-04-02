@@ -91,28 +91,26 @@ export const PostEditor: React.FC<Props> = ({ previewMode, values, setValues }) 
           },
         }}
         onPaste={(e: React.ClipboardEvent<HTMLDivElement>) => {
-          const html = e.clipboardData.getData('text/html');
+          const html = e.clipboardData.getData('text/plain');
           if (!html) {
             return;
           }
 
-          const markdownText = htmlToMarkdown(html);
-          if (!markdownText) {
-            return;
-          }
+          const split = html.split('<hr id="system-readmore" />');
 
-          const normalizedHtml = normalizeHtml(html);
-          const firstParagraph = normalizedHtml.querySelector('p');
-          const markdown = htmlToMarkdown(normalizedHtml.innerHTML);
+          if (split.length === 2) {
+            const firstParagraph = normalizeHtml(split[0]);
+            setValues((x: any) => ({
+              ...x,
+              introText: htmlToMarkdown(firstParagraph.innerHTML),
+              meta: firstParagraph.textContent,
+            }));
 
-          handleInsert(markdown);
-
-          if (!values.introText && firstParagraph) {
-            setValues((x: any) => ({ ...x, introText: htmlToMarkdown(firstParagraph.innerHTML) }));
-          }
-
-          if (!values.meta && firstParagraph) {
-            setValues((x: any) => ({ ...x, meta: firstParagraph.textContent }));
+            const text = normalizeHtml(split[1]);
+            setValues((x: any) => ({ ...x, text: htmlToMarkdown(text.innerHTML) }));
+          } else {
+            const text = normalizeHtml(split[0]);
+            setValues((x: any) => ({ ...x, text: htmlToMarkdown(text.innerHTML) }));
           }
 
           e.preventDefault();

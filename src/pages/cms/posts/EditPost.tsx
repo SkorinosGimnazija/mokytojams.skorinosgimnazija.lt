@@ -209,6 +209,21 @@ export default function EditPost() {
                   value={formData.publishedAt}
                   InputLabelProps={{ shrink: true }}
                   onChange={handleChange}
+                  onFocus={async () => {
+                    try {
+                      const text = await navigator.clipboard.readText();
+                      if (!text) {
+                        return;
+                      }
+
+                      const date = new Date(text);
+                      if (isNaN(date.getTime())) {
+                        return;
+                      }
+
+                      setFormData((x) => ({ ...x, publishedAt: format(date, "yyyy-MM-dd'T'HH:mm") }));
+                    } catch (error) {}
+                  }}
                 />
 
                 <TextField
