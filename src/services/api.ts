@@ -52,7 +52,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getMenus: {
       providesTags: ['Menu'],
     },
-    getPublicMenusByLanguageAndLocation: {
+    getPublicMenusByLanguage: {
       providesTags: ['Menu'],
     },
     searchMenus: {
@@ -172,7 +172,7 @@ export const {
   useGetMenuByIdQuery,
   useDeleteMenuMutation,
   useSearchMenusQuery,
-  useGetPublicMenusByLanguageAndLocationQuery,
+  useGetPublicMenusByLanguageQuery,
   useGetPostsQuery,
   useCreatePostMutation,
   useEditPostMutation,

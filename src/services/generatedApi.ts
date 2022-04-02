@@ -206,11 +206,11 @@ const injectedRtkApi = api.injectEndpoints({
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
-    getPublicMenusByLanguageAndLocation: build.query<
-      GetPublicMenusByLanguageAndLocationApiResponse,
-      GetPublicMenusByLanguageAndLocationApiArg
+    getPublicMenusByLanguage: build.query<
+      GetPublicMenusByLanguageApiResponse,
+      GetPublicMenusByLanguageApiArg
     >({
-      query: (queryArg) => ({ url: `/Menus/public/${queryArg.language}/${queryArg.location}` }),
+      query: (queryArg) => ({ url: `/Menus/public/${queryArg.language}` }),
     }),
     getPosts: build.query<GetPostsApiResponse, GetPostsApiArg>({
       query: (queryArg) => ({ url: `/Posts`, params: { Items: queryArg.items, Page: queryArg.page } }),
@@ -286,11 +286,11 @@ export type GetAppointmentByIdApiResponse = /** status 200 Success */ Appointmen
 export type GetAppointmentByIdApiArg = {
   id: number;
 };
-export type DeleteAppointmentApiResponse = /** status 204 Success */ undefined;
+export type DeleteAppointmentApiResponse = /** status 204 No Content */ undefined;
 export type DeleteAppointmentApiArg = {
   id: number;
 };
-export type DeleteAppointmentTypeApiResponse = /** status 204 Success */ undefined;
+export type DeleteAppointmentTypeApiResponse = /** status 204 No Content */ undefined;
 export type DeleteAppointmentTypeApiArg = {
   id: number;
 };
@@ -300,11 +300,11 @@ export type GetAppointmentTypeByIdApiArg = {
 };
 export type GetAppointmentTypesApiResponse = /** status 200 Success */ AppointmentTypeDto[];
 export type GetAppointmentTypesApiArg = void;
-export type CreateAppointmentTypeApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreateAppointmentTypeApiResponse = /** status 201 Created */ AppointmentDto;
 export type CreateAppointmentTypeApiArg = {
   appointmentTypeCreateDto: AppointmentTypeCreateDto;
 };
-export type CreateAppointmentApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
 export type CreateAppointmentApiArg = {
   appointmentCreateDto: AppointmentCreateDto;
 };
@@ -327,7 +327,7 @@ export type GetPublicAppointmentAvailableDatesApiArg = {
   type: string;
   userName: string;
 };
-export type CreatePublicAppointmentApiResponse = /** status 201 Success */ AppointmentDto;
+export type CreatePublicAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
 export type CreatePublicAppointmentApiArg = {
   appointmentPublicCreateDto: AppointmentPublicCreateDto;
 };
@@ -340,7 +340,7 @@ export type GetBannersApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateBannerApiResponse = /** status 201 Success */ BannerDto;
+export type CreateBannerApiResponse = /** status 201 Created */ BannerDto;
 export type CreateBannerApiArg = {
   body: {
     Title?: string;
@@ -371,7 +371,7 @@ export type GetBannerByIdApiResponse = /** status 200 Success */ BannerDto;
 export type GetBannerByIdApiArg = {
   id: number;
 };
-export type DeleteBannerApiResponse = /** status 204 Success */ undefined;
+export type DeleteBannerApiResponse = /** status 204 No Content */ undefined;
 export type DeleteBannerApiArg = {
   id: number;
 };
@@ -394,11 +394,11 @@ export type GetBullyReportByIdApiResponse = /** status 200 Success */ BullyRepor
 export type GetBullyReportByIdApiArg = {
   id: number;
 };
-export type DeleteBullyReportApiResponse = /** status 204 Success */ undefined;
+export type DeleteBullyReportApiResponse = /** status 204 No Content */ undefined;
 export type DeleteBullyReportApiArg = {
   id: number;
 };
-export type CreatePublicBullyReportApiResponse = /** status 201 Success */ BullyReportDto;
+export type CreatePublicBullyReportApiResponse = /** status 201 Created */ BullyReportDto;
 export type CreatePublicBullyReportApiArg = {
   bullyReportCreateDto: BullyReportCreateDto;
 };
@@ -418,7 +418,7 @@ export type GetMyCoursesApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateCourseApiResponse = /** status 201 Success */ CourseDto;
+export type CreateCourseApiResponse = /** status 201 Created */ CourseDto;
 export type CreateCourseApiArg = {
   courseCreateDto: CourseCreateDto;
 };
@@ -430,7 +430,7 @@ export type GetCourseByIdApiResponse = /** status 200 Success */ CourseDto;
 export type GetCourseByIdApiArg = {
   id: number;
 };
-export type DeleteCourseApiResponse = /** status 204 Success */ undefined;
+export type DeleteCourseApiResponse = /** status 204 No Content */ undefined;
 export type DeleteCourseApiArg = {
   id: number;
 };
@@ -449,7 +449,7 @@ export type GetMenusApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateMenuApiResponse = /** status 201 Success */ MenuDto;
+export type CreateMenuApiResponse = /** status 201 Created */ MenuDto;
 export type CreateMenuApiArg = {
   menuCreateDto: MenuCreateDto;
 };
@@ -463,7 +463,7 @@ export type GetMenuByIdApiResponse = /** status 200 Success */ MenuDetailsDto;
 export type GetMenuByIdApiArg = {
   id: number;
 };
-export type DeleteMenuApiResponse = /** status 204 Success */ undefined;
+export type DeleteMenuApiResponse = /** status 204 No Content */ undefined;
 export type DeleteMenuApiArg = {
   id: number;
 };
@@ -473,17 +473,16 @@ export type SearchMenusApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicMenusByLanguageAndLocationApiResponse = /** status 200 Success */ MenuDto[];
-export type GetPublicMenusByLanguageAndLocationApiArg = {
+export type GetPublicMenusByLanguageApiResponse = /** status 200 Success */ MenuDto[];
+export type GetPublicMenusByLanguageApiArg = {
   language: string;
-  location: string;
 };
 export type GetPostsApiResponse = /** status 200 Success */ PostDtoPaginatedList;
 export type GetPostsApiArg = {
   items?: number;
   page?: number;
 };
-export type CreatePostApiResponse = /** status 201 Success */ PostDetailsDto;
+export type CreatePostApiResponse = /** status 201 Created */ PostDetailsDto;
 export type CreatePostApiArg = {
   body: {
     IsFeatured?: boolean;
@@ -536,7 +535,7 @@ export type PatchPostApiArg = {
   id: number;
   postPatchDto: PostPatchDto;
 };
-export type DeletePostApiResponse = /** status 204 Success */ undefined;
+export type DeletePostApiResponse = /** status 204 No Content */ undefined;
 export type DeletePostApiArg = {
   id: number;
 };
@@ -774,6 +773,7 @@ export type MenuDto = {
   url?: string | null;
   title: string;
   slug: string;
+  position: string;
   path: string;
   isPublished: boolean;
   parentMenuId?: number | null;
@@ -807,6 +807,7 @@ export type MenuDetailsDto = {
   url?: string | null;
   title: string;
   slug: string;
+  position: string;
   path: string;
   isPublished: boolean;
   parentMenuId?: number | null;
