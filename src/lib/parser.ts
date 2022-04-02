@@ -23,7 +23,10 @@ export const htmlToMarkdown = (html: string) => {
 export const normalizeHtml = (html: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(
-    html.replaceAll(/\n|\r/g, ' ').replaceAll(/\s{2,}/g, ' '),
+    html
+      .replaceAll('&nbsp;', ' ')
+      .replaceAll(/\n|\r/g, ' ')
+      .replaceAll(/\s{2,}/g, ' '),
     'text/html'
   );
   const body = doc.body;
