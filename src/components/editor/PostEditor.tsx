@@ -91,6 +91,10 @@ export const PostEditor: React.FC<Props> = ({ previewMode, values, setValues }) 
           },
         }}
         onPaste={(e: React.ClipboardEvent<HTMLDivElement>) => {
+          if (values.text) {
+            return;
+          }
+
           const html = e.clipboardData.getData('text/plain');
           if (!html) {
             return;
