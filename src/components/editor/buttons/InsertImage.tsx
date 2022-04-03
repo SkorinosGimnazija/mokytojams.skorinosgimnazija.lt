@@ -76,13 +76,13 @@ export const InsertImage: React.FC<Props> = ({ onInsert, values }) => {
     }
 
     const isStatic = typeof files.find((x) => x.fileName === image)?.file === 'string';
-    const src = `src="${
-      isStatic ? process.env.REACT_APP_STATIC_URL : FILE_REPLACE_TEMPLATE
-    }/${image}"`;
+    const src = `src="${isStatic ? process.env.REACT_APP_STATIC_URL : FILE_REPLACE_TEMPLATE}/${image}"`;
     const width = `width="${imageWidth}"`;
     const height = `height="${imageHeight}"`;
     const style = `style="${
-      imageAlign === 'center' ? 'display:block;margin:auto' : `float:${imageAlign}`
+      imageAlign === 'center'
+        ? 'display:block;margin:auto'
+        : `float:${imageAlign};margin-${imageAlign === 'left' ? 'right' : 'left'}:1rem`
     }"`;
 
     const img = `<img ${style} ${width} ${height} ${src} alt="" />`;
