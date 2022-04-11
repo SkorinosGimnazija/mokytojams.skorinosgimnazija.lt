@@ -132,6 +132,10 @@ export default function EditCourse() {
               type="date"
               required
               value={formData.startDate}
+              onFocus={(e) => {
+                // @ts-ignore
+                e.target.showPicker?.();
+              }}
               onChange={(e) => {
                 handleChange(e);
 
@@ -152,7 +156,11 @@ export default function EditCourse() {
               label="Iki"
               type="date"
               required
-              onFocus={() => (endDateTouched.current = true)}
+              onFocus={(e) => {
+                // @ts-ignore
+                e.target.showPicker?.();
+                endDateTouched.current = true;
+              }}
               value={formData.endDate}
               onChange={(e) => {
                 handleChange(e);
