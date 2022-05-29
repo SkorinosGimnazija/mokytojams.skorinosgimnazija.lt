@@ -1,7 +1,16 @@
 import { generatedApi } from './generatedApi';
 
 const enhancedApi = generatedApi.enhanceEndpoints({
-  addTagTypes: ['Post', 'Menu', 'Banner', 'Course', 'Bully'],
+  addTagTypes: [
+    'Post',
+    'Menu',
+    'Banner',
+    'Course',
+    'Bully',
+    'Appointments',
+    'AppointmentsDate',
+    'Events',
+  ],
   endpoints: {
     authorize: {},
     getPublicLanguages: {
@@ -121,6 +130,63 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteBullyReport: {
       invalidatesTags: ['Bully'],
     },
+    createAppointment: {
+      invalidatesTags: ['Appointments'],
+    },
+    createAppointmentType: {
+      invalidatesTags: ['Appointments'],
+    },
+    deleteAppointment: {
+      invalidatesTags: ['Appointments'],
+    },
+    deleteAppointmentType: {
+      invalidatesTags: ['Appointments'],
+    },
+    editAppointmentType: {
+      invalidatesTags: ['Appointments'],
+    },
+    createPublicAppointment: {
+      invalidatesTags: ['Appointments'],
+    },
+    getAllAppointments: {
+      providesTags: ['Appointments'],
+    },
+    getAppointmentById: {
+      providesTags: ['Appointments'],
+    },
+    getAppointmentTypeById: {
+      providesTags: ['Appointments'],
+    },
+    getAppointmentTypes: {
+      providesTags: ['Appointments'],
+    },
+    getMyAppointments: {
+      providesTags: ['Appointments'],
+    },
+    getPublicAppointmentTypeBySlug: {
+      providesTags: ['Appointments'],
+    },
+    getAppointmentAvailableDates: {
+      providesTags: ['AppointmentsDate'],
+    },
+    getAppointmentDates: {
+      providesTags: ['AppointmentsDate'],
+    },
+    getPublicAppointmentAvailableDates: {
+      providesTags: ['AppointmentsDate'],
+    },
+    createAppointmentDate: {
+      invalidatesTags: ['AppointmentsDate'],
+    },
+    deleteAppointmentDate: {
+      invalidatesTags: ['AppointmentsDate'],
+    },
+    getPublicDayEvents: {
+      providesTags: ['Events'],
+    },
+    getPublicEvents: {
+      providesTags: ['Events'],
+    },
   },
 });
 
@@ -137,6 +203,8 @@ export const {
   useGetAppointmentTypesQuery,
   useCreateAppointmentTypeMutation,
   useCreateAppointmentMutation,
+  useCreateAppointmentDateMutation,
+  useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
   useGetAppointmentAvailableDatesQuery,
   useGetPublicAppointmentTypeBySlugQuery,
@@ -173,6 +241,9 @@ export const {
   useDeleteMenuMutation,
   useSearchMenusQuery,
   useGetPublicMenusByLanguageQuery,
+  useGetMenusMetaQuery,
+  useGetPostsMetaQuery,
+  useGetLocalesMetaQuery,
   useGetPostsQuery,
   useCreatePostMutation,
   useEditPostMutation,

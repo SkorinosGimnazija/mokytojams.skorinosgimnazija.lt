@@ -55,8 +55,22 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.appointmentCreateDto,
       }),
     }),
+    createAppointmentDate: build.mutation<CreateAppointmentDateApiResponse, CreateAppointmentDateApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/Appointments/time`,
+          method: 'POST',
+          body: queryArg.appointmentDateCreateDto,
+        }),
+      }
+    ),
+    deleteAppointmentDate: build.mutation<DeleteAppointmentDateApiResponse, DeleteAppointmentDateApiArg>(
+      {
+        query: (queryArg) => ({ url: `/Appointments/time/${queryArg.id}`, method: 'DELETE' }),
+      }
+    ),
     getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/time/${queryArg['type']}` }),
+      query: (queryArg) => ({ url: `/Appointments/time/${queryArg.typeId}` }),
     }),
     getAppointmentAvailableDates: build.query<
       GetAppointmentAvailableDatesApiResponse,
@@ -212,6 +226,15 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/Menus/public/${queryArg.language}` }),
     }),
+    getMenusMeta: build.query<GetMenusMetaApiResponse, GetMenusMetaApiArg>({
+      query: () => ({ url: `/Meta/menus` }),
+    }),
+    getPostsMeta: build.query<GetPostsMetaApiResponse, GetPostsMetaApiArg>({
+      query: () => ({ url: `/Meta/posts` }),
+    }),
+    getLocalesMeta: build.query<GetLocalesMetaApiResponse, GetLocalesMetaApiArg>({
+      query: () => ({ url: `/Meta/locales` }),
+    }),
     getPosts: build.query<GetPostsApiResponse, GetPostsApiArg>({
       query: (queryArg) => ({ url: `/Posts`, params: { Items: queryArg.items, Page: queryArg.page } }),
     }),
@@ -308,9 +331,17 @@ export type CreateAppointmentApiResponse = /** status 201 Created */ Appointment
 export type CreateAppointmentApiArg = {
   appointmentCreateDto: AppointmentCreateDto;
 };
+export type CreateAppointmentDateApiResponse = /** status 201 Created */ AppointmentDateDto;
+export type CreateAppointmentDateApiArg = {
+  appointmentDateCreateDto: AppointmentDateCreateDto;
+};
+export type DeleteAppointmentDateApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentDateApiArg = {
+  id: number;
+};
 export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentDatesApiArg = {
-  type: string;
+  typeId: number;
 };
 export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentAvailableDatesApiArg = {
@@ -477,6 +508,12 @@ export type GetPublicMenusByLanguageApiResponse = /** status 200 Success */ Menu
 export type GetPublicMenusByLanguageApiArg = {
   language: string;
 };
+export type GetMenusMetaApiResponse = /** status 200 Success */ MenuMetaDto[];
+export type GetMenusMetaApiArg = void;
+export type GetPostsMetaApiResponse = /** status 200 Success */ PostMetaDto[];
+export type GetPostsMetaApiArg = void;
+export type GetLocalesMetaApiResponse = /** status 200 Success */ LocaleMetaDto[];
+export type GetLocalesMetaApiArg = void;
 export type GetPostsApiResponse = /** status 200 Success */ PostDtoPaginatedList;
 export type GetPostsApiArg = {
   items?: number;
@@ -639,6 +676,10 @@ export type AppointmentTypeCreateDto = {
 export type AppointmentCreateDto = {
   dateId: number;
   userName: string;
+};
+export type AppointmentDateCreateDto = {
+  typeId: number;
+  date: string;
 };
 export type AppointmentPublicCreateDto = {
   captchaToken: string;
@@ -846,6 +887,21 @@ export type MenuEditDto = {
   linkedPostId?: number | null;
   parentMenuId?: number | null;
   id: number;
+};
+export type MenuMetaDto = {
+  url: string;
+  ln: string;
+  date: string;
+};
+export type PostMetaDto = {
+  url: string;
+  ln: string;
+  date: string;
+};
+export type LocaleMetaDto = {
+  url: string;
+  ln: string;
+  date: string;
 };
 export type PostDto = {
   id: number;

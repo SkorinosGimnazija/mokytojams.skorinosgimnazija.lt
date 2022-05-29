@@ -83,6 +83,33 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
+        name: 'Registracijos',
+        path: '/admin/appointments',
+        accessRole: 'Admin',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/appointments/ViewAllAppointments')),
+          },
+          {
+            path: 'types',
+            lazyElement: lazy(() => import('../pages/admin/appointments/ViewAllAppointmentTypes')),
+          },
+          {
+            path: 'types/create',
+            lazyElement: lazy(() => import('../pages/admin/appointments/EditAppointmentType')),
+          },
+          {
+            path: 'types/:id',
+            lazyElement: lazy(() => import('../pages/admin/appointments/EditAppointmentType')),
+          },
+          {
+            path: 'types/:id/time',
+            lazyElement: lazy(() => import('../pages/admin/appointments/EditAppointmentTime')),
+          },
+        ],
+      },
+      {
         name: 'Kvalifikacijos kursai',
         path: '/admin/courses',
         accessRole: 'Manager',
@@ -114,6 +141,25 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/teacher/courses/EditCourse')),
+          },
+        ],
+      },
+      {
+        name: 'Metiniai pokalbiai',
+        path: '/teacher/appointments',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/appointments/ViewAppointments')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/appointments/EditAppointment')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/appointments/EditAppointment')),
           },
         ],
       },
