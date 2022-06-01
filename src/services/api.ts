@@ -9,6 +9,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'Bully',
     'Appointments',
     'AppointmentsDate',
+    'AppointmentsUser',
     'Events',
   ],
   endpoints: {
@@ -19,7 +20,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getMenuLocations: {
       keepUnusedDataFor: 600,
     },
-    getPublicTeachers: {
+    getTeachers: {
       keepUnusedDataFor: 600,
     },
     searchPosts: {
@@ -181,6 +182,15 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteAppointmentDate: {
       invalidatesTags: ['AppointmentsDate'],
     },
+    getAppointmentUsers: {
+      providesTags: ['AppointmentsUser'],
+    },
+    createAppointmentUser: {
+      invalidatesTags: ['AppointmentsUser'],
+    },
+    deleteAppointmentUser: {
+      invalidatesTags: ['AppointmentsUser'],
+    },
     getPublicDayEvents: {
       providesTags: ['Events'],
     },
@@ -202,10 +212,13 @@ export const {
   useGetAppointmentTypeByIdQuery,
   useGetAppointmentTypesQuery,
   useCreateAppointmentTypeMutation,
-  useCreateAppointmentMutation,
+  useCreateAppointmentUserMutation,
+  useDeleteAppointmentUserMutation,
+  useGetAppointmentUsersQuery,
   useCreateAppointmentDateMutation,
   useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
+  useCreateAppointmentMutation,
   useGetAppointmentAvailableDatesQuery,
   useGetPublicAppointmentTypeBySlugQuery,
   useGetPublicAppointmentAvailableDatesQuery,
@@ -229,7 +242,7 @@ export const {
   useEditCourseMutation,
   useGetCourseByIdQuery,
   useDeleteCourseMutation,
-  useGetPublicTeachersQuery,
+  useGetTeachersQuery,
   useGetPublicEventsQuery,
   useGetPublicDayEventsQuery,
   useGetPublicLanguagesQuery,

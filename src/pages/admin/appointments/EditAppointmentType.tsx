@@ -1,22 +1,16 @@
 import { Checkbox, FormControlLabel, InputAdornment, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import format from 'date-fns/format';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SaveButton } from '../../../components/buttons/SaveButton';
-import { toLocalDateTime } from '../../../lib/dateFormat';
 import { itemSavedToast } from '../../../lib/toasts';
-import format from 'date-fns/format';
 import {
   useCreateAppointmentTypeMutation,
   useEditAppointmentTypeMutation,
   useGetAppointmentTypeByIdQuery,
-  useGetBullyReportByIdQuery,
 } from '../../../services/api';
-import {
-  AppointmentTypeCreateDto,
-  AppointmentTypeDto,
-  AppointmentTypeEditDto,
-} from '../../../services/generatedApi';
+import { AppointmentTypeDto } from '../../../services/generatedApi';
 
 export default function EditAppointmentType() {
   const navigate = useNavigate();
@@ -35,8 +29,6 @@ export default function EditAppointmentType() {
     durationInMinutes: 0,
     invitePrincipal: false,
     isPublic: false,
-    start: '',
-    end: '',
     registrationEnd: '',
   });
 
@@ -52,8 +44,6 @@ export default function EditAppointmentType() {
       durationInMinutes: typeQuery.data.durationInMinutes,
       invitePrincipal: typeQuery.data.invitePrincipal,
       isPublic: typeQuery.data.isPublic,
-      start: format(new Date(typeQuery.data.start), "yyyy-MM-dd'T'HH:mm"),
-      end: format(new Date(typeQuery.data.end), "yyyy-MM-dd'T'HH:mm"),
       registrationEnd: format(new Date(typeQuery.data.registrationEnd), "yyyy-MM-dd'T'HH:mm"),
     }));
   }, [typeQuery]);
@@ -65,7 +55,7 @@ export default function EditAppointmentType() {
       editTypeMutation({ appointmentTypeEditDto: formData }).then((response: any) => {
         if (!response.error) {
           itemSavedToast();
-          // navigate(`../`);
+          navigate('../types');
         }
       });
     } else {
@@ -73,7 +63,7 @@ export default function EditAppointmentType() {
         const courseData = response.data as AppointmentTypeDto;
         if (courseData) {
           itemSavedToast();
-          // navigate(`../`);
+          navigate('../types');
         }
       });
     }
@@ -159,28 +149,6 @@ export default function EditAppointmentType() {
             }
           />
         </Grid>
-
-        <TextField
-          id="start"
-          name="start"
-          type="datetime-local"
-          label="Start date"
-          required
-          value={formData.start}
-          InputLabelProps={{ shrink: true }}
-          onChange={handleChange}
-        />
-
-        <TextField
-          id="end"
-          name="end"
-          type="datetime-local"
-          label="End date"
-          required
-          value={formData.end}
-          InputLabelProps={{ shrink: true }}
-          onChange={handleChange}
-        />
 
         <Grid>
           <SaveButton

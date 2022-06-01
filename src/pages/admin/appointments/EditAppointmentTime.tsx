@@ -1,21 +1,18 @@
 import { LoadingButton } from '@mui/lab';
-import { Alert, Button, Chip, Grid, ListItem, TextField } from '@mui/material';
+import { Button, Chip, Grid, ListItem, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { addMinutes, setDate } from 'date-fns';
-import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { SaveButton } from '../../../components/buttons/SaveButton';
-import { CreateItemButton } from '../../../components/links/CreateItemButton';
-import { toLocalDateTime } from '../../../lib/dateFormat';
+import { addMinutes } from 'date-fns';
 import format from 'date-fns/format';
+import groupBy from 'lodash/groupBy';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toLocalDateTime } from '../../../lib/dateFormat';
 import { itemSavedToast } from '../../../lib/toasts';
 import {
   useCreateAppointmentDateMutation,
   useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
 } from '../../../services/api';
-import { AppointmentDateDto } from '../../../services/generatedApi';
-import groupBy from 'lodash/groupBy';
 
 export default function EditAppointmentTime() {
   const params = useParams();
@@ -31,17 +28,18 @@ export default function EditAppointmentTime() {
   const [deleteDateMutation, deleteDateStatus] = useDeleteAppointmentDateMutation();
 
   const handleDelete = (id: number) => () => {
-    deleteDateMutation({ id }).then(() => {
-      itemSavedToast();
+    deleteDateMutation({ id }).then((x: any) => {
+      if (!x.error) {
+        itemSavedToast();
+      }
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    createDateMutation({ appointmentDateCreateDto: { date: newDate, typeId } }).then((response: any) => {
-      const dto = response.data as AppointmentDateDto;
-      if (dto) {
+    createDateMutation({ appointmentDateCreateDto: { date: newDate, typeId } }).then((x: any) => {
+      if (!x.error) {
         itemSavedToast();
       }
     });

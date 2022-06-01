@@ -107,6 +107,10 @@ export const routes: RoutesGroup[] = [
             path: 'types/:id/time',
             lazyElement: lazy(() => import('../pages/admin/appointments/EditAppointmentTime')),
           },
+          {
+            path: 'types/:id/users',
+            lazyElement: lazy(() => import('../pages/admin/appointments/EditAppointmentUsers')),
+          },
         ],
       },
       {

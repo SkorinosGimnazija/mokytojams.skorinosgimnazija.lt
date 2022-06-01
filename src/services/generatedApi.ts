@@ -48,17 +48,27 @@ const injectedRtkApi = api.injectEndpoints({
         }),
       }
     ),
-    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/create`,
-        method: 'POST',
-        body: queryArg.appointmentCreateDto,
-      }),
+    createAppointmentUser: build.mutation<CreateAppointmentUserApiResponse, CreateAppointmentUserApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/Appointments/user`,
+          method: 'POST',
+          body: queryArg.appointmentUserCreateDto,
+        }),
+      }
+    ),
+    deleteAppointmentUser: build.mutation<DeleteAppointmentUserApiResponse, DeleteAppointmentUserApiArg>(
+      {
+        query: (queryArg) => ({ url: `/Appointments/user/${queryArg.id}`, method: 'DELETE' }),
+      }
+    ),
+    getAppointmentUsers: build.query<GetAppointmentUsersApiResponse, GetAppointmentUsersApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/user/${queryArg.typeId}` }),
     }),
     createAppointmentDate: build.mutation<CreateAppointmentDateApiResponse, CreateAppointmentDateApiArg>(
       {
         query: (queryArg) => ({
-          url: `/Appointments/time`,
+          url: `/Appointments/date`,
           method: 'POST',
           body: queryArg.appointmentDateCreateDto,
         }),
@@ -66,17 +76,24 @@ const injectedRtkApi = api.injectEndpoints({
     ),
     deleteAppointmentDate: build.mutation<DeleteAppointmentDateApiResponse, DeleteAppointmentDateApiArg>(
       {
-        query: (queryArg) => ({ url: `/Appointments/time/${queryArg.id}`, method: 'DELETE' }),
+        query: (queryArg) => ({ url: `/Appointments/date/${queryArg.id}`, method: 'DELETE' }),
       }
     ),
     getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/time/${queryArg.typeId}` }),
+      query: (queryArg) => ({ url: `/Appointments/date/${queryArg.typeId}` }),
+    }),
+    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/create`,
+        method: 'POST',
+        body: queryArg.appointmentCreateDto,
+      }),
     }),
     getAppointmentAvailableDates: build.query<
       GetAppointmentAvailableDatesApiResponse,
       GetAppointmentAvailableDatesApiArg
     >({
-      query: (queryArg) => ({ url: `/Appointments/time/${queryArg['type']}/${queryArg.userName}` }),
+      query: (queryArg) => ({ url: `/Appointments/date/${queryArg['type']}/${queryArg.userName}` }),
     }),
     getPublicAppointmentTypeBySlug: build.query<
       GetPublicAppointmentTypeBySlugApiResponse,
@@ -89,7 +106,7 @@ const injectedRtkApi = api.injectEndpoints({
       GetPublicAppointmentAvailableDatesApiArg
     >({
       query: (queryArg) => ({
-        url: `/Appointments/public/time/${queryArg['type']}/${queryArg.userName}`,
+        url: `/Appointments/public/date/${queryArg['type']}/${queryArg.userName}`,
       }),
     }),
     createPublicAppointment: build.mutation<
@@ -184,8 +201,8 @@ const injectedRtkApi = api.injectEndpoints({
     deleteCourse: build.mutation<DeleteCourseApiResponse, DeleteCourseApiArg>({
       query: (queryArg) => ({ url: `/Courses/${queryArg.id}`, method: 'DELETE' }),
     }),
-    getPublicTeachers: build.query<GetPublicTeachersApiResponse, GetPublicTeachersApiArg>({
-      query: () => ({ url: `/Employees/public/teachers` }),
+    getTeachers: build.query<GetTeachersApiResponse, GetTeachersApiArg>({
+      query: () => ({ url: `/Employees/teachers` }),
     }),
     getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
       query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
@@ -327,9 +344,17 @@ export type CreateAppointmentTypeApiResponse = /** status 201 Created */ Appoint
 export type CreateAppointmentTypeApiArg = {
   appointmentTypeCreateDto: AppointmentTypeCreateDto;
 };
-export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
-export type CreateAppointmentApiArg = {
-  appointmentCreateDto: AppointmentCreateDto;
+export type CreateAppointmentUserApiResponse = /** status 201 Created */ AppointmentUserDto;
+export type CreateAppointmentUserApiArg = {
+  appointmentUserCreateDto: AppointmentUserCreateDto;
+};
+export type DeleteAppointmentUserApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentUserApiArg = {
+  id: number;
+};
+export type GetAppointmentUsersApiResponse = /** status 200 Success */ AppointmentUserDto[];
+export type GetAppointmentUsersApiArg = {
+  typeId: number;
 };
 export type CreateAppointmentDateApiResponse = /** status 201 Created */ AppointmentDateDto;
 export type CreateAppointmentDateApiArg = {
@@ -342,6 +367,10 @@ export type DeleteAppointmentDateApiArg = {
 export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentDatesApiArg = {
   typeId: number;
+};
+export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
+export type CreateAppointmentApiArg = {
+  appointmentCreateDto: AppointmentCreateDto;
 };
 export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentAvailableDatesApiArg = {
@@ -465,8 +494,8 @@ export type DeleteCourseApiResponse = /** status 204 No Content */ undefined;
 export type DeleteCourseApiArg = {
   id: number;
 };
-export type GetPublicTeachersApiResponse = /** status 200 Success */ EmployeeDto[];
-export type GetPublicTeachersApiArg = void;
+export type GetTeachersApiResponse = /** status 200 Success */ EmployeeDto[];
+export type GetTeachersApiArg = void;
 export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
 export type GetPublicEventsApiArg = {
   week: number;
@@ -610,8 +639,6 @@ export type AppointmentTypeDto = {
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
-  start: string;
-  end: string;
   registrationEnd: string;
 };
 export type AppointmentDateDto = {
@@ -650,8 +677,6 @@ export type AppointmentTypeEditDto = {
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
-  start: string;
-  end: string;
   registrationEnd: string;
   id: number;
 };
@@ -669,17 +694,24 @@ export type AppointmentTypeCreateDto = {
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
-  start: string;
-  end: string;
   registrationEnd: string;
 };
-export type AppointmentCreateDto = {
-  dateId: number;
+export type AppointmentUserDto = {
+  id: number;
+  typeId: number;
+  userName: string;
+};
+export type AppointmentUserCreateDto = {
+  typeId: number;
   userName: string;
 };
 export type AppointmentDateCreateDto = {
   typeId: number;
   date: string;
+};
+export type AppointmentCreateDto = {
+  dateId: number;
+  userName: string;
 };
 export type AppointmentPublicCreateDto = {
   captchaToken: string;
