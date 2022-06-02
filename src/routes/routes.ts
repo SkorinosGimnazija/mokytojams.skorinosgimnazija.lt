@@ -162,7 +162,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Metiniai pokalbiai',
         path: '/teacher/appointments/yearly',
-        accessRole: 'Teacher',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
