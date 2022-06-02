@@ -38,7 +38,9 @@ export default function EditAppointmentTime() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    createDateMutation({ appointmentDateCreateDto: { date: newDate, typeId } }).then((x: any) => {
+    createDateMutation({
+      appointmentDateCreateDto: { date: new Date(newDate).toISOString(), typeId },
+    }).then((x: any) => {
       if (!x.error) {
         itemSavedToast();
       }

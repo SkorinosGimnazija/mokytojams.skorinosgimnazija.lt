@@ -51,17 +51,19 @@ export default function EditAppointmentType() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const data = { ...formData, registrationEnd: new Date(formData.registrationEnd).toISOString() };
+
     if (typeId) {
-      editTypeMutation({ appointmentTypeEditDto: formData }).then((response: any) => {
+      editTypeMutation({ appointmentTypeEditDto: data }).then((response: any) => {
         if (!response.error) {
           itemSavedToast();
           navigate('../types');
         }
       });
     } else {
-      createTypeMutation({ appointmentTypeCreateDto: formData }).then((response: any) => {
-        const courseData = response.data as AppointmentTypeDto;
-        if (courseData) {
+      createTypeMutation({ appointmentTypeCreateDto: data }).then((response: any) => {
+        const responseData = response.data as AppointmentTypeDto;
+        if (responseData) {
           itemSavedToast();
           navigate('../types');
         }

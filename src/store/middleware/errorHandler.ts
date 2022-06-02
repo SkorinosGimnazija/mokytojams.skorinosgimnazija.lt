@@ -8,18 +8,13 @@ export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) =
     //   api.dispatch(resetAuthState());
     // }
 
-    const errorData = action?.payload?.data;
-    if (errorData) {
-      const errors = errorData.errors;
-      if (errors) {
-        for (const key in errors) {
-          errorToast(`${key}: ${errors[key].join(', ')}`);
-        }
-      } else if (errorData.title) {
-        errorToast(errorData.title);
+    errorToast();
+
+    const errors = action?.payload?.data?.errors;
+    if (errors) {
+      for (const key in errors) {
+        errorToast(errors[key].join(', '));
       }
-    } else {
-      errorToast();
     }
   }
 
