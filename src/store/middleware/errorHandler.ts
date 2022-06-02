@@ -10,15 +10,13 @@ export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) =
 
     const errorData = action?.payload?.data;
     if (errorData) {
-      if (errorData.title) {
-        errorToast(errorData.title);
-      }
-
       const errors = errorData.errors;
       if (errors) {
         for (const key in errors) {
           errorToast(`${key}: ${errors[key].join(', ')}`);
         }
+      } else if (errorData.title) {
+        errorToast(errorData.title);
       }
     } else {
       errorToast();

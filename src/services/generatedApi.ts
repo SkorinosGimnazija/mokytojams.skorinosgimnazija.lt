@@ -3,8 +3,41 @@ const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     getMyAppointments: build.query<GetMyAppointmentsApiResponse, GetMyAppointmentsApiArg>({
       query: (queryArg) => ({
-        url: `/Appointments/my`,
+        url: `/Appointments/my/appointments/${queryArg.typeSlug}`,
         params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    getMyRegistrations: build.query<GetMyRegistrationsApiResponse, GetMyRegistrationsApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/my/registrations/${queryArg.typeSlug}`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/create`,
+        method: 'POST',
+        body: queryArg.appointmentCreateDto,
+      }),
+    }),
+    deleteAppointment: build.mutation<DeleteAppointmentApiResponse, DeleteAppointmentApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    getAppointmentById: build.query<GetAppointmentByIdApiResponse, GetAppointmentByIdApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}` }),
+    }),
+    getAppointmentAvailableHosts: build.query<
+      GetAppointmentAvailableHostsApiResponse,
+      GetAppointmentAvailableHostsApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/hosts/available/${queryArg.typeSlug}` }),
+    }),
+    getAppointmentAvailableDates: build.query<
+      GetAppointmentAvailableDatesApiResponse,
+      GetAppointmentAvailableDatesApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Appointments/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
       }),
     }),
     getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
@@ -12,12 +45,6 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/Appointments`,
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
-    }),
-    getAppointmentById: build.query<GetAppointmentByIdApiResponse, GetAppointmentByIdApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}` }),
-    }),
-    deleteAppointment: build.mutation<DeleteAppointmentApiResponse, DeleteAppointmentApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}`, method: 'DELETE' }),
     }),
     deleteAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>(
       {
@@ -81,27 +108,6 @@ const injectedRtkApi = api.injectEndpoints({
     ),
     getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
       query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.typeId}` }),
-    }),
-    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/create`,
-        method: 'POST',
-        body: queryArg.appointmentCreateDto,
-      }),
-    }),
-    getAppointmentAvailableHosts: build.query<
-      GetAppointmentAvailableHostsApiResponse,
-      GetAppointmentAvailableHostsApiArg
-    >({
-      query: (queryArg) => ({ url: `/Appointments/hosts/available/${queryArg.typeSlug}` }),
-    }),
-    getAppointmentAvailableDates: build.query<
-      GetAppointmentAvailableDatesApiResponse,
-      GetAppointmentAvailableDatesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Appointments/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
-      }),
     }),
     getPublicAppointmentAvailableHosts: build.query<
       GetPublicAppointmentAvailableHostsApiResponse,
@@ -320,19 +326,39 @@ export type GetMyAppointmentsApiResponse = /** status 200 Success */ Appointment
 export type GetMyAppointmentsApiArg = {
   items?: number;
   page?: number;
+  typeSlug: string;
 };
-export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
-export type GetAllAppointmentsApiArg = {
+export type GetMyRegistrationsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetMyRegistrationsApiArg = {
   items?: number;
   page?: number;
+  typeSlug: string;
+};
+export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
+export type CreateAppointmentApiArg = {
+  appointmentCreateDto: AppointmentCreateDto;
+};
+export type DeleteAppointmentApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentApiArg = {
+  id: number;
 };
 export type GetAppointmentByIdApiResponse = /** status 200 Success */ AppointmentDetailsDto;
 export type GetAppointmentByIdApiArg = {
   id: number;
 };
-export type DeleteAppointmentApiResponse = /** status 204 No Content */ undefined;
-export type DeleteAppointmentApiArg = {
-  id: number;
+export type GetAppointmentAvailableHostsApiResponse = /** status 200 Success */ AppointmentHostDto[];
+export type GetAppointmentAvailableHostsApiArg = {
+  typeSlug: string;
+};
+export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
+export type GetAppointmentAvailableDatesApiArg = {
+  typeSlug: string;
+  userName: string;
+};
+export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetAllAppointmentsApiArg = {
+  items?: number;
+  page?: number;
 };
 export type DeleteAppointmentTypeApiResponse = /** status 204 No Content */ undefined;
 export type DeleteAppointmentTypeApiArg = {
@@ -375,19 +401,6 @@ export type DeleteAppointmentDateApiArg = {
 export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentDatesApiArg = {
   typeId: number;
-};
-export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
-export type CreateAppointmentApiArg = {
-  appointmentCreateDto: AppointmentCreateDto;
-};
-export type GetAppointmentAvailableHostsApiResponse = /** status 200 Success */ AppointmentHostDto[];
-export type GetAppointmentAvailableHostsApiArg = {
-  typeSlug: string;
-};
-export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
-export type GetAppointmentAvailableDatesApiArg = {
-  typeSlug: string;
-  userName: string;
 };
 export type GetPublicAppointmentAvailableHostsApiResponse =
   /** status 200 Success */ AppointmentHostDto[];
@@ -662,8 +675,10 @@ export type AppointmentDateDto = {
 export type AppointmentDetailsDto = {
   id: number;
   eventId: string;
+  eventMeetingLink: string;
   dateId: number;
   userName: string;
+  userDisplayName: string;
   attendeeName: string;
   attendeeEmail: string;
   date: AppointmentDateDto;
@@ -676,6 +691,14 @@ export type AppointmentDetailsDtoPaginatedList = {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
 };
+export type AppointmentDto = {
+  id: number;
+  eventId: string;
+  dateId: number;
+  userName: string;
+  attendeeName: string;
+  attendeeEmail: string;
+};
 export type ProblemDetails = {
   type?: string | null;
   title?: string | null;
@@ -683,6 +706,14 @@ export type ProblemDetails = {
   detail?: string | null;
   instance?: string | null;
   [key: string]: any;
+};
+export type AppointmentCreateDto = {
+  dateId: number;
+  userName: string;
+};
+export type AppointmentHostDto = {
+  displayName: string;
+  userName: string;
 };
 export type AppointmentTypeEditDto = {
   name: string;
@@ -692,14 +723,6 @@ export type AppointmentTypeEditDto = {
   isPublic: boolean;
   registrationEnd: string;
   id: number;
-};
-export type AppointmentDto = {
-  id: number;
-  eventId: string;
-  dateId: number;
-  userName: string;
-  attendeeName: string;
-  attendeeEmail: string;
 };
 export type AppointmentTypeCreateDto = {
   name: string;
@@ -722,14 +745,6 @@ export type AppointmentDateCreateDto = {
   typeId: number;
   date: string;
 };
-export type AppointmentCreateDto = {
-  dateId: number;
-  userName: string;
-};
-export type AppointmentHostDto = {
-  displayName: string;
-  userName: string;
-};
 export type AppointmentPublicCreateDto = {
   captchaToken: string;
   dateId: number;
@@ -740,6 +755,7 @@ export type AppointmentPublicCreateDto = {
 export type UserAuthDto = {
   token: string;
   displayName: string;
+  email: string;
   roles: string[];
 };
 export type GoogleAuthDto = {

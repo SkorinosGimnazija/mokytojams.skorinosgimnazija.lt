@@ -28,11 +28,7 @@ export const Header = () => {
         </IconButton>
         <Stack width="100%" direction="row" alignItems="center">
           <Link color="inherit" underline="none" component={RouterLink} to="/">
-            <Typography
-              component="span"
-              variant="h6"
-              sx={{ display: { xs: 'none', sm: 'inline' } }}
-            >
+            <Typography component="span" variant="h6" sx={{ display: { xs: 'none', sm: 'inline' } }}>
               P. Skorinos gimnazija
             </Typography>
           </Link>

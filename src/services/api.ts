@@ -132,21 +132,18 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       invalidatesTags: ['Bully'],
     },
     createAppointment: {
-      invalidatesTags: ['AppointmentDates'],
+      invalidatesTags: ['AppointmentDates', 'Appointments'],
     },
     createAppointmentType: {
       invalidatesTags: ['Appointments'],
     },
     deleteAppointment: {
-      invalidatesTags: ['Appointments'],
+      invalidatesTags: ['AppointmentDates', 'Appointments'],
     },
     deleteAppointmentType: {
       invalidatesTags: ['Appointments'],
     },
     editAppointmentType: {
-      invalidatesTags: ['Appointments'],
-    },
-    createPublicAppointment: {
       invalidatesTags: ['Appointments'],
     },
     getAllAppointments: {
@@ -162,6 +159,9 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       providesTags: ['Appointments'],
     },
     getMyAppointments: {
+      providesTags: ['Appointments'],
+    },
+    getMyRegistrations: {
       providesTags: ['Appointments'],
     },
     getAppointmentAvailableDates: {
@@ -195,9 +195,13 @@ export { enhancedApi as api };
 
 export const {
   useGetMyAppointmentsQuery,
-  useGetAllAppointmentsQuery,
-  useGetAppointmentByIdQuery,
+  useGetMyRegistrationsQuery,
+  useCreateAppointmentMutation,
   useDeleteAppointmentMutation,
+  useGetAppointmentByIdQuery,
+  useGetAppointmentAvailableHostsQuery,
+  useGetAppointmentAvailableDatesQuery,
+  useGetAllAppointmentsQuery,
   useDeleteAppointmentTypeMutation,
   useGetAppointmentTypeByIdQuery,
   useEditAppointmentTypeMutation,
@@ -209,9 +213,6 @@ export const {
   useCreateAppointmentDateMutation,
   useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
-  useCreateAppointmentMutation,
-  useGetAppointmentAvailableHostsQuery,
-  useGetAppointmentAvailableDatesQuery,
   useGetPublicAppointmentAvailableHostsQuery,
   useGetPublicAppointmentAvailableDatesQuery,
   useCreatePublicAppointmentMutation,

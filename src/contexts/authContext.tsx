@@ -6,8 +6,9 @@ import { useAuthorizeMutation } from '../services/api';
 import {
   AuthRole,
   resetAuthState,
-  selectIsAuthenticated,
   selectDisplayName,
+  selectEmail,
+  selectIsAuthenticated,
   selectUserRoles,
   selectUserToken,
 } from '../store/authSlice';
@@ -18,6 +19,7 @@ interface Context {
   isLoading: boolean;
   isAuthenticated: boolean;
   displayName: string | null;
+  email: string | null;
   roles: AuthRole[] | null;
 }
 
@@ -27,6 +29,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const displayName = useAppSelector(selectDisplayName);
+  const email = useAppSelector(selectEmail);
   const roles = useAppSelector(selectUserRoles);
   const token = useAppSelector(selectUserToken);
 
@@ -64,6 +67,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         logOut,
         displayName,
         roles,
+        email,
         isAuthenticated,
         isLoading: authStatus.isLoading,
       }}

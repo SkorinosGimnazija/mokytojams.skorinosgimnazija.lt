@@ -83,6 +83,17 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
+        name: 'Kvalifikacijos kursai',
+        path: '/admin/courses',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/courses/ViewAllCourses')),
+          },
+        ],
+      },
+      {
         name: 'Registracijos',
         path: '/admin/appointments',
         accessRole: 'Admin',
@@ -114,13 +125,13 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
-        name: 'Kvalifikacijos kursai',
-        path: '/admin/courses',
+        name: 'Metiniai pokalbiai',
+        path: '/manager/appointments/yearly',
         accessRole: 'Manager',
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/admin/courses/ViewAllCourses')),
+            lazyElement: lazy(() => import('../pages/admin/appointments/ViewMyAppointments')),
           },
         ],
       },
@@ -155,7 +166,7 @@ export const routes: RoutesGroup[] = [
         innerRoutes: [
           {
             path: '',
-            lazyElement: lazy(() => import('../pages/teacher/appointments/ViewAppointments')),
+            lazyElement: lazy(() => import('../pages/teacher/appointments/ViewMyRegistrations')),
           },
           {
             path: 'create',

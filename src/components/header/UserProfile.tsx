@@ -9,7 +9,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAuth } from '../../hooks/useAuth';
 
 export const UserProfile = () => {

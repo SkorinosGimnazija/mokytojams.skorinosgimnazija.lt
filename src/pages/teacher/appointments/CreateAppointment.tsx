@@ -5,7 +5,7 @@ import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } fr
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toLocalDateTime } from '../../../lib/dateFormat';
-import { itemSavedToast } from '../../../lib/toasts';
+import { successToast } from '../../../lib/toasts';
 import {
   useCreateAppointmentMutation,
   useGetAppointmentAvailableDatesQuery,
@@ -58,7 +58,7 @@ export default function CreateAppointment() {
     createAppointmentMutation({ appointmentCreateDto: formData }).then((response: any) => {
       const appointmentData = response.data as AppointmentDto;
       if (appointmentData) {
-        itemSavedToast();
+        successToast('Registracija sėkminga');
         navigate('../');
       }
     });
@@ -68,12 +68,12 @@ export default function CreateAppointment() {
     <form onSubmit={handleSubmit}>
       <Grid container gap={2} direction="column" wrap="nowrap">
         <FormControl>
-          <InputLabel id="userName-label">Kuratorius</InputLabel>
+          <InputLabel id="userName-label">Vadovas</InputLabel>
           <Select
             id="userName"
             name="userName"
             labelId="userName-label"
-            label="Kuratorius"
+            label="Vadovas"
             required
             IconComponent={hostsQuery.isFetching ? LoopIcon : ArrowDropDownIcon}
             sx={{ width: '300px' }}
