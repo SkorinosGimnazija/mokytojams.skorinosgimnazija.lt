@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import { TimeLink } from '../../../components/links/TimeLink';
 import { errorToast, itemSavedToast } from '../../../lib/toasts';
 import {
-  useCreateAppointmentUserMutation,
-  useDeleteAppointmentUserMutation,
-  useGetAppointmentUsersQuery,
+  useCreateAppointmentHostMutation,
+  useDeleteAppointmentHostMutation,
+  useGetAppointmentHostsQuery,
   useGetTeachersQuery,
 } from '../../../services/api';
 
@@ -16,25 +16,25 @@ export default function EditAppointmentUsers() {
   const [selected, setSelected] = useState<{ [userName: string]: boolean }>({});
   const [loadingUser, setLoadingUser] = useState<string>();
 
-  const usersQuery = useGetAppointmentUsersQuery({ typeId });
+  const hostsQuery = useGetAppointmentHostsQuery({ typeId });
   const teachersQuery = useGetTeachersQuery();
 
-  const [createUserMutation, createUserStatus] = useCreateAppointmentUserMutation();
-  const [deleteUserMutation, deleteUserStatus] = useDeleteAppointmentUserMutation();
+  const [createUserMutation, createUserStatus] = useCreateAppointmentHostMutation();
+  const [deleteUserMutation, deleteUserStatus] = useDeleteAppointmentHostMutation();
 
   useEffect(() => {
-    if (!usersQuery.isSuccess || usersQuery.isFetching) {
+    if (!hostsQuery.isSuccess || hostsQuery.isFetching) {
       return;
     }
 
-    setSelected(Object.fromEntries(usersQuery.data.map((x) => [x.userName, true])));
-  }, [usersQuery]);
+    setSelected(Object.fromEntries(hostsQuery.data.map((x) => [x.userName, true])));
+  }, [hostsQuery]);
 
   const handleChange = (userName: string) => () => {
     setLoadingUser(userName);
 
     if (selected[userName]) {
-      const id = usersQuery.data?.find((x) => x.userName === userName)?.id;
+      const id = hostsQuery.data?.find((x) => x.userName === userName)?.id;
       if (!id) {
         errorToast('Unknown user id');
         return;
@@ -47,7 +47,7 @@ export default function EditAppointmentUsers() {
         }
       });
     } else {
-      createUserMutation({ appointmentUserCreateDto: { userName, typeId } }).then((x: any) => {
+      createUserMutation({ appointmentExclusiveHostCreateDto: { userName, typeId } }).then((x: any) => {
         if (!x.error) {
           itemSavedToast();
           setSelected((x) => ({ ...x, [userName]: true }));

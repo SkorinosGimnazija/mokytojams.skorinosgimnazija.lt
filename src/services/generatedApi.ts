@@ -1,23 +1,16 @@
 import { baseApi as api } from './baseApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/all`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
     getMyAppointments: build.query<GetMyAppointmentsApiResponse, GetMyAppointmentsApiArg>({
       query: (queryArg) => ({
-        url: `/Appointments`,
+        url: `/Appointments/my`,
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
-    editAppointmentType: build.mutation<EditAppointmentTypeApiResponse, EditAppointmentTypeApiArg>({
+    getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
       query: (queryArg) => ({
         url: `/Appointments`,
-        method: 'PUT',
-        body: queryArg.appointmentTypeEditDto,
+        params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
     getAppointmentById: build.query<GetAppointmentByIdApiResponse, GetAppointmentByIdApiArg>({
@@ -28,47 +21,54 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     deleteAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>(
       {
-        query: (queryArg) => ({ url: `/Appointments/type/${queryArg.id}`, method: 'DELETE' }),
+        query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}`, method: 'DELETE' }),
       }
     ),
     getAppointmentTypeById: build.query<GetAppointmentTypeByIdApiResponse, GetAppointmentTypeByIdApiArg>(
       {
-        query: (queryArg) => ({ url: `/Appointments/type/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}` }),
       }
     ),
+    editAppointmentType: build.mutation<EditAppointmentTypeApiResponse, EditAppointmentTypeApiArg>({
+      query: (queryArg) => ({
+        url: `/Appointments/types`,
+        method: 'PUT',
+        body: queryArg.appointmentTypeEditDto,
+      }),
+    }),
     getAppointmentTypes: build.query<GetAppointmentTypesApiResponse, GetAppointmentTypesApiArg>({
       query: () => ({ url: `/Appointments/types` }),
     }),
     createAppointmentType: build.mutation<CreateAppointmentTypeApiResponse, CreateAppointmentTypeApiArg>(
       {
         query: (queryArg) => ({
-          url: `/Appointments/type`,
+          url: `/Appointments/types`,
           method: 'POST',
           body: queryArg.appointmentTypeCreateDto,
         }),
       }
     ),
-    createAppointmentUser: build.mutation<CreateAppointmentUserApiResponse, CreateAppointmentUserApiArg>(
+    createAppointmentHost: build.mutation<CreateAppointmentHostApiResponse, CreateAppointmentHostApiArg>(
       {
         query: (queryArg) => ({
-          url: `/Appointments/user`,
+          url: `/Appointments/hosts`,
           method: 'POST',
-          body: queryArg.appointmentUserCreateDto,
+          body: queryArg.appointmentExclusiveHostCreateDto,
         }),
       }
     ),
-    deleteAppointmentUser: build.mutation<DeleteAppointmentUserApiResponse, DeleteAppointmentUserApiArg>(
+    deleteAppointmentHost: build.mutation<DeleteAppointmentHostApiResponse, DeleteAppointmentHostApiArg>(
       {
-        query: (queryArg) => ({ url: `/Appointments/user/${queryArg.id}`, method: 'DELETE' }),
+        query: (queryArg) => ({ url: `/Appointments/hosts/${queryArg.id}`, method: 'DELETE' }),
       }
     ),
-    getAppointmentUsers: build.query<GetAppointmentUsersApiResponse, GetAppointmentUsersApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/user/${queryArg.typeId}` }),
+    getAppointmentHosts: build.query<GetAppointmentHostsApiResponse, GetAppointmentHostsApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/hosts/${queryArg.typeId}` }),
     }),
     createAppointmentDate: build.mutation<CreateAppointmentDateApiResponse, CreateAppointmentDateApiArg>(
       {
         query: (queryArg) => ({
-          url: `/Appointments/date`,
+          url: `/Appointments/dates`,
           method: 'POST',
           body: queryArg.appointmentDateCreateDto,
         }),
@@ -76,11 +76,11 @@ const injectedRtkApi = api.injectEndpoints({
     ),
     deleteAppointmentDate: build.mutation<DeleteAppointmentDateApiResponse, DeleteAppointmentDateApiArg>(
       {
-        query: (queryArg) => ({ url: `/Appointments/date/${queryArg.id}`, method: 'DELETE' }),
+        query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.id}`, method: 'DELETE' }),
       }
     ),
     getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/date/${queryArg.typeId}` }),
+      query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.typeId}` }),
     }),
     createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
       query: (queryArg) => ({
@@ -89,24 +89,32 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.appointmentCreateDto,
       }),
     }),
+    getAppointmentAvailableHosts: build.query<
+      GetAppointmentAvailableHostsApiResponse,
+      GetAppointmentAvailableHostsApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/hosts/available/${queryArg.typeSlug}` }),
+    }),
     getAppointmentAvailableDates: build.query<
       GetAppointmentAvailableDatesApiResponse,
       GetAppointmentAvailableDatesApiArg
     >({
-      query: (queryArg) => ({ url: `/Appointments/date/${queryArg['type']}/${queryArg.userName}` }),
+      query: (queryArg) => ({
+        url: `/Appointments/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
+      }),
     }),
-    getPublicAppointmentTypeBySlug: build.query<
-      GetPublicAppointmentTypeBySlugApiResponse,
-      GetPublicAppointmentTypeBySlugApiArg
+    getPublicAppointmentAvailableHosts: build.query<
+      GetPublicAppointmentAvailableHostsApiResponse,
+      GetPublicAppointmentAvailableHostsApiArg
     >({
-      query: (queryArg) => ({ url: `/Appointments/public/type/${queryArg.slug}` }),
+      query: (queryArg) => ({ url: `/Appointments/public/hosts/available/${queryArg.typeSlug}` }),
     }),
     getPublicAppointmentAvailableDates: build.query<
       GetPublicAppointmentAvailableDatesApiResponse,
       GetPublicAppointmentAvailableDatesApiArg
     >({
       query: (queryArg) => ({
-        url: `/Appointments/public/date/${queryArg['type']}/${queryArg.userName}`,
+        url: `/Appointments/public/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
       }),
     }),
     createPublicAppointment: build.mutation<
@@ -308,19 +316,15 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as generatedApi };
-export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
-export type GetAllAppointmentsApiArg = {
-  items?: number;
-  page?: number;
-};
 export type GetMyAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
 export type GetMyAppointmentsApiArg = {
   items?: number;
   page?: number;
 };
-export type EditAppointmentTypeApiResponse = /** status 200 Success */ undefined;
-export type EditAppointmentTypeApiArg = {
-  appointmentTypeEditDto: AppointmentTypeEditDto;
+export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetAllAppointmentsApiArg = {
+  items?: number;
+  page?: number;
 };
 export type GetAppointmentByIdApiResponse = /** status 200 Success */ AppointmentDetailsDto;
 export type GetAppointmentByIdApiArg = {
@@ -338,22 +342,26 @@ export type GetAppointmentTypeByIdApiResponse = /** status 200 Success */ Appoin
 export type GetAppointmentTypeByIdApiArg = {
   id: number;
 };
+export type EditAppointmentTypeApiResponse = /** status 200 Success */ undefined;
+export type EditAppointmentTypeApiArg = {
+  appointmentTypeEditDto: AppointmentTypeEditDto;
+};
 export type GetAppointmentTypesApiResponse = /** status 200 Success */ AppointmentTypeDto[];
 export type GetAppointmentTypesApiArg = void;
 export type CreateAppointmentTypeApiResponse = /** status 201 Created */ AppointmentDto;
 export type CreateAppointmentTypeApiArg = {
   appointmentTypeCreateDto: AppointmentTypeCreateDto;
 };
-export type CreateAppointmentUserApiResponse = /** status 201 Created */ AppointmentUserDto;
-export type CreateAppointmentUserApiArg = {
-  appointmentUserCreateDto: AppointmentUserCreateDto;
+export type CreateAppointmentHostApiResponse = /** status 201 Created */ AppointmentExclusiveHostDto;
+export type CreateAppointmentHostApiArg = {
+  appointmentExclusiveHostCreateDto: AppointmentExclusiveHostCreateDto;
 };
-export type DeleteAppointmentUserApiResponse = /** status 204 No Content */ undefined;
-export type DeleteAppointmentUserApiArg = {
+export type DeleteAppointmentHostApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentHostApiArg = {
   id: number;
 };
-export type GetAppointmentUsersApiResponse = /** status 200 Success */ AppointmentUserDto[];
-export type GetAppointmentUsersApiArg = {
+export type GetAppointmentHostsApiResponse = /** status 200 Success */ AppointmentExclusiveHostDto[];
+export type GetAppointmentHostsApiArg = {
   typeId: number;
 };
 export type CreateAppointmentDateApiResponse = /** status 201 Created */ AppointmentDateDto;
@@ -372,19 +380,24 @@ export type CreateAppointmentApiResponse = /** status 201 Created */ Appointment
 export type CreateAppointmentApiArg = {
   appointmentCreateDto: AppointmentCreateDto;
 };
+export type GetAppointmentAvailableHostsApiResponse = /** status 200 Success */ AppointmentHostDto[];
+export type GetAppointmentAvailableHostsApiArg = {
+  typeSlug: string;
+};
 export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentAvailableDatesApiArg = {
-  type: string;
+  typeSlug: string;
   userName: string;
 };
-export type GetPublicAppointmentTypeBySlugApiResponse = /** status 200 Success */ AppointmentTypeDto;
-export type GetPublicAppointmentTypeBySlugApiArg = {
-  slug: string;
+export type GetPublicAppointmentAvailableHostsApiResponse =
+  /** status 200 Success */ AppointmentHostDto[];
+export type GetPublicAppointmentAvailableHostsApiArg = {
+  typeSlug: string;
 };
 export type GetPublicAppointmentAvailableDatesApiResponse =
   /** status 200 Success */ AppointmentDateDto[];
 export type GetPublicAppointmentAvailableDatesApiArg = {
-  type: string;
+  typeSlug: string;
   userName: string;
 };
 export type CreatePublicAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
@@ -696,12 +709,12 @@ export type AppointmentTypeCreateDto = {
   isPublic: boolean;
   registrationEnd: string;
 };
-export type AppointmentUserDto = {
+export type AppointmentExclusiveHostDto = {
   id: number;
   typeId: number;
   userName: string;
 };
-export type AppointmentUserCreateDto = {
+export type AppointmentExclusiveHostCreateDto = {
   typeId: number;
   userName: string;
 };
@@ -711,6 +724,10 @@ export type AppointmentDateCreateDto = {
 };
 export type AppointmentCreateDto = {
   dateId: number;
+  userName: string;
+};
+export type AppointmentHostDto = {
+  displayName: string;
   userName: string;
 };
 export type AppointmentPublicCreateDto = {

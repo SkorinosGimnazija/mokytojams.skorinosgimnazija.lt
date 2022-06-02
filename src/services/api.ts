@@ -8,8 +8,8 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'Course',
     'Bully',
     'Appointments',
-    'AppointmentsDate',
-    'AppointmentsUser',
+    'AppointmentDates',
+    'AppointmentHosts',
     'Events',
   ],
   endpoints: {
@@ -132,7 +132,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       invalidatesTags: ['Bully'],
     },
     createAppointment: {
-      invalidatesTags: ['Appointments'],
+      invalidatesTags: ['AppointmentDates'],
     },
     createAppointmentType: {
       invalidatesTags: ['Appointments'],
@@ -164,38 +164,29 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getMyAppointments: {
       providesTags: ['Appointments'],
     },
-    getPublicAppointmentTypeBySlug: {
-      providesTags: ['Appointments'],
-    },
     getAppointmentAvailableDates: {
-      providesTags: ['AppointmentsDate'],
+      providesTags: ['AppointmentDates'],
     },
     getAppointmentDates: {
-      providesTags: ['AppointmentsDate'],
-    },
-    getPublicAppointmentAvailableDates: {
-      providesTags: ['AppointmentsDate'],
+      providesTags: ['AppointmentDates'],
     },
     createAppointmentDate: {
-      invalidatesTags: ['AppointmentsDate'],
+      invalidatesTags: ['AppointmentDates'],
     },
     deleteAppointmentDate: {
-      invalidatesTags: ['AppointmentsDate'],
+      invalidatesTags: ['AppointmentDates'],
     },
-    getAppointmentUsers: {
-      providesTags: ['AppointmentsUser'],
+    getAppointmentHosts: {
+      providesTags: ['AppointmentHosts'],
     },
-    createAppointmentUser: {
-      invalidatesTags: ['AppointmentsUser'],
+    getAppointmentAvailableHosts: {
+      providesTags: ['AppointmentHosts'],
     },
-    deleteAppointmentUser: {
-      invalidatesTags: ['AppointmentsUser'],
+    createAppointmentHost: {
+      invalidatesTags: ['AppointmentHosts'],
     },
-    getPublicDayEvents: {
-      providesTags: ['Events'],
-    },
-    getPublicEvents: {
-      providesTags: ['Events'],
+    deleteAppointmentHost: {
+      invalidatesTags: ['AppointmentHosts'],
     },
   },
 });
@@ -203,24 +194,25 @@ const enhancedApi = generatedApi.enhanceEndpoints({
 export { enhancedApi as api };
 
 export const {
-  useGetAllAppointmentsQuery,
   useGetMyAppointmentsQuery,
-  useEditAppointmentTypeMutation,
+  useGetAllAppointmentsQuery,
   useGetAppointmentByIdQuery,
   useDeleteAppointmentMutation,
   useDeleteAppointmentTypeMutation,
   useGetAppointmentTypeByIdQuery,
+  useEditAppointmentTypeMutation,
   useGetAppointmentTypesQuery,
   useCreateAppointmentTypeMutation,
-  useCreateAppointmentUserMutation,
-  useDeleteAppointmentUserMutation,
-  useGetAppointmentUsersQuery,
+  useCreateAppointmentHostMutation,
+  useDeleteAppointmentHostMutation,
+  useGetAppointmentHostsQuery,
   useCreateAppointmentDateMutation,
   useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
   useCreateAppointmentMutation,
+  useGetAppointmentAvailableHostsQuery,
   useGetAppointmentAvailableDatesQuery,
-  useGetPublicAppointmentTypeBySlugQuery,
+  useGetPublicAppointmentAvailableHostsQuery,
   useGetPublicAppointmentAvailableDatesQuery,
   useCreatePublicAppointmentMutation,
   useAuthorizeMutation,

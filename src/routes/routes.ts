@@ -150,7 +150,7 @@ export const routes: RoutesGroup[] = [
       },
       {
         name: 'Metiniai pokalbiai',
-        path: '/teacher/appointments',
+        path: '/teacher/appointments/yearly',
         accessRole: 'Teacher',
         innerRoutes: [
           {
@@ -159,11 +159,7 @@ export const routes: RoutesGroup[] = [
           },
           {
             path: 'create',
-            lazyElement: lazy(() => import('../pages/teacher/appointments/EditAppointment')),
-          },
-          {
-            path: ':id',
-            lazyElement: lazy(() => import('../pages/teacher/appointments/EditAppointment')),
+            lazyElement: lazy(() => import('../pages/teacher/appointments/CreateAppointment')),
           },
         ],
       },
