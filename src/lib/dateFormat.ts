@@ -1,10 +1,12 @@
 const ltDateFormat = new Intl.DateTimeFormat('lt', {
   dateStyle: 'short',
+  timeZone: 'Europe/Vilnius',
 });
 
 const ltDateTimeFormat = new Intl.DateTimeFormat('lt', {
   dateStyle: 'short',
   timeStyle: 'short',
+  timeZone: 'Europe/Vilnius',
 });
 
 type LocalDate = {
