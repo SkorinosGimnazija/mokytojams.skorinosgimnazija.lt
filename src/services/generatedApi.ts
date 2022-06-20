@@ -780,21 +780,28 @@ export type ProblemDetails = {
   instance?: string | null;
   [key: string]: any;
 };
+export type AccomplishmentCreateTeacherDto = {
+  name: string;
+};
+export type AccomplishmentCreateStudentDto = {
+  classroomId: number;
+  name: string;
+};
 export type AccomplishmentCreateDto = {
   name: string;
   achievement: string;
   date: string;
   scaleId: number;
-  additionalTeachers: string[];
-  students: string[];
+  additionalTeachers: AccomplishmentCreateTeacherDto[];
+  students: AccomplishmentCreateStudentDto[];
 };
 export type AccomplishmentEditDto = {
   name: string;
   achievement: string;
   date: string;
   scaleId: number;
-  additionalTeachers: string[];
-  students: string[];
+  additionalTeachers: AccomplishmentCreateTeacherDto[];
+  students: AccomplishmentCreateStudentDto[];
   id: number;
 };
 export type AccomplishmentDetailsDto = {
