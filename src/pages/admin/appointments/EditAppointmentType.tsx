@@ -82,7 +82,7 @@ export default function EditAppointmentType() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={4} direction="column" flexWrap="nowrap">
         <Grid container item direction="row" gap={4}>
           <TextField

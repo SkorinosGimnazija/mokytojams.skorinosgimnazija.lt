@@ -162,7 +162,7 @@ export default function EditPost() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={2} direction="column" wrap="nowrap">
         <Grid item>
           <Grid container gap={2}>

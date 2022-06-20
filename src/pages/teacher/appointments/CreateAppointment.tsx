@@ -65,7 +65,7 @@ export default function CreateAppointment() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={2} direction="column" wrap="nowrap">
         <FormControl>
           <InputLabel id="userName-label">Vadovas</InputLabel>

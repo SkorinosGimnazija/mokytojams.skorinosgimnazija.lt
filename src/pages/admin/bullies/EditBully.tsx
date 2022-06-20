@@ -38,7 +38,7 @@ export default function EditBully() {
   }, [bullyQuery]);
 
   return (
-    <form>
+    <form autoComplete="off">
       <Grid container gap={4} direction="column" flexWrap="nowrap">
         <Grid container item direction="row" gap={4}>
           <TextField

@@ -90,7 +90,7 @@ export default function EditCourse() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={4} direction="column" flexWrap="nowrap">
         <TextField
           id="title"

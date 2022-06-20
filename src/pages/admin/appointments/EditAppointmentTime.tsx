@@ -59,7 +59,7 @@ export default function EditAppointmentTime() {
 
   return (
     <Box sx={{ marginTop: '10px' }}>
-      <form onSubmit={handleSubmit}>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <Grid container gap={4} alignItems="center">
           <TextField
             id="newDate"

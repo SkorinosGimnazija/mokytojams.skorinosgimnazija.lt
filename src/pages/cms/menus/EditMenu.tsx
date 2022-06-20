@@ -135,7 +135,7 @@ export default function EditMenu() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={4} direction="column" flexWrap="nowrap">
         <Grid item>
           <Grid container gap={4}>
