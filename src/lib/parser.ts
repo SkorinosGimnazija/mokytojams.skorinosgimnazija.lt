@@ -1,8 +1,10 @@
 export const htmlToMarkdown = (html: string) => {
   const md = html
+    .replaceAll('&nbsp;', ' ')
     .replaceAll(/<[/]?span>/g, '')
     .replaceAll(/<(?:i|em)>(.*?)<\/(?:i|em)>/g, '*$1*')
     .replaceAll(/<(?:b|strong)>(.*?)<\/(?:b|strong)>/g, '**$1**')
+    .replaceAll(/\s{2,}/g, ' ')
     .replaceAll(/<a href="(.*?)">(.*?)<\/a>/g, (_, link: string, text: string) => {
       //encode link ?
       return `[${text}](${link})`;
@@ -22,13 +24,7 @@ export const htmlToMarkdown = (html: string) => {
 
 export const normalizeHtml = (html: string) => {
   const parser = new DOMParser();
-  const doc = parser.parseFromString(
-    html
-      .replaceAll('&nbsp;', ' ')
-      .replaceAll(/\n|\r/g, ' ')
-      .replaceAll(/\s{2,}/g, ' '),
-    'text/html'
-  );
+  const doc = parser.parseFromString(html.replaceAll(/\n|\r/g, ' '), 'text/html');
   const body = doc.body;
 
   for (const node of Array.from(body.childNodes)) {

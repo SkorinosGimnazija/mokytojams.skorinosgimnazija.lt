@@ -1,6 +1,53 @@
 import { baseApi as api } from './baseApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    getAccomplishmentsByDate: build.query<
+      GetAccomplishmentsByDateApiResponse,
+      GetAccomplishmentsByDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Accomplishment/all`,
+        params: { start: queryArg.start, end: queryArg.end },
+      }),
+    }),
+    getAccomplishmentScales: build.query<
+      GetAccomplishmentScalesApiResponse,
+      GetAccomplishmentScalesApiArg
+    >({
+      query: () => ({ url: `/Accomplishment/scales` }),
+    }),
+    getAccomplishmentClassrooms: build.query<
+      GetAccomplishmentClassroomsApiResponse,
+      GetAccomplishmentClassroomsApiArg
+    >({
+      query: () => ({ url: `/Accomplishment/classrooms` }),
+    }),
+    getMyAccomplishments: build.query<GetMyAccomplishmentsApiResponse, GetMyAccomplishmentsApiArg>({
+      query: (queryArg) => ({
+        url: `/Accomplishment`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    createAccomplishment: build.mutation<CreateAccomplishmentApiResponse, CreateAccomplishmentApiArg>({
+      query: (queryArg) => ({
+        url: `/Accomplishment`,
+        method: 'POST',
+        body: queryArg.accomplishmentCreateDto,
+      }),
+    }),
+    editAccomplishment: build.mutation<EditAccomplishmentApiResponse, EditAccomplishmentApiArg>({
+      query: (queryArg) => ({
+        url: `/Accomplishment`,
+        method: 'PUT',
+        body: queryArg.accomplishmentEditDto,
+      }),
+    }),
+    getAccomplishmentById: build.query<GetAccomplishmentByIdApiResponse, GetAccomplishmentByIdApiArg>({
+      query: (queryArg) => ({ url: `/Accomplishment/${queryArg.id}` }),
+    }),
+    deleteAccomplishment: build.mutation<DeleteAccomplishmentApiResponse, DeleteAccomplishmentApiArg>({
+      query: (queryArg) => ({ url: `/Accomplishment/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getMyAppointments: build.query<GetMyAppointmentsApiResponse, GetMyAppointmentsApiArg>({
       query: (queryArg) => ({
         url: `/Appointments/my/appointments/${queryArg.typeSlug}`,
@@ -322,6 +369,37 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as generatedApi };
+export type GetAccomplishmentsByDateApiResponse = /** status 200 Success */ AccomplishmentDto[];
+export type GetAccomplishmentsByDateApiArg = {
+  start?: string;
+  end?: string;
+};
+export type GetAccomplishmentScalesApiResponse = /** status 200 Success */ AccomplishmentScaleDto[];
+export type GetAccomplishmentScalesApiArg = void;
+export type GetAccomplishmentClassroomsApiResponse =
+  /** status 200 Success */ AccomplishmentClassroomDto[];
+export type GetAccomplishmentClassroomsApiArg = void;
+export type GetMyAccomplishmentsApiResponse = /** status 200 Success */ AccomplishmentDtoPaginatedList;
+export type GetMyAccomplishmentsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateAccomplishmentApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateAccomplishmentApiArg = {
+  accomplishmentCreateDto: AccomplishmentCreateDto;
+};
+export type EditAccomplishmentApiResponse = /** status 200 Success */ undefined;
+export type EditAccomplishmentApiArg = {
+  accomplishmentEditDto: AccomplishmentEditDto;
+};
+export type GetAccomplishmentByIdApiResponse = /** status 200 Success */ AccomplishmentDetailsDto;
+export type GetAccomplishmentByIdApiArg = {
+  id: number;
+};
+export type DeleteAccomplishmentApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAccomplishmentApiArg = {
+  id: number;
+};
 export type GetMyAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
 export type GetMyAppointmentsApiArg = {
   items?: number;
@@ -467,7 +545,7 @@ export type SearchBannersApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerDto[];
+export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerPublicDto[];
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
 };
@@ -559,7 +637,7 @@ export type SearchMenusApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicMenusByLanguageApiResponse = /** status 200 Success */ MenuDto[];
+export type GetPublicMenusByLanguageApiResponse = /** status 200 Success */ MenuPublicDto[];
 export type GetPublicMenusByLanguageApiArg = {
   language: string;
 };
@@ -637,7 +715,7 @@ export type SearchPostsApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicPostByIdApiResponse = /** status 200 Success */ PostDetailsDto;
+export type GetPublicPostByIdApiResponse = /** status 200 Success */ PostPublicDetailsDto;
 export type GetPublicPostByIdApiArg = {
   id: number;
 };
@@ -646,17 +724,88 @@ export type GetPublicPostByMenuLanguageAndPathApiArg = {
   language: string;
   path: string;
 };
-export type GetPublicPostsByLanguageApiResponse = /** status 200 Success */ PostDto[];
+export type GetPublicPostsByLanguageApiResponse = /** status 200 Success */ PostPublicDto[];
 export type GetPublicPostsByLanguageApiArg = {
   language: string;
   items?: number;
   page?: number;
 };
-export type SearchPublicPostsApiResponse = /** status 200 Success */ PostDtoPaginatedList;
+export type SearchPublicPostsApiResponse = /** status 200 Success */ PostPublicDtoPaginatedList;
 export type SearchPublicPostsApiArg = {
   text: string;
   items?: number;
   page?: number;
+};
+export type AccomplishmentTeacherDto = {
+  id: number;
+  name: string;
+};
+export type AccomplishmentClassroomDto = {
+  id: number;
+  name: string;
+};
+export type AccomplishmentStudentDto = {
+  id: number;
+  name: string;
+  classroom: AccomplishmentClassroomDto;
+};
+export type AccomplishmentDto = {
+  id: number;
+  name: string;
+  achievement: string;
+  date: string;
+  teacherDisplayName: string;
+  userId: number;
+  scale: string;
+  additionalTeachers: AccomplishmentTeacherDto[];
+  students: AccomplishmentStudentDto[];
+};
+export type AccomplishmentScaleDto = {
+  id: number;
+  name: string;
+};
+export type AccomplishmentDtoPaginatedList = {
+  items: AccomplishmentDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type ProblemDetails = {
+  type?: string | null;
+  title?: string | null;
+  status?: number | null;
+  detail?: string | null;
+  instance?: string | null;
+  [key: string]: any;
+};
+export type AccomplishmentCreateDto = {
+  name: string;
+  achievement: string;
+  date: string;
+  scaleId: number;
+  additionalTeachers: string[];
+  students: string[];
+};
+export type AccomplishmentEditDto = {
+  name: string;
+  achievement: string;
+  date: string;
+  scaleId: number;
+  additionalTeachers: string[];
+  students: string[];
+  id: number;
+};
+export type AccomplishmentDetailsDto = {
+  id: number;
+  name: string;
+  achievement: string;
+  date: string;
+  userId: number;
+  scaleId: number;
+  additionalTeachers: AccomplishmentTeacherDto[];
+  students: AccomplishmentStudentDto[];
 };
 export type AppointmentTypeDto = {
   id: number;
@@ -698,14 +847,6 @@ export type AppointmentDto = {
   userName: string;
   attendeeName: string;
   attendeeEmail: string;
-};
-export type ProblemDetails = {
-  type?: string | null;
-  title?: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-  [key: string]: any;
 };
 export type AppointmentCreateDto = {
   dateId: number;
@@ -784,6 +925,14 @@ export type BannerDtoPaginatedList = {
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type BannerPublicDto = {
+  id: number;
+  title: string;
+  url: string;
+  width: number;
+  height: number;
+  pictureUrl: string;
 };
 export type BullyReportDto = {
   id: number;
@@ -953,6 +1102,16 @@ export type MenuEditDto = {
   parentMenuId?: number | null;
   id: number;
 };
+export type MenuPublicDto = {
+  id: number;
+  url?: string | null;
+  title: string;
+  slug: string;
+  position: string;
+  path: string;
+  parentMenuId?: number | null;
+  childMenus: MenuPublicDto[];
+};
 export type MenuMetaDto = {
   url: string;
   ln: string;
@@ -993,4 +1152,33 @@ export type PostDtoPaginatedList = {
 export type PostPatchDto = {
   isFeatured?: boolean | null;
   isPublished?: boolean | null;
+};
+export type PostPublicDetailsDto = {
+  id: number;
+  publishedAt: string;
+  modifiedAt?: string | null;
+  slug: string;
+  title: string;
+  introText?: string | null;
+  featuredImage?: string | null;
+  images?: string[] | null;
+  meta?: string | null;
+  text?: string | null;
+};
+export type PostPublicDto = {
+  id: number;
+  publishedAt: string;
+  modifiedAt?: string | null;
+  slug: string;
+  title: string;
+  introText?: string | null;
+  featuredImage?: string | null;
+};
+export type PostPublicDtoPaginatedList = {
+  items: PostPublicDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };

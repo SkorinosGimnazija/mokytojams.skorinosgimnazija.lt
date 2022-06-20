@@ -11,6 +11,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'AppointmentDates',
     'AppointmentHosts',
     'Events',
+    'Accomplishments',
   ],
   endpoints: {
     authorize: {},
@@ -21,6 +22,12 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       keepUnusedDataFor: 600,
     },
     getTeachers: {
+      keepUnusedDataFor: 600,
+    },
+    getAccomplishmentScales: {
+      keepUnusedDataFor: 600,
+    },
+    getAccomplishmentClassrooms: {
       keepUnusedDataFor: 600,
     },
     searchPosts: {
@@ -188,12 +195,38 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteAppointmentHost: {
       invalidatesTags: ['AppointmentHosts'],
     },
+    createAccomplishment: {
+      invalidatesTags: ['Accomplishments'],
+    },
+    editAccomplishment: {
+      invalidatesTags: ['Accomplishments'],
+    },
+    deleteAccomplishment: {
+      invalidatesTags: ['Accomplishments'],
+    },
+    getAccomplishmentById: {
+      providesTags: ['Accomplishments'],
+    },
+    getAccomplishmentsByDate: {
+      providesTags: ['Accomplishments'],
+    },
+    getMyAccomplishments: {
+      providesTags: ['Accomplishments'],
+    },
   },
 });
 
 export { enhancedApi as api };
 
 export const {
+  useGetAccomplishmentsByDateQuery,
+  useGetAccomplishmentScalesQuery,
+  useGetAccomplishmentClassroomsQuery,
+  useGetMyAccomplishmentsQuery,
+  useCreateAccomplishmentMutation,
+  useEditAccomplishmentMutation,
+  useGetAccomplishmentByIdQuery,
+  useDeleteAccomplishmentMutation,
   useGetMyAppointmentsQuery,
   useGetMyRegistrationsQuery,
   useCreateAppointmentMutation,

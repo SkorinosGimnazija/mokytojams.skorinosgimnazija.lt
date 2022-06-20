@@ -94,6 +94,28 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
+        name: 'Mokinių pasiekimai',
+        path: '/admin/accomplishments',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/accomplishments/ViewAllAccomplishments')),
+          },
+        ],
+      },
+      {
+        name: 'Metiniai pokalbiai',
+        path: '/manager/appointments/yearly',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/appointments/ViewMyAppointments')),
+          },
+        ],
+      },
+      {
         name: 'Registracijos',
         path: '/admin/appointments',
         accessRole: 'Admin',
@@ -124,17 +146,6 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
-      {
-        name: 'Metiniai pokalbiai',
-        path: '/manager/appointments/yearly',
-        accessRole: 'Manager',
-        innerRoutes: [
-          {
-            path: '',
-            lazyElement: lazy(() => import('../pages/admin/appointments/ViewMyAppointments')),
-          },
-        ],
-      },
     ],
   },
   {
@@ -156,6 +167,25 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/teacher/courses/EditCourse')),
+          },
+        ],
+      },
+      {
+        name: 'Mokinių pasiekimai',
+        path: '/teacher/accomplishments',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/accomplishments/ViewAccomplishments')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
           },
         ],
       },
