@@ -1,6 +1,6 @@
 import { YearPicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import { addDays, addYears, format } from 'date-fns';
