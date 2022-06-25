@@ -1,17 +1,20 @@
 import { YearPicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { Stack } from '@mui/material';
+import { FormControlLabel, Stack, Switch } from '@mui/material';
 import { Box } from '@mui/system';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { addDays, addYears, format } from 'date-fns';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AccomplishmentsList } from '../../../components/lists/AccomplishmentsList';
-import { CourseStatsList } from '../../../components/lists/CourseStatsList';
-import { useGetAccomplishmentsByDateQuery, useGetCoursesStatsByDateQuery } from '../../../services/api';
+import { useGetAccomplishmentsByDateQuery } from '../../../services/api';
 
 export default function ViewAllAccomplishments() {
+  const [academicYear, setAcademicYear] = useState(false);
   const [year, setYear] = useState(addDays(new Date(), -31));
-  const dateRange = { start: format(year, 'yyyy-01-01'), end: format(year, 'yyyy-12-31') };
+  const dateRange = {
+    start: format(year, academicYear ? 'yyyy-09-01' : 'yyyy-01-01'),
+    end: format(academicYear ? addYears(year, 1) : year, academicYear ? 'yyyy-08-31' : 'yyyy-12-31'),
+  };
   const accomplishmentsQuery = useGetAccomplishmentsByDateQuery(dateRange);
 
   return (
@@ -26,6 +29,10 @@ export default function ViewAllAccomplishments() {
             isDateDisabled={() => false}
           />
         </LocalizationProvider>
+        <FormControlLabel
+          label="Mokslo metai"
+          control={<Switch checked={academicYear} onChange={(e) => setAcademicYear(e.target.checked)} />}
+        />
       </Stack>
       <Box mt={4}>
         <AccomplishmentsList
