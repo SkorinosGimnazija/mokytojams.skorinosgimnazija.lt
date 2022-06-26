@@ -170,25 +170,25 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
-      {
-        name: 'Mokinių pasiekimai',
-        path: '/teacher/accomplishments',
-        accessRole: 'Teacher',
-        innerRoutes: [
-          {
-            path: '',
-            lazyElement: lazy(() => import('../pages/teacher/accomplishments/ViewAccomplishments')),
-          },
-          {
-            path: 'create',
-            lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
-          },
-          {
-            path: ':id',
-            lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
-          },
-        ],
-      },
+      // {
+      //   name: 'Mokinių pasiekimai',
+      //   path: '/teacher/accomplishments',
+      //   accessRole: 'Teacher',
+      //   innerRoutes: [
+      //     {
+      //       path: '',
+      //       lazyElement: lazy(() => import('../pages/teacher/accomplishments/ViewAccomplishments')),
+      //     },
+      //     {
+      //       path: 'create',
+      //       lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+      //     },
+      //     {
+      //       path: ':id',
+      //       lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+      //     },
+      //   ],
+      // },
       {
         name: 'Metiniai pokalbiai',
         path: '/teacher/appointments/yearly',
