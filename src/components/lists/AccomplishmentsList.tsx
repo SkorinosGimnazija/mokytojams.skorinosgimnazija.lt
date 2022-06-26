@@ -36,7 +36,7 @@ export const AccomplishmentsList: React.FC<Props> = ({ data, isLoading, adminVie
     return {
       achievements,
       achievementsCount,
-      teachersCount: (data?.flatMap((x) => x.additionalTeachers)?.length ?? 0) + achievementsCount,
+      teachersCount: (data?.flatMap((x) => x.additionalTeachers)?.length ?? 0) + (data?.length ?? 0),
       accomplishmentsCount: data?.length ?? 0,
     };
   }, [data, achievementQuery]);
