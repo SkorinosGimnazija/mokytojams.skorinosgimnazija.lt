@@ -38,7 +38,7 @@ export default function ViewAllAccomplishments() {
         <AccomplishmentsList
           data={accomplishmentsQuery.data}
           isLoading={accomplishmentsQuery.isFetching}
-          preview
+          adminView
         />
       </Box>
     </Box>

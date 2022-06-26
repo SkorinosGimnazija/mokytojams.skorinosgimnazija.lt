@@ -102,6 +102,10 @@ export const routes: RoutesGroup[] = [
             path: '',
             lazyElement: lazy(() => import('../pages/admin/accomplishments/ViewAllAccomplishments')),
           },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+          },
         ],
       },
       {

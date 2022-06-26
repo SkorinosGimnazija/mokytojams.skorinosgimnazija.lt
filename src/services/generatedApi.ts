@@ -16,6 +16,12 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: () => ({ url: `/Accomplishment/scales` }),
     }),
+    getAccomplishmentAchievements: build.query<
+      GetAccomplishmentAchievementsApiResponse,
+      GetAccomplishmentAchievementsApiArg
+    >({
+      query: () => ({ url: `/Accomplishment/achievements` }),
+    }),
     getAccomplishmentClassrooms: build.query<
       GetAccomplishmentClassroomsApiResponse,
       GetAccomplishmentClassroomsApiArg
@@ -376,6 +382,9 @@ export type GetAccomplishmentsByDateApiArg = {
 };
 export type GetAccomplishmentScalesApiResponse = /** status 200 Success */ AccomplishmentScaleDto[];
 export type GetAccomplishmentScalesApiArg = void;
+export type GetAccomplishmentAchievementsApiResponse =
+  /** status 200 Success */ AccomplishmentAchievementDto[];
+export type GetAccomplishmentAchievementsApiArg = void;
 export type GetAccomplishmentClassroomsApiResponse =
   /** status 200 Success */ AccomplishmentClassroomDto[];
 export type GetAccomplishmentClassroomsApiArg = void;
@@ -744,15 +753,19 @@ export type AccomplishmentClassroomDto = {
   id: number;
   name: string;
 };
+export type AccomplishmentAchievementDto = {
+  id: number;
+  name: string;
+};
 export type AccomplishmentStudentDto = {
   id: number;
   name: string;
   classroom: AccomplishmentClassroomDto;
+  achievement: AccomplishmentAchievementDto;
 };
 export type AccomplishmentDto = {
   id: number;
   name: string;
-  achievement: string;
   date: string;
   teacherDisplayName: string;
   userId: number;
@@ -785,11 +798,11 @@ export type AccomplishmentCreateTeacherDto = {
 };
 export type AccomplishmentCreateStudentDto = {
   classroomId: number;
+  achievementId: number;
   name: string;
 };
 export type AccomplishmentCreateDto = {
   name: string;
-  achievement: string;
   date: string;
   scaleId: number;
   additionalTeachers: AccomplishmentCreateTeacherDto[];
@@ -797,7 +810,6 @@ export type AccomplishmentCreateDto = {
 };
 export type AccomplishmentEditDto = {
   name: string;
-  achievement: string;
   date: string;
   scaleId: number;
   additionalTeachers: AccomplishmentCreateTeacherDto[];
@@ -807,7 +819,6 @@ export type AccomplishmentEditDto = {
 export type AccomplishmentDetailsDto = {
   id: number;
   name: string;
-  achievement: string;
   date: string;
   userId: number;
   scaleId: number;

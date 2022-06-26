@@ -23,6 +23,7 @@ import { itemSavedToast } from '../../../lib/toasts';
 import {
   useCreateAccomplishmentMutation,
   useEditAccomplishmentMutation,
+  useGetAccomplishmentAchievementsQuery,
   useGetAccomplishmentByIdQuery,
   useGetAccomplishmentClassroomsQuery,
   useGetAccomplishmentScalesQuery,
@@ -41,6 +42,7 @@ export default function EditAccomplishment() {
   const params = useParams();
   const accomplishmentId = Number(params.id);
 
+  const achievementQuery = useGetAccomplishmentAchievementsQuery();
   const classroomQuery = useGetAccomplishmentClassroomsQuery();
   const scaleQuery = useGetAccomplishmentScalesQuery();
   const accomplishmentQuery = useGetAccomplishmentByIdQuery(
@@ -57,7 +59,6 @@ export default function EditAccomplishment() {
   const [formData, setFormData] = useState({
     id: accomplishmentId,
     name: '',
-    achievement: '',
     date: '',
     scaleId: 0,
     students: [] as AccomplishmentCreateStudentDto[],
@@ -83,11 +84,11 @@ export default function EditAccomplishment() {
     setFormData((x) => ({
       ...x,
       name: accomplishmentQuery.data.name,
-      achievement: accomplishmentQuery.data.achievement,
       additionalTeachers: accomplishmentQuery.data.additionalTeachers.map((x) => ({ name: x.name })),
       students: accomplishmentQuery.data.students.map((x) => ({
         name: x.name,
         classroomId: x.classroom.id,
+        achievementId: x.achievement.id,
       })),
       scaleId: accomplishmentQuery.data.scaleId,
       date: format(new Date(accomplishmentQuery.data.date), 'yyyy-MM-dd'),
@@ -141,14 +142,47 @@ export default function EditAccomplishment() {
                   students: [
                     ...x.students.slice(0, i),
                     {
+                      ...x.students[i],
                       name: e.target.value,
-                      classroomId: x.students[i].classroomId,
                     },
                     ...x.students.slice(i + 1),
                   ],
                 }));
               }}
             />
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel id={`student-achievement-${i}-label`}>Laimėjimas</InputLabel>
+              <Select
+                id={`student-achievement-${i}`}
+                labelId={`student-achievement-${i}-label`}
+                label="Laimėjimas"
+                value={formData.students[i]?.achievementId || ''}
+                onChange={(e) => {
+                  setFormData((x) => ({
+                    ...x,
+                    students: [
+                      ...x.students.slice(0, i),
+                      {
+                        ...x.students[i],
+                        achievementId: Number(e.target.value),
+                      },
+                      ...x.students.slice(i + 1),
+                    ],
+                  }));
+                }}
+                sx={{ width: '200px' }}
+              >
+                {achievementQuery.data?.map((x) => {
+                  return (
+                    <MenuItem key={x.id} value={x.id}>
+                      {x.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item>
             <FormControl>
@@ -163,7 +197,10 @@ export default function EditAccomplishment() {
                     ...x,
                     students: [
                       ...x.students.slice(0, i),
-                      { name: x.students[i].name, classroomId: Number(e.target.value) },
+                      {
+                        ...x.students[i],
+                        classroomId: Number(e.target.value),
+                      },
                       ...x.students.slice(i + 1),
                     ],
                   }));
@@ -230,17 +267,6 @@ export default function EditAccomplishment() {
           onChange={handleChange}
         />
 
-        <TextField
-          id="achievement"
-          name="achievement"
-          label="Laimėjimas (vieta, laipsnis, nominacija ar pan.)"
-          autoComplete="accomplishment-achievement"
-          fullWidth
-          required
-          value={formData.achievement}
-          onChange={handleChange}
-        />
-
         <Grid item>
           <Grid container gap={4}>
             <FormControl>
@@ -290,7 +316,7 @@ export default function EditAccomplishment() {
             <Paper
               variant="outlined"
               sx={{
-                width: '45%',
+                width: '65%',
                 padding: '20px',
                 backgroundColor: 'transparent',
                 display: 'flex',
@@ -311,7 +337,11 @@ export default function EditAccomplishment() {
                           ...x,
                           students: [
                             ...x.students,
-                            { name: '', classroomId: classroomQuery.data?.[0]?.id ?? 1 },
+                            {
+                              name: '',
+                              classroomId: classroomQuery.data?.[0]?.id ?? 1,
+                              achievementId: achievementQuery.data?.[0]?.id ?? 1,
+                            },
                           ],
                         }));
                         setStudentsCount((x) => x + 1);
@@ -324,42 +354,44 @@ export default function EditAccomplishment() {
               </Grid>
               {studentInputFields()}
             </Paper>
-
-            <Paper
-              variant="outlined"
-              sx={{
-                width: '35%',
-                padding: '20px',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-              }}
-            >
-              <Grid container alignItems="center">
-                <Grid item>
-                  <Typography>Papildomai prisidėję mokytojai</Typography>
-                </Grid>
-                <Grid item>
-                  <Tooltip title="Pridėti mokytoją">
-                    <IconButton
-                      color="success"
-                      onClick={() => {
-                        setFormData((x) => ({
-                          ...x,
-                          additionalTeachers: [...x.additionalTeachers, { name: '' }],
-                        }));
-                        setTeachersCount((x) => x + 1);
-                      }}
-                    >
-                      <PersonAddAltOutlinedIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Grid>
-              </Grid>
-              {teacherInputFields()}
-            </Paper>
           </Grid>
+        </Grid>
+
+        <Grid item>
+          <Paper
+            variant="outlined"
+            sx={{
+              width: '35%',
+              padding: '20px',
+              backgroundColor: 'transparent',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+            }}
+          >
+            <Grid container alignItems="center">
+              <Grid item>
+                <Typography>Papildomai prisidėję mokytojai</Typography>
+              </Grid>
+              <Grid item>
+                <Tooltip title="Pridėti mokytoją">
+                  <IconButton
+                    color="success"
+                    onClick={() => {
+                      setFormData((x) => ({
+                        ...x,
+                        additionalTeachers: [...x.additionalTeachers, { name: '' }],
+                      }));
+                      setTeachersCount((x) => x + 1);
+                    }}
+                  >
+                    <PersonAddAltOutlinedIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            </Grid>
+            {teacherInputFields()}
+          </Paper>
         </Grid>
 
         <Grid item>

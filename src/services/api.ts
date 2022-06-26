@@ -30,6 +30,9 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getAccomplishmentClassrooms: {
       keepUnusedDataFor: 600,
     },
+    getAccomplishmentAchievements: {
+      keepUnusedDataFor: 600,
+    },
     searchPosts: {
       providesTags: ['Post'],
     },
@@ -221,6 +224,7 @@ export { enhancedApi as api };
 export const {
   useGetAccomplishmentsByDateQuery,
   useGetAccomplishmentScalesQuery,
+  useGetAccomplishmentAchievementsQuery,
   useGetAccomplishmentClassroomsQuery,
   useGetMyAccomplishmentsQuery,
   useCreateAccomplishmentMutation,
