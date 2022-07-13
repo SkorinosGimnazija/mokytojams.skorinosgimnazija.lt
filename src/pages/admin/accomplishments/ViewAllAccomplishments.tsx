@@ -1,8 +1,7 @@
-import { YearPicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { FormControlLabel, Stack, Switch } from '@mui/material';
 import { Box } from '@mui/system';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider, YearPicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, addYears, format } from 'date-fns';
 import { useState } from 'react';
 import { AccomplishmentsList } from '../../../components/lists/AccomplishmentsList';
@@ -25,8 +24,7 @@ export default function ViewAllAccomplishments() {
             date={year}
             minDate={addYears(new Date(), -2)}
             maxDate={new Date()}
-            onChange={(x) => setYear(x!)}
-            isDateDisabled={() => false}
+            onChange={(x) => setYear(x)}
           />
         </LocalizationProvider>
         <FormControlLabel

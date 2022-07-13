@@ -1,10 +1,9 @@
-import { YearPicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
+import { LocalizationProvider, YearPicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, addYears, format } from 'date-fns';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CourseStatsList } from '../../../components/lists/CourseStatsList';
 import { useGetCoursesStatsByDateQuery } from '../../../services/api';
 
@@ -21,8 +20,7 @@ export default function ViewAllCourses() {
             date={year}
             minDate={addYears(new Date(), -2)}
             maxDate={new Date()}
-            onChange={(x) => setYear(x!)}
-            isDateDisabled={() => false}
+            onChange={(x) => setYear(x)}
           />
         </LocalizationProvider>
       </Stack>
