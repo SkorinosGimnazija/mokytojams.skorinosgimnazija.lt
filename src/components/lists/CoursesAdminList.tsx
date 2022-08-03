@@ -10,9 +10,5 @@ interface Props {
 export const CoursesAdminList: React.FC<Props> = ({ dateRange, teacherId }) => {
   const coursesQuery = useGetTeacherCoursesByIdAndDateQuery({ ...dateRange, id: teacherId });
 
-  return (
-    <>
-      <CoursesList data={coursesQuery.data} isLoading={coursesQuery.isLoading} preview />
-    </>
-  );
+  return <CoursesList data={coursesQuery.data} isLoading={coursesQuery.isLoading} preview />;
 };

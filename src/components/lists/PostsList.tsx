@@ -13,7 +13,7 @@ import { FeatureButton } from '../buttons/FeatureButton';
 import { PublishButton } from '../buttons/PublishButton';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
-interface Props extends DefaultTableProps {
+interface Props extends Omit<DefaultTableProps, 'children'> {
   data?: PostDto[];
 }
 
@@ -30,55 +30,53 @@ export const PostsList: React.FC<Props> = ({ data, isLoading, ...props }) => {
   };
 
   return (
-    <>
-      <DefaultTable {...props} isLoading={isLoading || patchLoading || deleteLoading}>
-        <TableHead>
-          <TableRow>
-            <TableCell width="120px"></TableCell>
-            <TableCell>Title</TableCell>
-            <TableCell width="200px" align="right">
-              Language
+    <DefaultTable {...props} isLoading={isLoading || patchLoading || deleteLoading}>
+      <TableHead>
+        <TableRow>
+          <TableCell width="120px"></TableCell>
+          <TableCell>Title</TableCell>
+          <TableCell width="200px" align="right">
+            Language
+          </TableCell>
+          <TableCell width="200px" align="center">
+            Date
+          </TableCell>
+          <TableCell width="100px" align="right"></TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data?.map((post) => (
+          <TableRow hover key={post.id}>
+            <TableCell>
+              <PublishButton
+                active={post.isPublished}
+                onClick={() => handlePatch(post.id, { isPublished: !post.isPublished })}
+              />
+              <FeatureButton
+                active={post.isFeatured}
+                onClick={() => handlePatch(post.id, { isFeatured: !post.isFeatured })}
+              />
             </TableCell>
-            <TableCell width="200px" align="center">
-              Date
+            <TableCell>
+              <Link component={RouterLink} to={`${post.id}`}>
+                <Typography>{post.title}</Typography>
+              </Link>
+              <Typography variant="caption">{post.slug}</Typography>
             </TableCell>
-            <TableCell width="100px" align="right"></TableCell>
+            <TableCell align="right">
+              <Typography> {post.language?.name}</Typography>
+              <Typography variant="caption">{post.showInFeed && <>In feed</>}</Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>{toLocalDate(post.publishedAt)}</Typography>
+              <Typography variant="caption">{toLocalDate(post.modifiedAt)}</Typography>
+            </TableCell>
+            <TableCell align="right">
+              <DeleteButton onConfirm={() => handleDelete(post.id)} />
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((post) => (
-            <TableRow hover key={post.id}>
-              <TableCell>
-                <PublishButton
-                  active={post.isPublished}
-                  onClick={() => handlePatch(post.id, { isPublished: !post.isPublished })}
-                />
-                <FeatureButton
-                  active={post.isFeatured}
-                  onClick={() => handlePatch(post.id, { isFeatured: !post.isFeatured })}
-                />
-              </TableCell>
-              <TableCell>
-                <Link component={RouterLink} to={`${post.id}`}>
-                  <Typography>{post.title}</Typography>
-                </Link>
-                <Typography variant="caption">{post.slug}</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography> {post.language?.name}</Typography>
-                <Typography variant="caption">{post.showInFeed && <>In feed</>}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{toLocalDate(post.publishedAt)}</Typography>
-                <Typography variant="caption">{toLocalDate(post.modifiedAt)}</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <DeleteButton onConfirm={() => handleDelete(post.id)} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </DefaultTable>
-    </>
+        ))}
+      </TableBody>
+    </DefaultTable>
   );
 };

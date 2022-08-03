@@ -14,7 +14,7 @@ import { AccomplishmentDto } from '../../services/generatedApi';
 import { DeleteButton } from '../buttons/DeleteButton';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
-interface Props extends DefaultTableProps {
+interface Props extends Omit<DefaultTableProps, 'children'> {
   data?: AccomplishmentDto[];
   adminView?: boolean;
 }

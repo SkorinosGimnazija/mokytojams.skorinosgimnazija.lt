@@ -25,7 +25,7 @@ interface Context {
 
 export const AuthContext = React.createContext<Context>({} as Context);
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const displayName = useAppSelector(selectDisplayName);

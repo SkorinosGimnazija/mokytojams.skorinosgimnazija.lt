@@ -11,7 +11,7 @@ import { DeleteButton } from '../buttons/DeleteButton';
 import { PublishButton } from '../buttons/PublishButton';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 
-interface Props extends DefaultTableProps {
+interface Props extends Omit<DefaultTableProps, 'children'> {
   data?: BannerDto[];
 }
 
@@ -23,46 +23,44 @@ export const BannersList: React.FC<Props> = ({ data, isLoading, ...props }) => {
   };
 
   return (
-    <>
-      <DefaultTable {...props} isLoading={isLoading || deleteLoading}>
-        <TableHead>
-          <TableRow>
-            <TableCell width="60px"></TableCell>
-            <TableCell>Title</TableCell>
-            <TableCell width="200px" align="right">
-              Language
+    <DefaultTable {...props} isLoading={isLoading || deleteLoading}>
+      <TableHead>
+        <TableRow>
+          <TableCell width="60px"></TableCell>
+          <TableCell>Title</TableCell>
+          <TableCell width="200px" align="right">
+            Language
+          </TableCell>
+          <TableCell width="200px" align="center">
+            Position
+          </TableCell>
+          <TableCell width="100px" align="right"></TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data?.map((banner) => (
+          <TableRow hover key={banner.id}>
+            <TableCell>
+              <PublishButton active={banner.isPublished} onClick={() => {}} />
             </TableCell>
-            <TableCell width="200px" align="center">
-              Position
+            <TableCell>
+              <Link component={RouterLink} to={`${banner.id}`}>
+                <Typography>{banner.title}</Typography>
+              </Link>
+              <Typography variant="caption">{banner.url}</Typography>
             </TableCell>
-            <TableCell width="100px" align="right"></TableCell>
+            <TableCell align="right">
+              <Typography> {banner.language.name}</Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>{banner.order}</Typography>
+            </TableCell>
+            <TableCell align="right">
+              <DeleteButton onConfirm={() => handleDelete(banner.id)} />
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((banner) => (
-            <TableRow hover key={banner.id}>
-              <TableCell>
-                <PublishButton active={banner.isPublished} onClick={() => {}} />
-              </TableCell>
-              <TableCell>
-                <Link component={RouterLink} to={`${banner.id}`}>
-                  <Typography>{banner.title}</Typography>
-                </Link>
-                <Typography variant="caption">{banner.url}</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography> {banner.language.name}</Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography>{banner.order}</Typography>
-              </TableCell>
-              <TableCell align="right">
-                <DeleteButton onConfirm={() => handleDelete(banner.id)} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </DefaultTable>
-    </>
+        ))}
+      </TableBody>
+    </DefaultTable>
   );
 };

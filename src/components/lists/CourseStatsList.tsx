@@ -11,7 +11,7 @@ import { CourseStatsDto } from '../../services/generatedApi';
 import { DefaultTable, DefaultTableProps } from '../table/DefaultTable';
 import { CoursesAdminList } from './CoursesAdminList';
 
-interface Props extends DefaultTableProps {
+interface Props extends Omit<DefaultTableProps, 'children'> {
   coursesData?: CourseStatsDto[];
   dateRange: { start: string; end: string };
 }

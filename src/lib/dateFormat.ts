@@ -11,8 +11,8 @@ const ltDateTimeFormat = new Intl.DateTimeFormat('lt', {
 
 type LocalDate = {
   (date: null | undefined): null;
-  (date: Date | string): Date;
-  (date: Date | string | null | undefined): Date | null;
+  (date: Date | string): string;
+  (date: Date | string | null | undefined): string | null;
 };
 
 export const toLocalDate: LocalDate = (date?: Date | string | null) => {

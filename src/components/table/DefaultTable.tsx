@@ -12,6 +12,7 @@ export interface DefaultTableProps {
   itemsPerPage?: number;
   onPageChange?: (value: number) => void;
   onRowsPerPageChange?: (value: number) => void;
+  children: React.ReactNode;
 }
 
 export const DefaultTable: React.FC<DefaultTableProps> = ({
