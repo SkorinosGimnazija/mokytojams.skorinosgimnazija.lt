@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,7 +11,10 @@ import { AuthProvider } from './contexts/authContext';
 import { store } from './store/store';
 import theme from './theme';
 
-ReactDOM.render(
+const container = document.getElementById('root')!;
+const root = createRoot(container);
+
+root.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <PersistGate persistor={persistStore(store)}>
@@ -24,6 +27,5 @@ ReactDOM.render(
         </BrowserRouter>
       </PersistGate>
     </ThemeProvider>
-  </Provider>,
-  document.querySelector('#root')
+  </Provider>
 );
