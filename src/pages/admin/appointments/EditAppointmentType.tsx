@@ -91,7 +91,6 @@ export default function EditAppointmentType() {
             label="Name"
             required
             sx={{ flex: '1 1 300px' }}
-            InputLabelProps={{ shrink: true }}
             value={formData.name}
             onChange={handleChange}
           />
@@ -102,7 +101,6 @@ export default function EditAppointmentType() {
             label="Slug"
             required
             sx={{ flex: '1 1 300px' }}
-            InputLabelProps={{ shrink: true }}
             value={formData.slug}
             onChange={handleChange}
           />
@@ -130,7 +128,6 @@ export default function EditAppointmentType() {
             onChange={handleChange}
             InputProps={{ endAdornment: <InputAdornment position="end">min.</InputAdornment> }}
             inputProps={{ min: '0.1', step: '0.1' }}
-            InputLabelProps={{ shrink: true }}
           />
 
           <FormControlLabel

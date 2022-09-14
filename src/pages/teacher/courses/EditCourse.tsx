@@ -182,7 +182,6 @@ export default function EditCourse() {
               onChange={handleChange}
               InputProps={{ endAdornment: <InputAdornment position="end">val.</InputAdornment> }}
               inputProps={{ min: '0.1', step: '0.1' }}
-              InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>

@@ -216,6 +216,15 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getMyAccomplishments: {
       providesTags: ['Accomplishments'],
     },
+    getEventsByDate: {
+      providesTags: ['Events'],
+    },
+    createEvent: {
+      invalidatesTags: ['Events'],
+    },
+    deleteEvent: {
+      invalidatesTags: ['Events'],
+    },
   },
 });
 
@@ -273,6 +282,9 @@ export const {
   useGetCourseByIdQuery,
   useDeleteCourseMutation,
   useGetTeachersQuery,
+  useGetEventsByDateQuery,
+  useCreateEventMutation,
+  useDeleteEventMutation,
   useGetPublicEventsQuery,
   useGetPublicDayEventsQuery,
   useGetPublicLanguagesQuery,

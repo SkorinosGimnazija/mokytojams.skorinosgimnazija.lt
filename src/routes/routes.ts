@@ -62,6 +62,21 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'Events',
+        path: '/cms/events',
+        accessRole: 'Admin',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/cms/events/ViewEvents')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/cms/events/EditEvent')),
+          },
+        ],
+      },
     ],
   },
   {

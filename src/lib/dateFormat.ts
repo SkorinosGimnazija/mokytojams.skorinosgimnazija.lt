@@ -38,3 +38,30 @@ export const toLocalDateTime: LocalDate = (date?: Date | string | null) => {
 
   return ltDateTimeFormat.format(date);
 };
+
+export const formatTime = (text: string) => {
+  const numbers = text.match(/\d+/g)?.join('');
+  if (!numbers) {
+    return '';
+  }
+
+  let time = numbers;
+
+  if (time.length === 1) {
+    time = time.padStart(2, '0');
+  }
+
+  if (time.length < 4) {
+    time = time.padEnd(4, '0');
+  }
+
+  if (time.length === 4) {
+    time = time.slice(0, 2) + ':' + time.slice(2);
+  }
+
+  if (time.length !== 5 || time[2] !== ':') {
+    return '';
+  }
+
+  return time;
+};

@@ -271,6 +271,15 @@ const injectedRtkApi = api.injectEndpoints({
     getTeachers: build.query<GetTeachersApiResponse, GetTeachersApiArg>({
       query: () => ({ url: `/Employees/teachers` }),
     }),
+    getEventsByDate: build.query<GetEventsByDateApiResponse, GetEventsByDateApiArg>({
+      query: (queryArg) => ({ url: `/Events`, params: { start: queryArg.start, end: queryArg.end } }),
+    }),
+    createEvent: build.mutation<CreateEventApiResponse, CreateEventApiArg>({
+      query: (queryArg) => ({ url: `/Events`, method: 'POST', body: queryArg.eventCreateDto }),
+    }),
+    deleteEvent: build.mutation<DeleteEventApiResponse, DeleteEventApiArg>({
+      query: (queryArg) => ({ url: `/Events/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
       query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
     }),
@@ -609,6 +618,19 @@ export type DeleteCourseApiArg = {
 };
 export type GetTeachersApiResponse = /** status 200 Success */ EmployeeDto[];
 export type GetTeachersApiArg = void;
+export type GetEventsByDateApiResponse = /** status 200 Success */ EventDto[];
+export type GetEventsByDateApiArg = {
+  start?: string;
+  end?: string;
+};
+export type CreateEventApiResponse = /** status 201 Created */ EventDto;
+export type CreateEventApiArg = {
+  eventCreateDto: EventCreateDto;
+};
+export type DeleteEventApiResponse = /** status 204 No Content */ undefined;
+export type DeleteEventApiArg = {
+  id: string;
+};
 export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
 export type GetPublicEventsApiArg = {
   week: number;
@@ -1039,6 +1061,12 @@ export type EventDto = {
   startDateTime?: string | null;
   endDate?: string | null;
   endDateTime?: string | null;
+};
+export type EventCreateDto = {
+  title: string;
+  startDate: string;
+  endDate: string;
+  allDay: boolean;
 };
 export type MenuDto = {
   id: number;
