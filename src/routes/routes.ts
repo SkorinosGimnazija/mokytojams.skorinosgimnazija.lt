@@ -171,6 +171,25 @@ export const routes: RoutesGroup[] = [
     name: 'Mokytojams',
     routes: [
       {
+        name: 'Patyčių žurnalas',
+        path: '/teacher/bullies',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/ViewBullies')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
+          },
+        ],
+      },
+      {
         name: 'Kvalifikacijos kursai',
         path: '/teacher/courses',
         accessRole: 'Teacher',

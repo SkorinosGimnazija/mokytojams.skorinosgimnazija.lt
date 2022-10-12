@@ -216,6 +216,46 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
     }),
+    getBullyJournalReports: build.query<GetBullyJournalReportsApiResponse, GetBullyJournalReportsApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/BullyJournal`,
+          params: { Items: queryArg.items, Page: queryArg.page },
+        }),
+      }
+    ),
+    createBullyJournalReport: build.mutation<
+      CreateBullyJournalReportApiResponse,
+      CreateBullyJournalReportApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/BullyJournal`,
+        method: 'POST',
+        body: queryArg.bullyJournalReportCreateDto,
+      }),
+    }),
+    editBullyJournalReport: build.mutation<
+      EditBullyJournalReportApiResponse,
+      EditBullyJournalReportApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/BullyJournal`,
+        method: 'PUT',
+        body: queryArg.bullyJournalReportEditDto,
+      }),
+    }),
+    getBullyJournalReportById: build.query<
+      GetBullyJournalReportByIdApiResponse,
+      GetBullyJournalReportByIdApiArg
+    >({
+      query: (queryArg) => ({ url: `/BullyJournal/${queryArg.id}` }),
+    }),
+    deleteBullyJournalReport: build.mutation<
+      DeleteBullyJournalReportApiResponse,
+      DeleteBullyJournalReportApiArg
+    >({
+      query: (queryArg) => ({ url: `/BullyJournal/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getBullyReports: build.query<GetBullyReportsApiResponse, GetBullyReportsApiArg>({
       query: (queryArg) => ({
         url: `/BullyReports`,
@@ -566,6 +606,29 @@ export type SearchBannersApiArg = {
 export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerPublicDto[];
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
+};
+export type GetBullyJournalReportsApiResponse =
+  /** status 200 Success */ BullyJournalReportDtoPaginatedList;
+export type GetBullyJournalReportsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateBullyJournalReportApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateBullyJournalReportApiArg = {
+  bullyJournalReportCreateDto: BullyJournalReportCreateDto;
+};
+export type EditBullyJournalReportApiResponse = /** status 200 Success */ undefined;
+export type EditBullyJournalReportApiArg = {
+  bullyJournalReportEditDto: BullyJournalReportEditDto;
+};
+export type GetBullyJournalReportByIdApiResponse =
+  /** status 200 Success */ BullyJournalReportDetailsDto;
+export type GetBullyJournalReportByIdApiArg = {
+  id: number;
+};
+export type DeleteBullyJournalReportApiResponse = /** status 204 No Content */ undefined;
+export type DeleteBullyJournalReportApiArg = {
+  id: number;
 };
 export type GetBullyReportsApiResponse = /** status 200 Success */ BullyReportDtoPaginatedList;
 export type GetBullyReportsApiArg = {
@@ -934,6 +997,7 @@ export type AppointmentPublicCreateDto = {
   attendeeEmail: string;
 };
 export type UserAuthDto = {
+  id: number;
   token: string;
   displayName: string;
   email: string;
@@ -973,6 +1037,47 @@ export type BannerPublicDto = {
   width: number;
   height: number;
   pictureUrl: string;
+};
+export type BullyJournalReportDto = {
+  id: number;
+  userId: number;
+  userDisplayName: string;
+  bullyInfo: string;
+  victimInfo: string;
+  date: string;
+};
+export type BullyJournalReportDtoPaginatedList = {
+  items: BullyJournalReportDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type BullyJournalReportCreateDto = {
+  bullyInfo: string;
+  victimInfo: string;
+  details: string;
+  actions: string;
+  date: string;
+};
+export type BullyJournalReportEditDto = {
+  bullyInfo: string;
+  victimInfo: string;
+  details: string;
+  actions: string;
+  date: string;
+  id: number;
+};
+export type BullyJournalReportDetailsDto = {
+  id: number;
+  userId: number;
+  userDisplayName: string;
+  bullyInfo: string;
+  victimInfo: string;
+  date: string;
+  details: string;
+  actions: string;
 };
 export type BullyReportDto = {
   id: number;

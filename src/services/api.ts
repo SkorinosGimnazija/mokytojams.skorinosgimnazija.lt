@@ -7,6 +7,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'Banner',
     'Course',
     'Bully',
+    'BullyJournal',
     'Appointments',
     'AppointmentDates',
     'AppointmentHosts',
@@ -225,6 +226,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteEvent: {
       invalidatesTags: ['Events'],
     },
+    getBullyJournalReportById: {
+      providesTags: ['BullyJournal'],
+    },
+    getBullyJournalReports: {
+      providesTags: ['BullyJournal'],
+    },
+    editBullyJournalReport: {
+      invalidatesTags: ['BullyJournal'],
+    },
+    createBullyJournalReport: {
+      invalidatesTags: ['BullyJournal'],
+    },
+    deleteBullyJournalReport: {
+      invalidatesTags: ['BullyJournal'],
+    },
   },
 });
 
@@ -270,6 +286,11 @@ export const {
   useDeleteBannerMutation,
   useSearchBannersQuery,
   useGetPublicBannersByLanguageQuery,
+  useGetBullyJournalReportsQuery,
+  useCreateBullyJournalReportMutation,
+  useEditBullyJournalReportMutation,
+  useGetBullyJournalReportByIdQuery,
+  useDeleteBullyJournalReportMutation,
   useGetBullyReportsQuery,
   useGetBullyReportByIdQuery,
   useDeleteBullyReportMutation,
