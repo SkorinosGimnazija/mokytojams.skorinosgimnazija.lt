@@ -5,6 +5,7 @@ import { RootState } from './store';
 export type AuthRole = 'Admin' | 'Manager' | 'Teacher' | 'Bully';
 
 interface State {
+  id: number | null;
   displayName: string | null;
   email: string | null;
   token: string | null;
@@ -13,6 +14,7 @@ interface State {
 }
 
 const initialState: State = {
+  id: null,
   displayName: null,
   email: null,
   roles: [],
@@ -35,6 +37,7 @@ const authSlice = createSlice({
         state.displayName = action.payload.displayName;
         state.email = action.payload.email;
         state.roles = action.payload.roles as AuthRole[];
+        state.id = action.payload.id;
         state.isAuthenticated = true;
       }
     });
@@ -48,5 +51,6 @@ export const selectDisplayName = (state: RootState) => state.auth.displayName;
 export const selectUserRoles = (state: RootState) => state.auth.roles;
 export const selectUserToken = (state: RootState) => state.auth.token;
 export const selectEmail = (state: RootState) => state.auth.email;
+export const selectUserId = (state: RootState) => state.auth.id;
 
 export default authSlice.reducer;

@@ -9,6 +9,7 @@ import {
   selectDisplayName,
   selectEmail,
   selectIsAuthenticated,
+  selectUserId,
   selectUserRoles,
   selectUserToken,
 } from '../store/authSlice';
@@ -18,6 +19,7 @@ interface Context {
   logOut: (callback?: VoidFunction) => void;
   isLoading: boolean;
   isAuthenticated: boolean;
+  userId: number | null;
   displayName: string | null;
   email: string | null;
   roles: AuthRole[] | null;
@@ -32,6 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const email = useAppSelector(selectEmail);
   const roles = useAppSelector(selectUserRoles);
   const token = useAppSelector(selectUserToken);
+  const userId = useAppSelector(selectUserId);
 
   const [authorize, authStatus] = useAuthorizeMutation();
 
@@ -65,6 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         logIn,
         logOut,
+        userId,
         displayName,
         roles,
         email,
