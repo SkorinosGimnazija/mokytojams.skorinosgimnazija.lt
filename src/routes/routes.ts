@@ -190,6 +190,25 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
+        name: 'Gedimų žurnalas',
+        path: '/teacher/failures',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/failures/ViewFailures')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/failures/EditFailures')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/failures/EditFailures')),
+          },
+        ],
+      },
+      {
         name: 'Kvalifikacijos kursai',
         path: '/teacher/courses',
         accessRole: 'Teacher',

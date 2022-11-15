@@ -420,6 +420,53 @@ const injectedRtkApi = api.injectEndpoints({
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
+    getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
+      query: (queryArg) => ({
+        url: `/TechJournal`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    createTechJournalReport: build.mutation<
+      CreateTechJournalReportApiResponse,
+      CreateTechJournalReportApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/TechJournal`,
+        method: 'POST',
+        body: queryArg.techJournalReportCreateDto,
+      }),
+    }),
+    editTechJournalReport: build.mutation<EditTechJournalReportApiResponse, EditTechJournalReportApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/TechJournal`,
+          method: 'PUT',
+          body: queryArg.techJournalReportEditDto,
+        }),
+      }
+    ),
+    getTechJournalReportById: build.query<
+      GetTechJournalReportByIdApiResponse,
+      GetTechJournalReportByIdApiArg
+    >({
+      query: (queryArg) => ({ url: `/TechJournal/${queryArg.id}` }),
+    }),
+    patchTechJournalReport: build.mutation<
+      PatchTechJournalReportApiResponse,
+      PatchTechJournalReportApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/TechJournal/${queryArg.id}`,
+        method: 'PATCH',
+        body: queryArg.techJournalReportPatchDto,
+      }),
+    }),
+    deleteTechJournalReport: build.mutation<
+      DeleteTechJournalReportApiResponse,
+      DeleteTechJournalReportApiArg
+    >({
+      query: (queryArg) => ({ url: `/TechJournal/${queryArg.id}`, method: 'DELETE' }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -829,6 +876,33 @@ export type SearchPublicPostsApiArg = {
   text: string;
   items?: number;
   page?: number;
+};
+export type GetTechJournalReportsApiResponse =
+  /** status 200 Success */ TechJournalReportDtoPaginatedList;
+export type GetTechJournalReportsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateTechJournalReportApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateTechJournalReportApiArg = {
+  techJournalReportCreateDto: TechJournalReportCreateDto;
+};
+export type EditTechJournalReportApiResponse = /** status 200 Success */ undefined;
+export type EditTechJournalReportApiArg = {
+  techJournalReportEditDto: TechJournalReportEditDto;
+};
+export type GetTechJournalReportByIdApiResponse = /** status 200 Success */ TechJournalReportDto;
+export type GetTechJournalReportByIdApiArg = {
+  id: number;
+};
+export type PatchTechJournalReportApiResponse = /** status 200 Success */ undefined;
+export type PatchTechJournalReportApiArg = {
+  id: number;
+  techJournalReportPatchDto: TechJournalReportPatchDto;
+};
+export type DeleteTechJournalReportApiResponse = /** status 204 No Content */ undefined;
+export type DeleteTechJournalReportApiArg = {
+  id: number;
 };
 export type AccomplishmentTeacherDto = {
   id: number;
@@ -1332,4 +1406,36 @@ export type PostPublicDtoPaginatedList = {
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type TechJournalReportDto = {
+  id: number;
+  userId: number;
+  userDisplayName: string;
+  isFixed?: boolean | null;
+  place: string;
+  fixDate?: string | null;
+  reportDate: string;
+  notes?: string | null;
+  details: string;
+};
+export type TechJournalReportDtoPaginatedList = {
+  items: TechJournalReportDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type TechJournalReportCreateDto = {
+  place: string;
+  details: string;
+};
+export type TechJournalReportEditDto = {
+  place: string;
+  details: string;
+  id: number;
+};
+export type TechJournalReportPatchDto = {
+  isFixed: boolean;
+  notes?: string | null;
 };

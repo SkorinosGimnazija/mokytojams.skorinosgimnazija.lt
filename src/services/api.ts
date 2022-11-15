@@ -13,6 +13,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'AppointmentHosts',
     'Events',
     'Accomplishments',
+    'TechJournal',
   ],
   endpoints: {
     authorize: {},
@@ -241,6 +242,24 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteBullyJournalReport: {
       invalidatesTags: ['BullyJournal'],
     },
+    getTechJournalReportById: {
+      providesTags: ['TechJournal'],
+    },
+    getTechJournalReports: {
+      providesTags: ['TechJournal'],
+    },
+    editTechJournalReport: {
+      invalidatesTags: ['TechJournal'],
+    },
+    patchTechJournalReport: {
+      invalidatesTags: ['TechJournal'],
+    },
+    createTechJournalReport: {
+      invalidatesTags: ['TechJournal'],
+    },
+    deleteTechJournalReport: {
+      invalidatesTags: ['TechJournal'],
+    },
   },
 });
 
@@ -331,4 +350,10 @@ export const {
   useGetPublicPostByMenuLanguageAndPathQuery,
   useGetPublicPostsByLanguageQuery,
   useSearchPublicPostsQuery,
+  useGetTechJournalReportsQuery,
+  useCreateTechJournalReportMutation,
+  useEditTechJournalReportMutation,
+  useGetTechJournalReportByIdQuery,
+  usePatchTechJournalReportMutation,
+  useDeleteTechJournalReportMutation,
 } = enhancedApi;
