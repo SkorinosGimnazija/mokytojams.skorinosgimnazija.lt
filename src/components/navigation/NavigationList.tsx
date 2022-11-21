@@ -1,7 +1,6 @@
-import { Typography } from '@mui/material';
+import { ListSubheader } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Toolbar from '@mui/material/Toolbar';
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
@@ -20,12 +19,15 @@ export const NavigationList = () => {
         .map((group) => {
           return (
             <React.Fragment key={group.name}>
-              <List>
-                <ListItem>
-                  <Typography component="span" fontWeight={700}>
+              <List
+                disablePadding
+                dense
+                subheader={
+                  <ListSubheader disableSticky color="inherit">
                     {group.name}
-                  </Typography>
-                </ListItem>
+                  </ListSubheader>
+                }
+              >
                 {group.routes
                   .filter((x) => auth.hasRole(x.accessRole))
                   .map((route) => {
