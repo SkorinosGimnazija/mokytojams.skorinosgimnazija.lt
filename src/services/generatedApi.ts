@@ -991,9 +991,10 @@ export type AppointmentTypeDto = {
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
+  isOnline: boolean;
   registrationEnd: string;
 };
-export type AppointmentDateDto = {
+export type AppointmentDateDetailsDto = {
   id: number;
   date: string;
   type: AppointmentTypeDto;
@@ -1007,7 +1008,7 @@ export type AppointmentDetailsDto = {
   userDisplayName: string;
   attendeeName: string;
   attendeeEmail: string;
-  date: AppointmentDateDto;
+  date: AppointmentDateDetailsDto;
 };
 export type AppointmentDetailsDtoPaginatedList = {
   items: AppointmentDetailsDto[];
@@ -1033,12 +1034,17 @@ export type AppointmentHostDto = {
   displayName: string;
   userName: string;
 };
+export type AppointmentDateDto = {
+  id: number;
+  date: string;
+};
 export type AppointmentTypeEditDto = {
   name: string;
   slug: string;
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
+  isOnline: boolean;
   registrationEnd: string;
   id: number;
 };
@@ -1048,6 +1054,7 @@ export type AppointmentTypeCreateDto = {
   durationInMinutes: number;
   invitePrincipal: boolean;
   isPublic: boolean;
+  isOnline: boolean;
   registrationEnd: string;
 };
 export type AppointmentExclusiveHostDto = {

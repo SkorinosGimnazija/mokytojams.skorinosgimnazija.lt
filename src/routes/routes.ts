@@ -137,7 +137,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Registracijos',
         path: '/admin/appointments',
-        accessRole: 'Admin',
+        accessRole: 'Manager',
         innerRoutes: [
           {
             path: '',
@@ -243,6 +243,17 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+          },
+        ],
+      },
+      {
+        name: 'Tėvų dienos',
+        path: '/teacher/appointments/parents',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/appointments/ViewMyAppointments')),
           },
         ],
       },

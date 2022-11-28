@@ -29,6 +29,7 @@ export default function EditAppointmentType() {
     durationInMinutes: 0,
     invitePrincipal: false,
     isPublic: false,
+    isOnline: false,
     registrationEnd: '',
   });
 
@@ -44,6 +45,7 @@ export default function EditAppointmentType() {
       durationInMinutes: typeQuery.data.durationInMinutes,
       invitePrincipal: typeQuery.data.invitePrincipal,
       isPublic: typeQuery.data.isPublic,
+      isOnline: typeQuery.data.isOnline,
       registrationEnd: format(new Date(typeQuery.data.registrationEnd), "yyyy-MM-dd'T'HH:mm"),
     }));
   }, [typeQuery]);
@@ -145,6 +147,13 @@ export default function EditAppointmentType() {
             label="Is public"
             control={
               <Checkbox name="isPublic" checked={formData.isPublic} onChange={handleCheckboxChange} />
+            }
+          />
+
+          <FormControlLabel
+            label="Is online"
+            control={
+              <Checkbox name="isOnline" checked={formData.isOnline} onChange={handleCheckboxChange} />
             }
           />
         </Grid>
