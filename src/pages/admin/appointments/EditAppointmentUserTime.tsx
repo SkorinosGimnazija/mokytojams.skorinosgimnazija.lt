@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Grid,
   List,
   ListItem,
   ListItemButton,
@@ -7,6 +8,8 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import format from 'date-fns/format';
+import groupBy from 'lodash/groupBy';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toLocalDateTime } from '../../../lib/dateFormat';
@@ -37,6 +40,10 @@ export default function EditAppointmentUserTime() {
 
   const [createTimeMutation, createTimeStatus] = useCreateAppointmentReservedDateMutation();
   const [deleteTimeMutation, deleteTimeStatus] = useDeleteAppointmentReservedDateMutation();
+
+  const groupedTimes = Object.entries(
+    groupBy(datesQuery.data, (x) => format(new Date(x.date), 'yyyy-MM-dd')) ?? []
+  );
 
   useEffect(() => {
     if (!reservedDatesQuery.isSuccess || reservedDatesQuery.isFetching) {
@@ -95,27 +102,33 @@ export default function EditAppointmentUserTime() {
       <Typography>
         Pažymėkite kada {currentTeacher} <b>negalės</b> dalyvauti {currentType} konsultacijose
       </Typography>
-      <List dense sx={{ width: '100%', maxWidth: 300 }}>
-        {datesQuery.data?.map((x) => {
-          const labelId = `checkbox-list-secondary-label-${x.id}`;
+      <Grid container gap={3} marginTop={2}>
+        {groupedTimes.map(([key, times]) => {
           return (
-            <ListItem key={x.id} disablePadding>
-              <ListItemButton
-                disabled={
-                  loadingTime === x.id && (createTimeStatus.isLoading || deleteTimeStatus.isLoading)
-                }
-                onClick={handleChange(x.id)}
-                dense
-              >
-                <ListItemIcon>
-                  <Checkbox checked={selected[x.id] ?? false} tabIndex={-1} disableRipple />
-                </ListItemIcon>
-                <ListItemText id={labelId} primary={toLocalDateTime(x.date)} />
-              </ListItemButton>
-            </ListItem>
+            <List key={key} dense>
+              {times.map((x) => {
+                return (
+                  <ListItem key={x.id} disablePadding>
+                    <ListItemButton
+                      disabled={
+                        loadingTime === x.id &&
+                        (createTimeStatus.isLoading || deleteTimeStatus.isLoading)
+                      }
+                      onClick={handleChange(x.id)}
+                      dense
+                    >
+                      <ListItemIcon>
+                        <Checkbox checked={selected[x.id] ?? false} tabIndex={-1} disableRipple />
+                      </ListItemIcon>
+                      <ListItemText primary={toLocalDateTime(x.date)} />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
           );
         })}
-      </List>
+      </Grid>
     </>
   );
 }
