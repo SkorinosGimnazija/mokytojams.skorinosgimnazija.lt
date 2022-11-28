@@ -10,7 +10,7 @@ interface Props {
 export const UserLink: React.FC<Props> = ({ url }) => {
   return (
     <Link to={url}>
-      <Tooltip title="Users">
+      <Tooltip title="Mokytojai">
         <IconButton>
           <PersonOutlineIcon />
         </IconButton>

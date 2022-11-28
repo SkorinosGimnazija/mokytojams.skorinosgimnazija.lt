@@ -10,7 +10,7 @@ interface Props {
 export const TimeLink: React.FC<Props> = ({ url }) => {
   return (
     <Link to={url}>
-      <Tooltip title="Time">
+      <Tooltip title="Laikas">
         <IconButton>
           <AccessTimeIcon />
         </IconButton>

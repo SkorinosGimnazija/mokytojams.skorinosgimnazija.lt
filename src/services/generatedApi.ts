@@ -162,6 +162,28 @@ const injectedRtkApi = api.injectEndpoints({
     getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
       query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.typeId}` }),
     }),
+    getAppointmentReservedDates: build.query<
+      GetAppointmentReservedDatesApiResponse,
+      GetAppointmentReservedDatesApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/dates/reserved/${queryArg.userName}` }),
+    }),
+    createAppointmentReservedDate: build.mutation<
+      CreateAppointmentReservedDateApiResponse,
+      CreateAppointmentReservedDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/Appointments/dates/reserved`,
+        method: 'POST',
+        body: queryArg.appointmentReservedDateCreateDto,
+      }),
+    }),
+    deleteAppointmentReservedDate: build.mutation<
+      DeleteAppointmentReservedDateApiResponse,
+      DeleteAppointmentReservedDateApiArg
+    >({
+      query: (queryArg) => ({ url: `/Appointments/dates/reserved/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getPublicAppointmentAvailableHosts: build.query<
       GetPublicAppointmentAvailableHostsApiResponse,
       GetPublicAppointmentAvailableHostsApiArg
@@ -584,6 +606,20 @@ export type DeleteAppointmentDateApiArg = {
 export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
 export type GetAppointmentDatesApiArg = {
   typeId: number;
+};
+export type GetAppointmentReservedDatesApiResponse =
+  /** status 200 Success */ AppointmentReservedDateDto[];
+export type GetAppointmentReservedDatesApiArg = {
+  userName: string;
+};
+export type CreateAppointmentReservedDateApiResponse =
+  /** status 201 Created */ AppointmentReservedDateDto;
+export type CreateAppointmentReservedDateApiArg = {
+  appointmentReservedDateCreateDto: AppointmentReservedDateCreateDto;
+};
+export type DeleteAppointmentReservedDateApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentReservedDateApiArg = {
+  id: number;
 };
 export type GetPublicAppointmentAvailableHostsApiResponse =
   /** status 200 Success */ AppointmentHostDto[];
@@ -1069,6 +1105,14 @@ export type AppointmentExclusiveHostCreateDto = {
 export type AppointmentDateCreateDto = {
   typeId: number;
   date: string;
+};
+export type AppointmentReservedDateDto = {
+  id: number;
+  dateId: number;
+};
+export type AppointmentReservedDateCreateDto = {
+  dateId: number;
+  userName: string;
 };
 export type AppointmentPublicCreateDto = {
   captchaToken: string;

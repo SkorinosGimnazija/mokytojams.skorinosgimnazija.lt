@@ -2,7 +2,6 @@ import { useMediaQuery } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import React from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAuth } from '../../hooks/useAuth';
@@ -33,6 +32,7 @@ export const NavDrawer = () => {
             width: '240px',
             border: '0',
             backgroundColor: 'primary.light',
+            paddingBottom: '100px',
           },
         }}
       >

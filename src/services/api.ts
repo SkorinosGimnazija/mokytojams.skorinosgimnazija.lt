@@ -188,6 +188,15 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteAppointmentDate: {
       invalidatesTags: ['AppointmentDates'],
     },
+    getAppointmentReservedDates: {
+      providesTags: ['AppointmentDates'],
+    },
+    createAppointmentReservedDate: {
+      invalidatesTags: ['AppointmentDates'],
+    },
+    deleteAppointmentReservedDate: {
+      invalidatesTags: ['AppointmentDates'],
+    },
     getAppointmentHosts: {
       providesTags: ['AppointmentHosts'],
     },
@@ -294,6 +303,9 @@ export const {
   useCreateAppointmentDateMutation,
   useDeleteAppointmentDateMutation,
   useGetAppointmentDatesQuery,
+  useGetAppointmentReservedDatesQuery,
+  useCreateAppointmentReservedDateMutation,
+  useDeleteAppointmentReservedDateMutation,
   useGetPublicAppointmentAvailableHostsQuery,
   useGetPublicAppointmentAvailableDatesQuery,
   useCreatePublicAppointmentMutation,
