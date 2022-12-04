@@ -47,8 +47,8 @@ export const formatTime = (text: string) => {
 
   let time = numbers;
 
-  if (time.length === 1) {
-    time = time.padStart(2, '0');
+  if (time.length === 1 || time.length === 3) {
+    time = time.padStart(time.length + 1, '0');
   }
 
   if (time.length < 4) {

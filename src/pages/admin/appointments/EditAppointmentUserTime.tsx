@@ -66,7 +66,7 @@ export default function EditAppointmentUserTime() {
       return;
     }
 
-    setCurrentTeacher(teachersQuery.data.find((x) => x.userName === userName)!.displayName);
+    setCurrentTeacher(teachersQuery.data?.find((x) => x.userName === userName)?.displayName ?? '?');
   }, [teachersQuery, userName]);
 
   const handleChange = (dateId: number) => () => {

@@ -53,12 +53,14 @@ export default function EditEvent() {
   };
 
   const reformatStartEndTime = (forceStartTime?: string) => {
-    const time = formatTime(forceStartTime ?? startTime);
-    const [hours, mins] = time.split(':');
-    const date = new Date().setHours(Number(hours), Number(mins), 0, 0);
+    try {
+      const time = formatTime(forceStartTime ?? startTime);
+      const [hours, mins] = time.split(':');
+      const date = new Date().setHours(Number(hours), Number(mins), 0, 0);
 
-    setStartTime(time);
-    setEndTime(format(addHours(date, 1), 'HH:mm'));
+      setStartTime(time);
+      setEndTime(format(addHours(date, 1), 'HH:mm'));
+    } catch {}
   };
 
   return (
@@ -109,69 +111,71 @@ export default function EditEvent() {
           />
         </Grid>
 
-        <Grid container item direction="row" gap={4}>
-          <TextField
-            id="startDate"
-            name="startDate"
-            label="Start date"
-            type="date"
-            required
-            value={startDate}
-            onFocus={(e) => {
-              // @ts-ignore
-              e.target.showPicker?.();
-            }}
-            onChange={(e) => {
-              setStartDate(e.target.value);
-              setEndDate(e.target.value);
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-
-          {!formData.allDay && (
+        <Grid container gap={4}>
+          <Grid container item direction="column" gap={4} maxWidth={200}>
             <TextField
-              id="startTime"
-              name="startTime"
-              label="Start time"
+              id="startDate"
+              name="startDate"
+              label="Start date"
+              type="date"
               required
-              value={startTime}
-              onFocus={(e) => e.target.select()}
-              onBlur={() => reformatStartEndTime()}
-              onChange={(e) => setStartTime(e.target.value)}
+              value={startDate}
+              onFocus={(e) => {
+                // @ts-ignore
+                e.target.showPicker?.();
+              }}
+              onChange={(e) => {
+                setStartDate(e.target.value);
+                setEndDate(e.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
             />
-          )}
-        </Grid>
 
-        <Grid container item direction="row" gap={4}>
-          <TextField
-            id="endDate"
-            name="endDate"
-            label="End date"
-            type="date"
-            required
-            value={endDate}
-            onFocus={(e) => {
-              // @ts-ignore
-              e.target.showPicker?.();
-            }}
-            onChange={(e) => {
-              setEndDate(e.target.value);
-            }}
-            InputLabelProps={{ shrink: true }}
-          />
-
-          {!formData.allDay && (
             <TextField
-              id="endTime"
-              name="endTime"
-              label="End time"
+              id="endDate"
+              name="endDate"
+              label="End date"
+              type="date"
               required
-              value={endTime}
-              onFocus={(e) => e.target.select()}
-              onBlur={(e) => setEndTime(formatTime(endTime))}
-              onChange={(e) => setEndTime(e.target.value)}
+              value={endDate}
+              onFocus={(e) => {
+                // @ts-ignore
+                e.target.showPicker?.();
+              }}
+              onChange={(e) => {
+                setEndDate(e.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
             />
-          )}
+          </Grid>
+
+          <Grid container item direction="column" gap={4} maxWidth={200}>
+            {!formData.allDay && (
+              <TextField
+                id="startTime"
+                name="startTime"
+                label="Start time"
+                required
+                value={startTime}
+                onFocus={(e) => e.target.select()}
+                onBlur={() => reformatStartEndTime()}
+                onChange={(e) => setStartTime(e.target.value)}
+              />
+            )}
+
+            {!formData.allDay && (
+              <TextField
+                id="endTime"
+                name="endTime"
+                label="End time"
+                required
+                value={endTime}
+                onFocus={(e) => e.target.select()}
+                onBlur={(e) => setEndTime(formatTime(endTime))}
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            )}
+          </Grid>
         </Grid>
 
         <Grid>
