@@ -96,7 +96,7 @@ const injectedRtkApi = api.injectEndpoints({
     getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
       query: (queryArg) => ({
         url: `/Appointments`,
-        params: { Items: queryArg.items, Page: queryArg.page },
+        params: { Items: queryArg.items, Page: queryArg.page, query: queryArg.query },
       }),
     }),
     deleteAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>(
@@ -564,6 +564,7 @@ export type GetAllAppointmentsApiResponse = /** status 200 Success */ Appointmen
 export type GetAllAppointmentsApiArg = {
   items?: number;
   page?: number;
+  query?: string;
 };
 export type DeleteAppointmentTypeApiResponse = /** status 204 No Content */ undefined;
 export type DeleteAppointmentTypeApiArg = {
