@@ -1,11 +1,12 @@
-import { Typography } from '@mui/material';
+import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
+import { IconButton, Tooltip, Typography } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Box } from '@mui/system';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { toLocalDate } from '../../lib/dateFormat';
 import { useDeleteTechJournalReportMutation } from '../../services/api';
@@ -27,6 +28,10 @@ export const TechJournalReportsList: React.FC<Props> = ({ data, isLoading, ...pr
     deleteTechReport({ id });
   };
 
+  const handleFixClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: number) => {
+    e.stopPropagation();
+  };
+
   return (
     <DefaultTable {...props} isLoading={isLoading || deleteLoading}>
       <TableHead>
@@ -40,7 +45,7 @@ export const TechJournalReportsList: React.FC<Props> = ({ data, isLoading, ...pr
             Gedimo/defekto apibūdinimas
           </TableCell>
           <TableCell align="center">Data</TableCell>
-          <TableCell width="100px" align="right"></TableCell>
+          <TableCell width="150px" align="right"></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -70,6 +75,15 @@ export const TechJournalReportsList: React.FC<Props> = ({ data, isLoading, ...pr
               <Typography variant="caption">{toLocalDate(techReport.fixDate)}</Typography>
             </TableCell>
             <TableCell align="right">
+              {(auth.isAdmin || auth.isTech) && (
+                <Link to={`${techReport.id}/fix`} onClick={(e) => e.stopPropagation()}>
+                  <Tooltip title="Gedimas">
+                    <IconButton>
+                      <BuildRoundedIcon color="info" />
+                    </IconButton>
+                  </Tooltip>
+                </Link>
+              )}
               {(auth.isAdmin || auth.userId === techReport.userId) && (
                 <DeleteButton onConfirm={() => handleDelete(techReport.id)} />
               )}

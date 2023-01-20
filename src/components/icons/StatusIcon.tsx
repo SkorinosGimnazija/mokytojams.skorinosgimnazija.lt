@@ -32,15 +32,31 @@ const tooltipTitle = (notes?: string | null) => {
 };
 
 export const StatusIcon: React.FC<Props> = ({ status, notes }) => {
-  if (status == null) {
+  const StatusIcon = () => {
+    if (status === true) {
+      return <CheckCircleOutlinedIcon color="success" />;
+    }
+
+    if (status === false) {
+      return <CancelOutlinedIcon color="error" />;
+    }
+
     return null;
-  }
+  };
+
+  const NotesIcon = () => {
+    if (notes == null || notes.length === 0) {
+      return null;
+    }
+
+    return <ErrorOutlineOutlinedIcon color="warning" />;
+  };
 
   return (
     <Tooltip title={tooltipTitle(notes)}>
       <span>
-        {status ? <CheckCircleOutlinedIcon color="success" /> : <CancelOutlinedIcon color="error" />}
-        {notes && <ErrorOutlineOutlinedIcon color="warning" />}
+        <StatusIcon />
+        <NotesIcon />
       </span>
     </Tooltip>
   );

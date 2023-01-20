@@ -1488,6 +1488,6 @@ export type TechJournalReportEditDto = {
   id: number;
 };
 export type TechJournalReportPatchDto = {
-  isFixed: boolean;
+  isFixed?: boolean | null;
   notes?: string | null;
 };

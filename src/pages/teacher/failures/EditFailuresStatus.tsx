@@ -1,4 +1,11 @@
-import { SelectChangeEvent, TextField } from '@mui/material';
+import {
+  Divider,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,27 +14,27 @@ import { useAuth } from '../../../hooks/useAuth';
 import { itemSavedToast } from '../../../lib/toasts';
 import {
   useCreateTechJournalReportMutation,
-  useEditTechJournalReportMutation,
   useGetTechJournalReportByIdQuery,
+  usePatchTechJournalReportMutation,
 } from '../../../services/api';
-import { TechJournalReportDto } from '../../../services/generatedApi';
 
-export default function EditFailures() {
+export default function EditFailuresStatus() {
   const auth = useAuth();
   const navigate = useNavigate();
   const params = useParams();
   const techId = Number(params.id);
-  const [readOnly, setReadOnly] = useState(false);
 
   const techQuery = useGetTechJournalReportByIdQuery({ id: techId }, { skip: !techId });
 
   const [createTechMutation, createTechStatus] = useCreateTechJournalReportMutation();
-  const [editTechMutation, editTechStatus] = useEditTechJournalReportMutation();
+  const [patchTechMutation, patchTechStatus] = usePatchTechJournalReportMutation();
 
   const [formData, setFormData] = useState({
     id: techId,
     place: '',
     details: '',
+    notes: '' as string | null | undefined,
+    isFixed: 'null',
   });
 
   useEffect(() => {
@@ -35,34 +42,35 @@ export default function EditFailures() {
       return;
     }
 
-    setReadOnly(!auth.isAdmin && techQuery.data.userId !== auth.userId);
-
     setFormData((x) => ({
       ...x,
       place: techQuery.data.place,
       details: techQuery.data.details,
+      notes: techQuery.data.notes,
+      isFixed: techQuery.data.isFixed == null ? 'null' : String(techQuery.data.isFixed),
     }));
   }, [techQuery, auth.isAdmin, auth.isTech, auth.userId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (techId) {
-      editTechMutation({ techJournalReportEditDto: formData }).then((response: any) => {
-        if (!response.error) {
-          itemSavedToast();
-          navigate(`../`);
-        }
-      });
-    } else {
-      createTechMutation({ techJournalReportCreateDto: formData }).then((response: any) => {
-        const techData = response.data as TechJournalReportDto;
-        if (techData) {
-          itemSavedToast();
-          navigate(`../`);
-        }
-      });
-    }
+    const sendFormData = {
+      id: formData.id,
+      notes: formData.notes,
+      isFixed: formData.isFixed === 'null' ? null : formData.isFixed === 'false' ? false : true,
+    };
+
+    console.log(formData.isFixed);
+    console.log(sendFormData);
+
+    return;
+
+    patchTechMutation({ id: techId, techJournalReportPatchDto: sendFormData }).then((response: any) => {
+      if (!response.error) {
+        itemSavedToast();
+        navigate(`../`);
+      }
+    });
   };
 
   const handleChange = (
@@ -82,7 +90,7 @@ export default function EditFailures() {
           required
           value={formData.place}
           onChange={handleChange}
-          disabled={readOnly}
+          disabled
         />
 
         <TextField
@@ -93,15 +101,34 @@ export default function EditFailures() {
           required
           value={formData.details}
           onChange={handleChange}
-          disabled={readOnly}
+          disabled
         />
 
+        <Divider />
+
         <Grid item>
-          {!readOnly && (
-            <SaveButton
-              disabled={createTechStatus.isLoading || editTechStatus.isLoading || techQuery.isFetching}
+          <Grid container gap={3}>
+            <RadioGroup name="isFixed" value={formData.isFixed} onChange={handleChange}>
+              <FormControlLabel value="null" control={<Radio />} label="Gedimas tvarkomas" />
+              <FormControlLabel value="true" control={<Radio />} label="Gedimas sutvarkytas" />
+              <FormControlLabel value="false" control={<Radio />} label="Gedimas nesutvarkytas" />
+            </RadioGroup>
+
+            <TextField
+              id="notes"
+              name="notes"
+              label="Pastabos"
+              fullWidth
+              value={formData.notes ?? ''}
+              onChange={handleChange}
             />
-          )}
+          </Grid>
+        </Grid>
+
+        <Grid item>
+          <SaveButton
+            disabled={createTechStatus.isLoading || patchTechStatus.isLoading || techQuery.isFetching}
+          />
         </Grid>
       </Grid>
     </form>
