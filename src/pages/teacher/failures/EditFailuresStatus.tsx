@@ -60,11 +60,6 @@ export default function EditFailuresStatus() {
       isFixed: formData.isFixed === 'null' ? null : formData.isFixed === 'false' ? false : true,
     };
 
-    console.log(formData.isFixed);
-    console.log(sendFormData);
-
-    return;
-
     patchTechMutation({ id: techId, techJournalReportPatchDto: sendFormData }).then((response: any) => {
       if (!response.error) {
         itemSavedToast();
