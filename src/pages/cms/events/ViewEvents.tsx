@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import { LocalizationProvider, MonthPicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, MonthCalendar } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addMonths, format, getDaysInMonth } from 'date-fns';
 import { useState } from 'react';
@@ -21,12 +21,15 @@ export default function ViewEvents() {
       <Stack direction="row" gap={4}>
         <CreateItemButton />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <MonthPicker
-            date={date}
+          <MonthCalendar
+            value={date}
             minDate={addMonths(new Date(), -1)}
             maxDate={addMonths(new Date(), 1)}
             onChange={(x) => setDate(x)}
-            sx={{ 'button:disabled': { display: 'none' } }}
+            sx={{
+              'button:disabled': { display: 'none' }, // firefox
+              'div:has(> button:disabled)': { display: 'none' },
+            }}
           />
         </LocalizationProvider>
       </Stack>

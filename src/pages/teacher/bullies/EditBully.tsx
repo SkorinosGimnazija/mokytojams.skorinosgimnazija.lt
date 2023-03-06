@@ -1,7 +1,7 @@
 import { SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import format from 'date-fns/format';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SaveButton } from '../../../components/buttons/SaveButton';
 import { useAuth } from '../../../hooks/useAuth';
@@ -19,6 +19,8 @@ export default function EditBully() {
   const params = useParams();
   const bullyId = Number(params.id);
   const [readOnly, setReadOnly] = useState(false);
+
+  const dateTouched = useRef(false);
 
   const bullyQuery = useGetBullyJournalReportByIdQuery({ id: bullyId }, { skip: !bullyId });
 
@@ -135,6 +137,12 @@ export default function EditBully() {
               required
               value={formData.date}
               onFocus={(e) => {
+                if (dateTouched.current) {
+                  return;
+                }
+
+                dateTouched.current = true;
+
                 // @ts-ignore
                 e.target.showPicker?.();
               }}

@@ -87,7 +87,9 @@ export default function EditEvent() {
                 .trim()
                 .replace(/\s+/g, ' ')
                 .replace(/\sAts\..*$/g, '')
-                .replace(/(?<!kl)\.$/g, '');
+                .replace(/(?<!kl)\.$/g, '')
+                .replace(/,,/g, '„')
+                .trim();
               const regex = /^(\d{1,2})(?:\.|:)(\d{2})(?:\s?val\.\s?–\s?)(.*)$/g;
               const match = regex.exec(text);
 

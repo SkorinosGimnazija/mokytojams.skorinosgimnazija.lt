@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import { LocalizationProvider, YearPicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, YearCalendar } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, addYears, format } from 'date-fns';
 import { useState } from 'react';
@@ -16,8 +16,8 @@ export default function ViewAllCourses() {
     <Box>
       <Stack direction="row" gap={4}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <YearPicker
-            date={year}
+          <YearCalendar
+            value={year}
             minDate={addYears(new Date(), -2)}
             maxDate={new Date()}
             onChange={(x) => setYear(x)}

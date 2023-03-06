@@ -42,6 +42,8 @@ export default function EditAccomplishment() {
   const params = useParams();
   const accomplishmentId = Number(params.id);
 
+  const dateTouched = useRef(false);
+
   const achievementQuery = useGetAccomplishmentAchievementsQuery();
   const classroomQuery = useGetAccomplishmentClassroomsQuery();
   const scaleQuery = useGetAccomplishmentScalesQuery();
@@ -299,13 +301,16 @@ export default function EditAccomplishment() {
               required
               value={formData.date}
               onFocus={(e) => {
+                if (dateTouched.current) {
+                  return;
+                }
+
+                dateTouched.current = true;
+
                 // @ts-ignore
                 e.target.showPicker?.();
               }}
-              onChange={(e) => {
-                handleChange(e);
-                setFormData((x) => ({ ...x, date: e.target.value }));
-              }}
+              onChange={handleChange}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>

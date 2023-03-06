@@ -17,6 +17,7 @@ export default function EditCourse() {
   const params = useParams();
   const courseId = Number(params.id);
 
+  const startDateTouched = useRef(false);
   const endDateTouched = useRef(false);
 
   const courseQuery = useGetCourseByIdQuery({ id: courseId }, { skip: !courseId });
@@ -133,6 +134,12 @@ export default function EditCourse() {
               required
               value={formData.startDate}
               onFocus={(e) => {
+                if (startDateTouched.current) {
+                  return;
+                }
+
+                startDateTouched.current = true;
+
                 // @ts-ignore
                 e.target.showPicker?.();
               }}
@@ -157,9 +164,14 @@ export default function EditCourse() {
               type="date"
               required
               onFocus={(e) => {
+                if (endDateTouched.current) {
+                  return;
+                }
+
+                endDateTouched.current = true;
+
                 // @ts-ignore
                 e.target.showPicker?.();
-                endDateTouched.current = true;
               }}
               value={formData.endDate}
               onChange={(e) => {
