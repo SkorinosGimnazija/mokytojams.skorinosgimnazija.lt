@@ -49,47 +49,49 @@ export const TechJournalReportsList: React.FC<Props> = ({ data, isLoading, ...pr
         </TableRow>
       </TableHead>
       <TableBody>
-        {data?.map((techReport) => (
-          <TableRow
-            sx={{ cursor: 'pointer' }}
-            hover
-            key={techReport.id}
-            onClick={() => navigate(`${techReport.id}`)}
-          >
-            <TableCell sx={{ padding: '0' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <StatusIcon status={techReport.isFixed} notes={techReport.notes} />
-              </Box>
-            </TableCell>
-            <TableCell>
-              <Typography>{techReport.userDisplayName}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography align="center">{techReport.place}</Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography>{techReport.details}</Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography>{toLocalDate(techReport.reportDate)}</Typography>
-              <Typography variant="caption">{toLocalDate(techReport.fixDate)}</Typography>
-            </TableCell>
-            <TableCell align="right">
-              {(auth.isAdmin || auth.isTech) && (
-                <Link to={`${techReport.id}/fix`} onClick={(e) => e.stopPropagation()}>
-                  <Tooltip title="Gedimas">
-                    <IconButton>
-                      <BuildRoundedIcon color="info" />
-                    </IconButton>
-                  </Tooltip>
-                </Link>
-              )}
-              {(auth.isAdmin || auth.userId === techReport.userId) && (
-                <DeleteButton onConfirm={() => handleDelete(techReport.id)} />
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
+        {data?.map((techReport) => {
+          const canEdit = auth.isAdmin || auth.userId === techReport.userId;
+          const canFix = auth.isAdmin || auth.isTech;
+          return (
+            <TableRow
+              sx={{ cursor: canEdit ? 'pointer' : null }}
+              hover
+              key={techReport.id}
+              onClick={() => canEdit && navigate(`${techReport.id}`)}
+            >
+              <TableCell sx={{ padding: '0' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <StatusIcon status={techReport.isFixed} notes={techReport.notes} />
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Typography>{techReport.userDisplayName}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography align="center">{techReport.place}</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography>{techReport.details}</Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography>{toLocalDate(techReport.reportDate)}</Typography>
+                <Typography variant="caption">{toLocalDate(techReport.fixDate)}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                {canFix && (
+                  <Link to={`${techReport.id}/fix`} onClick={(e) => e.stopPropagation()}>
+                    <Tooltip title="Gedimas">
+                      <IconButton>
+                        <BuildRoundedIcon color="info" />
+                      </IconButton>
+                    </Tooltip>
+                  </Link>
+                )}
+                {canEdit && <DeleteButton onConfirm={() => handleDelete(techReport.id)} />}
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </DefaultTable>
   );
