@@ -6,7 +6,7 @@ http
   .createServer(function (req, res) {
     const url = decodeURIComponent(req.url);
 
-    fs.readFile(`E:/TEMP/uploads/${url}`, function (err, data) {
+    fs.readFile(`C:/TEMP/uploads/${url}`, function (err, data) {
       if (err) {
         res.writeHead(404);
         res.end(JSON.stringify(err));
