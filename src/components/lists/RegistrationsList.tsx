@@ -48,17 +48,21 @@ export const RegistrationsList: React.FC<Props> = ({ data, isLoading, ...props }
               <Typography>{toLocalDateTime(reg.date.date)}</Typography>
             </TableCell>
             <TableCell align="center">
-              <Tooltip title="Prisijungti prie vaizdo susitikimo">
-                <a
-                  href={`${reg.eventMeetingLink}?authuser=${auth.email}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <IconButton>
-                    <VideoCallIcon color="info" />
-                  </IconButton>
-                </a>
-              </Tooltip>
+              {reg.eventMeetingLink ? (
+                <Tooltip title="Prisijungti prie vaizdo susitikimo">
+                  <a
+                    href={`${reg.eventMeetingLink}?authuser=${auth.email}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <IconButton>
+                      <VideoCallIcon color="info" />
+                    </IconButton>
+                  </a>
+                </Tooltip>
+              ) : (
+                '-'
+              )}
             </TableCell>
             <TableCell align="right">
               <DeleteButton onConfirm={() => handleDelete(reg.id)} />
