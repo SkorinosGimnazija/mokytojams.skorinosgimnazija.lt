@@ -1,9 +1,7 @@
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import {
-  Checkbox,
   FormControl,
-  FormControlLabel,
   IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Paper,
@@ -14,7 +12,6 @@ import {
   Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Box } from '@mui/system';
 import format from 'date-fns/format';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -25,17 +22,14 @@ import {
   useEditAccomplishmentMutation,
   useGetAccomplishmentAchievementsQuery,
   useGetAccomplishmentByIdQuery,
-  useGetAccomplishmentClassroomsQuery,
   useGetAccomplishmentScalesQuery,
+  useGetClassroomsQuery,
 } from '../../../services/api';
 import {
   AccomplishmentCreateStudentDto,
   AccomplishmentCreateTeacherDto,
   AccomplishmentDto,
-  AccomplishmentStudentDto,
-  AccomplishmentTeacherDto,
 } from '../../../services/generatedApi';
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 
 export default function EditAccomplishment() {
   const navigate = useNavigate();
@@ -45,7 +39,7 @@ export default function EditAccomplishment() {
   const dateTouched = useRef(false);
 
   const achievementQuery = useGetAccomplishmentAchievementsQuery();
-  const classroomQuery = useGetAccomplishmentClassroomsQuery();
+  const classroomQuery = useGetClassroomsQuery();
   const scaleQuery = useGetAccomplishmentScalesQuery();
   const accomplishmentQuery = useGetAccomplishmentByIdQuery(
     { id: accomplishmentId },

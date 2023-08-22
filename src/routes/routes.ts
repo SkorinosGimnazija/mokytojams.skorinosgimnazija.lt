@@ -172,6 +172,49 @@ export const routes: RoutesGroup[] = [
     ],
   },
   {
+    name: 'Mokykla',
+    routes: [
+      {
+        name: 'Klasės',
+        path: '/school/classrooms',
+        accessRole: 'Admin',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/school/classrooms/ViewClassrooms')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/admin/school/classrooms/EditClassroom')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/school/classrooms/EditClassroom')),
+          },
+        ],
+      },
+      {
+        name: 'Pamokos',
+        path: '/school/classtimes',
+        accessRole: 'Admin',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/ViewClasstimes')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditClasstime')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditClasstime')),
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: 'Mokytojams',
     routes: [
       {

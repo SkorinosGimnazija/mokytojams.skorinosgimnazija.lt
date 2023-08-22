@@ -22,12 +22,6 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: () => ({ url: `/Accomplishment/achievements` }),
     }),
-    getAccomplishmentClassrooms: build.query<
-      GetAccomplishmentClassroomsApiResponse,
-      GetAccomplishmentClassroomsApiArg
-    >({
-      query: () => ({ url: `/Accomplishment/classrooms` }),
-    }),
     getMyAccomplishments: build.query<GetMyAccomplishmentsApiResponse, GetMyAccomplishmentsApiArg>({
       query: (queryArg) => ({
         url: `/Accomplishment`,
@@ -442,6 +436,29 @@ const injectedRtkApi = api.injectEndpoints({
         params: { Items: queryArg.items, Page: queryArg.page },
       }),
     }),
+    getClassrooms: build.query<GetClassroomsApiResponse, GetClassroomsApiArg>({
+      query: () => ({ url: `/School/classrooms` }),
+    }),
+    createClassroom: build.mutation<CreateClassroomApiResponse, CreateClassroomApiArg>({
+      query: (queryArg) => ({
+        url: `/School/classrooms`,
+        method: 'POST',
+        body: queryArg.classroomCreateDto,
+      }),
+    }),
+    editClassroom: build.mutation<EditClassroomApiResponse, EditClassroomApiArg>({
+      query: (queryArg) => ({
+        url: `/School/classrooms`,
+        method: 'PUT',
+        body: queryArg.classroomEditDto,
+      }),
+    }),
+    getClassroomById: build.query<GetClassroomByIdApiResponse, GetClassroomByIdApiArg>({
+      query: (queryArg) => ({ url: `/School/classrooms/${queryArg.id}` }),
+    }),
+    deleteClassroom: build.mutation<DeleteClassroomApiResponse, DeleteClassroomApiArg>({
+      query: (queryArg) => ({ url: `/School/classrooms/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
       query: (queryArg) => ({
         url: `/TechJournal`,
@@ -503,9 +520,6 @@ export type GetAccomplishmentScalesApiArg = void;
 export type GetAccomplishmentAchievementsApiResponse =
   /** status 200 Success */ AccomplishmentAchievementDto[];
 export type GetAccomplishmentAchievementsApiArg = void;
-export type GetAccomplishmentClassroomsApiResponse =
-  /** status 200 Success */ AccomplishmentClassroomDto[];
-export type GetAccomplishmentClassroomsApiArg = void;
 export type GetMyAccomplishmentsApiResponse = /** status 200 Success */ AccomplishmentDtoPaginatedList;
 export type GetMyAccomplishmentsApiArg = {
   items?: number;
@@ -914,6 +928,24 @@ export type SearchPublicPostsApiArg = {
   items?: number;
   page?: number;
 };
+export type GetClassroomsApiResponse = /** status 200 Success */ ClassroomDto[];
+export type GetClassroomsApiArg = void;
+export type CreateClassroomApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateClassroomApiArg = {
+  classroomCreateDto: ClassroomCreateDto;
+};
+export type EditClassroomApiResponse = /** status 200 Success */ undefined;
+export type EditClassroomApiArg = {
+  classroomEditDto: ClassroomEditDto;
+};
+export type GetClassroomByIdApiResponse = /** status 200 Success */ ClassroomDetailsDto;
+export type GetClassroomByIdApiArg = {
+  id: number;
+};
+export type DeleteClassroomApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClassroomApiArg = {
+  id: number;
+};
 export type GetTechJournalReportsApiResponse =
   /** status 200 Success */ TechJournalReportDtoPaginatedList;
 export type GetTechJournalReportsApiArg = {
@@ -945,9 +977,10 @@ export type AccomplishmentTeacherDto = {
   id: number;
   name: string;
 };
-export type AccomplishmentClassroomDto = {
+export type ClassroomDto = {
   id: number;
   name: string;
+  number: number;
 };
 export type AccomplishmentAchievementDto = {
   id: number;
@@ -956,7 +989,7 @@ export type AccomplishmentAchievementDto = {
 export type AccomplishmentStudentDto = {
   id: number;
   name: string;
-  classroom: AccomplishmentClassroomDto;
+  classroom: ClassroomDto;
   achievement: AccomplishmentAchievementDto;
 };
 export type AccomplishmentDto = {
@@ -1458,6 +1491,20 @@ export type PostPublicDtoPaginatedList = {
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type ClassroomCreateDto = {
+  name: string;
+  number: number;
+};
+export type ClassroomEditDto = {
+  name: string;
+  number: number;
+  id: number;
+};
+export type ClassroomDetailsDto = {
+  id: number;
+  name: string;
+  number: number;
 };
 export type TechJournalReportDto = {
   id: number;

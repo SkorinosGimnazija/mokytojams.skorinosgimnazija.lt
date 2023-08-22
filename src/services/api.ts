@@ -14,6 +14,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'Events',
     'Accomplishments',
     'TechJournal',
+    'Classrooms',
   ],
   endpoints: {
     authorize: {},
@@ -27,9 +28,6 @@ const enhancedApi = generatedApi.enhanceEndpoints({
       keepUnusedDataFor: 600,
     },
     getAccomplishmentScales: {
-      keepUnusedDataFor: 600,
-    },
-    getAccomplishmentClassrooms: {
       keepUnusedDataFor: 600,
     },
     getAccomplishmentAchievements: {
@@ -269,6 +267,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteTechJournalReport: {
       invalidatesTags: ['TechJournal'],
     },
+    getClassrooms: {
+      providesTags: ['Classrooms'],
+    },
+    getClassroomById: {
+      providesTags: ['Classrooms'],
+    },
+    createClassroom: {
+      invalidatesTags: ['Classrooms'],
+    },
+    deleteClassroom: {
+      invalidatesTags: ['Classrooms'],
+    },
+    editClassroom: {
+      invalidatesTags: ['Classrooms'],
+    },
   },
 });
 
@@ -278,7 +291,6 @@ export const {
   useGetAccomplishmentsByDateQuery,
   useGetAccomplishmentScalesQuery,
   useGetAccomplishmentAchievementsQuery,
-  useGetAccomplishmentClassroomsQuery,
   useGetMyAccomplishmentsQuery,
   useCreateAccomplishmentMutation,
   useEditAccomplishmentMutation,
@@ -362,6 +374,11 @@ export const {
   useGetPublicPostByMenuLanguageAndPathQuery,
   useGetPublicPostsByLanguageQuery,
   useSearchPublicPostsQuery,
+  useGetClassroomsQuery,
+  useCreateClassroomMutation,
+  useEditClassroomMutation,
+  useGetClassroomByIdQuery,
+  useDeleteClassroomMutation,
   useGetTechJournalReportsQuery,
   useCreateTechJournalReportMutation,
   useEditTechJournalReportMutation,
