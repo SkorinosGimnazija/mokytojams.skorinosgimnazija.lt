@@ -17,7 +17,7 @@ export default function ViewClassrooms() {
         <CreateItemButton />
       </Stack>
       <Box mt={4}>
-        <ClassroomList data={classroomQuery.data} />
+        <ClassroomList data={classroomQuery.data} isLoading={classroomQuery.isFetching} />
       </Box>
     </Box>
   );

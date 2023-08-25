@@ -459,6 +459,29 @@ const injectedRtkApi = api.injectEndpoints({
     deleteClassroom: build.mutation<DeleteClassroomApiResponse, DeleteClassroomApiArg>({
       query: (queryArg) => ({ url: `/School/classrooms/${queryArg.id}`, method: 'DELETE' }),
     }),
+    getClasstimes: build.query<GetClasstimesApiResponse, GetClasstimesApiArg>({
+      query: () => ({ url: `/School/classtimes` }),
+    }),
+    createClasstime: build.mutation<CreateClasstimeApiResponse, CreateClasstimeApiArg>({
+      query: (queryArg) => ({
+        url: `/School/classtimes`,
+        method: 'POST',
+        body: queryArg.classtimeCreateDto,
+      }),
+    }),
+    getClasstimeById: build.query<GetClasstimeByIdApiResponse, GetClasstimeByIdApiArg>({
+      query: (queryArg) => ({ url: `/School/classtimes/${queryArg.id}` }),
+    }),
+    deleteClasstime: build.mutation<DeleteClasstimeApiResponse, DeleteClasstimeApiArg>({
+      query: (queryArg) => ({ url: `/School/classtimes/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    editClasstime: build.mutation<EditClasstimeApiResponse, EditClasstimeApiArg>({
+      query: (queryArg) => ({
+        url: `/School/classtime`,
+        method: 'PUT',
+        body: queryArg.classtimeEditDto,
+      }),
+    }),
     getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
       query: (queryArg) => ({
         url: `/TechJournal`,
@@ -930,7 +953,7 @@ export type SearchPublicPostsApiArg = {
 };
 export type GetClassroomsApiResponse = /** status 200 Success */ ClassroomDto[];
 export type GetClassroomsApiArg = void;
-export type CreateClassroomApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateClassroomApiResponse = /** status 201 Created */ ClassroomDto;
 export type CreateClassroomApiArg = {
   classroomCreateDto: ClassroomCreateDto;
 };
@@ -938,13 +961,31 @@ export type EditClassroomApiResponse = /** status 200 Success */ undefined;
 export type EditClassroomApiArg = {
   classroomEditDto: ClassroomEditDto;
 };
-export type GetClassroomByIdApiResponse = /** status 200 Success */ ClassroomDetailsDto;
+export type GetClassroomByIdApiResponse = /** status 200 Success */ ClassroomDto;
 export type GetClassroomByIdApiArg = {
   id: number;
 };
 export type DeleteClassroomApiResponse = /** status 204 No Content */ undefined;
 export type DeleteClassroomApiArg = {
   id: number;
+};
+export type GetClasstimesApiResponse = /** status 200 Success */ ClasstimeDto[];
+export type GetClasstimesApiArg = void;
+export type CreateClasstimeApiResponse = /** status 201 Created */ ClasstimeDto;
+export type CreateClasstimeApiArg = {
+  classtimeCreateDto: ClasstimeCreateDto;
+};
+export type GetClasstimeByIdApiResponse = /** status 200 Success */ ClasstimeDto;
+export type GetClasstimeByIdApiArg = {
+  id: number;
+};
+export type DeleteClasstimeApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClasstimeApiArg = {
+  id: number;
+};
+export type EditClasstimeApiResponse = /** status 200 Success */ undefined;
+export type EditClasstimeApiArg = {
+  classtimeEditDto: ClasstimeEditDto;
 };
 export type GetTechJournalReportsApiResponse =
   /** status 200 Success */ TechJournalReportDtoPaginatedList;
@@ -1501,10 +1542,22 @@ export type ClassroomEditDto = {
   number: number;
   id: number;
 };
-export type ClassroomDetailsDto = {
+export type ClasstimeDto = {
   id: number;
-  name: string;
   number: number;
+  startTime: string;
+  endTime: string;
+};
+export type ClasstimeCreateDto = {
+  number: number;
+  startTime: string;
+  endTime: string;
+};
+export type ClasstimeEditDto = {
+  number: number;
+  startTime: string;
+  endTime: string;
+  id: number;
 };
 export type TechJournalReportDto = {
   id: number;

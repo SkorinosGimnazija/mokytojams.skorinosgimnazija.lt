@@ -69,16 +69,6 @@ export default function EditClassroom() {
     <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={4} direction="column" flexWrap="nowrap">
         <TextField
-          id="name"
-          name="name"
-          label="Klasė"
-          autoComplete="class-name"
-          fullWidth
-          required
-          value={formData.name}
-          onChange={handleChange}
-        />
-        <TextField
           id="number"
           name="number"
           label="Numeris"
@@ -89,6 +79,16 @@ export default function EditClassroom() {
           value={formData.number}
           onChange={handleChange}
           InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          id="name"
+          name="name"
+          label="Klasė"
+          autoComplete="class-name"
+          fullWidth
+          required
+          value={formData.name}
+          onChange={handleChange}
         />
         <Grid item>
           <SaveButton
