@@ -482,6 +482,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.classtimeEditDto,
       }),
     }),
+    getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
+      query: () => ({ url: `/School/classdays` }),
+    }),
     getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
       query: (queryArg) => ({
         url: `/TechJournal`,
@@ -528,6 +531,24 @@ const injectedRtkApi = api.injectEndpoints({
       DeleteTechJournalReportApiArg
     >({
       query: (queryArg) => ({ url: `/TechJournal/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    getTimetable: build.query<GetTimetableApiResponse, GetTimetableApiArg>({
+      query: (queryArg) => ({
+        url: `/Timetable`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
+    createTimetable: build.mutation<CreateTimetableApiResponse, CreateTimetableApiArg>({
+      query: (queryArg) => ({ url: `/Timetable`, method: 'POST', body: queryArg.timetableCreateDto }),
+    }),
+    editTimetable: build.mutation<EditTimetableApiResponse, EditTimetableApiArg>({
+      query: (queryArg) => ({ url: `/Timetable`, method: 'PUT', body: queryArg.timetableEditDto }),
+    }),
+    getTimetableById: build.query<GetTimetableByIdApiResponse, GetTimetableByIdApiArg>({
+      query: (queryArg) => ({ url: `/Timetable/${queryArg.id}` }),
+    }),
+    deleteTimetable: build.mutation<DeleteTimetableApiResponse, DeleteTimetableApiArg>({
+      query: (queryArg) => ({ url: `/Timetable/${queryArg.id}`, method: 'DELETE' }),
     }),
   }),
   overrideExisting: false,
@@ -734,7 +755,7 @@ export type GetBullyJournalReportsApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateBullyJournalReportApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateBullyJournalReportApiResponse = /** status 201 Created */ BullyJournalReportDetailsDto;
 export type CreateBullyJournalReportApiArg = {
   bullyJournalReportCreateDto: BullyJournalReportCreateDto;
 };
@@ -987,13 +1008,15 @@ export type EditClasstimeApiResponse = /** status 200 Success */ undefined;
 export type EditClasstimeApiArg = {
   classtimeEditDto: ClasstimeEditDto;
 };
+export type GetClassdaysApiResponse = /** status 200 Success */ ClassdayDto[];
+export type GetClassdaysApiArg = void;
 export type GetTechJournalReportsApiResponse =
   /** status 200 Success */ TechJournalReportDtoPaginatedList;
 export type GetTechJournalReportsApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateTechJournalReportApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateTechJournalReportApiResponse = /** status 201 Created */ TechJournalReportDto;
 export type CreateTechJournalReportApiArg = {
   techJournalReportCreateDto: TechJournalReportCreateDto;
 };
@@ -1012,6 +1035,27 @@ export type PatchTechJournalReportApiArg = {
 };
 export type DeleteTechJournalReportApiResponse = /** status 204 No Content */ undefined;
 export type DeleteTechJournalReportApiArg = {
+  id: number;
+};
+export type GetTimetableApiResponse = /** status 200 Success */ TimetableDtoPaginatedList;
+export type GetTimetableApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateTimetableApiResponse = /** status 201 Created */ TimetableDto;
+export type CreateTimetableApiArg = {
+  timetableCreateDto: TimetableCreateDto;
+};
+export type EditTimetableApiResponse = /** status 200 Success */ undefined;
+export type EditTimetableApiArg = {
+  timetableEditDto: TimetableEditDto;
+};
+export type GetTimetableByIdApiResponse = /** status 200 Success */ TimetableDto;
+export type GetTimetableByIdApiArg = {
+  id: number;
+};
+export type DeleteTimetableApiResponse = /** status 204 No Content */ undefined;
+export type DeleteTimetableApiArg = {
   id: number;
 };
 export type AccomplishmentTeacherDto = {
@@ -1254,6 +1298,16 @@ export type BullyJournalReportDtoPaginatedList = {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
 };
+export type BullyJournalReportDetailsDto = {
+  id: number;
+  userId: number;
+  userDisplayName: string;
+  bullyInfo: string;
+  victimInfo: string;
+  date: string;
+  details: string;
+  actions: string;
+};
 export type BullyJournalReportCreateDto = {
   bullyInfo: string;
   victimInfo: string;
@@ -1268,16 +1322,6 @@ export type BullyJournalReportEditDto = {
   actions: string;
   date: string;
   id: number;
-};
-export type BullyJournalReportDetailsDto = {
-  id: number;
-  userId: number;
-  userDisplayName: string;
-  bullyInfo: string;
-  victimInfo: string;
-  date: string;
-  details: string;
-  actions: string;
 };
 export type BullyReportDto = {
   id: number;
@@ -1559,6 +1603,11 @@ export type ClasstimeEditDto = {
   endTime: string;
   id: number;
 };
+export type ClassdayDto = {
+  id: number;
+  name: string;
+  number: number;
+};
 export type TechJournalReportDto = {
   id: number;
   userId: number;
@@ -1590,4 +1639,32 @@ export type TechJournalReportEditDto = {
 export type TechJournalReportPatchDto = {
   isFixed?: boolean | null;
   notes?: string | null;
+};
+export type TimetableDto = {
+  id: number;
+  day: ClassdayDto;
+  room: ClassroomDto;
+  time: ClasstimeDto;
+  className?: string | null;
+};
+export type TimetableDtoPaginatedList = {
+  items: TimetableDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type TimetableCreateDto = {
+  dayId: number;
+  timeId: number;
+  roomId: number;
+  className?: string | null;
+};
+export type TimetableEditDto = {
+  dayId: number;
+  timeId: number;
+  roomId: number;
+  className?: string | null;
+  id: number;
 };

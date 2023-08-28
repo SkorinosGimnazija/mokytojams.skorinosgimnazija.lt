@@ -16,6 +16,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'TechJournal',
     'Classrooms',
     'Classtimes',
+    'Timetable',
   ],
   endpoints: {
     authorize: {},
@@ -298,6 +299,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     getClasstimes: {
       providesTags: ['Classtimes'],
     },
+    getTimetable: {
+      providesTags: ['Timetable'],
+    },
+    getTimetableById: {
+      providesTags: ['Timetable'],
+    },
+    editTimetable: {
+      invalidatesTags: ['Timetable'],
+    },
+    createTimetable: {
+      invalidatesTags: ['Timetable'],
+    },
+    deleteTimetable: {
+      invalidatesTags: ['Timetable'],
+    },
   },
 });
 
@@ -400,10 +416,16 @@ export const {
   useGetClasstimeByIdQuery,
   useDeleteClasstimeMutation,
   useEditClasstimeMutation,
+  useGetClassdaysQuery,
   useGetTechJournalReportsQuery,
   useCreateTechJournalReportMutation,
   useEditTechJournalReportMutation,
   useGetTechJournalReportByIdQuery,
   usePatchTechJournalReportMutation,
   useDeleteTechJournalReportMutation,
+  useGetTimetableQuery,
+  useCreateTimetableMutation,
+  useEditTimetableMutation,
+  useGetTimetableByIdQuery,
+  useDeleteTimetableMutation,
 } = enhancedApi;

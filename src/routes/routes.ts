@@ -169,6 +169,25 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'Tvarkaraštis',
+        path: '/admin/timetable',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/timetable/ViewTimetable')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
+          },
+        ],
+      },
     ],
   },
   {
