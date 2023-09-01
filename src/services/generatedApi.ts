@@ -488,7 +488,7 @@ const injectedRtkApi = api.injectEndpoints({
     getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
       query: (queryArg) => ({
         url: `/TechJournal`,
-        params: { Items: queryArg.items, Page: queryArg.page },
+        params: { Items: queryArg.items, Page: queryArg.page, start: queryArg.start, end: queryArg.end },
       }),
     }),
     createTechJournalReport: build.mutation<
@@ -549,6 +549,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     deleteTimetable: build.mutation<DeleteTimetableApiResponse, DeleteTimetableApiArg>({
       query: (queryArg) => ({ url: `/Timetable/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    getPublicTimetable: build.query<GetPublicTimetableApiResponse, GetPublicTimetableApiArg>({
+      query: () => ({ url: `/Timetable/public/today` }),
     }),
   }),
   overrideExisting: false,
@@ -1015,6 +1018,8 @@ export type GetTechJournalReportsApiResponse =
 export type GetTechJournalReportsApiArg = {
   items?: number;
   page?: number;
+  start?: string;
+  end?: string;
 };
 export type CreateTechJournalReportApiResponse = /** status 201 Created */ TechJournalReportDto;
 export type CreateTechJournalReportApiArg = {
@@ -1058,6 +1063,8 @@ export type DeleteTimetableApiResponse = /** status 204 No Content */ undefined;
 export type DeleteTimetableApiArg = {
   id: number;
 };
+export type GetPublicTimetableApiResponse = /** status 200 Success */ TimetableDto[];
+export type GetPublicTimetableApiArg = void;
 export type AccomplishmentTeacherDto = {
   id: number;
   name: string;
