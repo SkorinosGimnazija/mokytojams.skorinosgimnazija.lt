@@ -169,15 +169,10 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
-    ],
-  },
-  {
-    name: 'Mokykla',
-    routes: [
       {
         name: 'Klasės',
         path: '/school/classrooms',
-        accessRole: 'Manager',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
@@ -196,7 +191,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Pamokos',
         path: '/school/classtimes',
-        accessRole: 'Manager',
+        accessRole: 'Admin',
         innerRoutes: [
           {
             path: '',
