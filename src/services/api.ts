@@ -17,6 +17,7 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     'Classrooms',
     'Classtimes',
     'Timetable',
+    'Announcements',
   ],
   endpoints: {
     authorize: {},
@@ -317,6 +318,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteTimetableDay: {
       invalidatesTags: ['Timetable'],
     },
+    getAnnouncementById: {
+      providesTags: ['Announcements'],
+    },
+    getAnnouncements: {
+      providesTags: ['Announcements'],
+    },
+    editAnnouncement: {
+      invalidatesTags: ['Announcements'],
+    },
+    createAnnouncement: {
+      invalidatesTags: ['Announcements'],
+    },
+    deleteAnnouncement: {
+      invalidatesTags: ['Announcements'],
+    },
   },
 });
 
@@ -420,6 +436,11 @@ export const {
   useDeleteClasstimeMutation,
   useEditClasstimeMutation,
   useGetClassdaysQuery,
+  useGetAnnouncementByIdQuery,
+  useDeleteAnnouncementMutation,
+  useCreateAnnouncementMutation,
+  useEditAnnouncementMutation,
+  useGetAnnouncementsQuery,
   useGetPublicAnnouncementsQuery,
   useGetPublicRandomImageQuery,
   useGetTechJournalReportsQuery,
@@ -431,8 +452,8 @@ export const {
   useGetTimetableQuery,
   useCreateTimetableMutation,
   useEditTimetableMutation,
-  useDeleteTimetableDayMutation,
   useGetTimetableByIdQuery,
   useDeleteTimetableMutation,
+  useDeleteTimetableDayMutation,
   useGetPublicTimetableQuery,
 } = enhancedApi;

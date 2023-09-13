@@ -485,6 +485,32 @@ const injectedRtkApi = api.injectEndpoints({
     getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
       query: () => ({ url: `/School/classdays` }),
     }),
+    getAnnouncementById: build.query<GetAnnouncementByIdApiResponse, GetAnnouncementByIdApiArg>({
+      query: (queryArg) => ({ url: `/School/announcements/${queryArg.id}` }),
+    }),
+    deleteAnnouncement: build.mutation<DeleteAnnouncementApiResponse, DeleteAnnouncementApiArg>({
+      query: (queryArg) => ({ url: `/School/announcements/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    createAnnouncement: build.mutation<CreateAnnouncementApiResponse, CreateAnnouncementApiArg>({
+      query: (queryArg) => ({
+        url: `/School/announcements`,
+        method: 'POST',
+        body: queryArg.announcementCreateDto,
+      }),
+    }),
+    editAnnouncement: build.mutation<EditAnnouncementApiResponse, EditAnnouncementApiArg>({
+      query: (queryArg) => ({
+        url: `/School/announcements`,
+        method: 'PUT',
+        body: queryArg.announcementEditDto,
+      }),
+    }),
+    getAnnouncements: build.query<GetAnnouncementsApiResponse, GetAnnouncementsApiArg>({
+      query: (queryArg) => ({
+        url: `/School/announcements`,
+        params: { Items: queryArg.items, Page: queryArg.page },
+      }),
+    }),
     getPublicAnnouncements: build.query<GetPublicAnnouncementsApiResponse, GetPublicAnnouncementsApiArg>(
       {
         query: () => ({ url: `/School/public/announcements` }),
@@ -1028,7 +1054,28 @@ export type EditClasstimeApiArg = {
 };
 export type GetClassdaysApiResponse = /** status 200 Success */ ClassdayDto[];
 export type GetClassdaysApiArg = void;
-export type GetPublicAnnouncementsApiResponse = /** status 200 Success */ any[];
+export type GetAnnouncementByIdApiResponse = /** status 200 Success */ AnnouncementDto;
+export type GetAnnouncementByIdApiArg = {
+  id: number;
+};
+export type DeleteAnnouncementApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAnnouncementApiArg = {
+  id: number;
+};
+export type CreateAnnouncementApiResponse = /** status 201 Created */ AnnouncementDto;
+export type CreateAnnouncementApiArg = {
+  announcementCreateDto: AnnouncementCreateDto;
+};
+export type EditAnnouncementApiResponse = /** status 200 Success */ undefined;
+export type EditAnnouncementApiArg = {
+  announcementEditDto: AnnouncementEditDto;
+};
+export type GetAnnouncementsApiResponse = /** status 200 Success */ AnnouncementDtoPaginatedList;
+export type GetAnnouncementsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type GetPublicAnnouncementsApiResponse = /** status 200 Success */ AnnouncementDto[];
 export type GetPublicAnnouncementsApiArg = void;
 export type GetPublicRandomImageApiResponse = /** status 200 Success */ string;
 export type GetPublicRandomImageApiArg = void;
@@ -1637,6 +1684,31 @@ export type ClassdayDto = {
   id: number;
   name: string;
   number: number;
+};
+export type AnnouncementDto = {
+  id: number;
+  title: string;
+  startTime: string;
+  endTime: string;
+};
+export type AnnouncementCreateDto = {
+  title: string;
+  startTime: string;
+  endTime: string;
+};
+export type AnnouncementEditDto = {
+  title: string;
+  startTime: string;
+  endTime: string;
+  id: number;
+};
+export type AnnouncementDtoPaginatedList = {
+  items: AnnouncementDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };
 export type TechJournalReportDto = {
   id: number;

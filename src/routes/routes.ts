@@ -235,6 +235,25 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'Skelbimai',
+        path: '/admin/announcements',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/school/announcements/ViewAnnouncements')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/school/announcements/EditAnnouncement')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/admin/school/announcements/EditAnnouncement')),
+          },
+        ],
+      },
     ],
   },
   {
