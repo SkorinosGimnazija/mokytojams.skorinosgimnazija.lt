@@ -169,25 +169,6 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
-      {
-        name: 'Tvarkaraštis',
-        path: '/admin/timetable',
-        accessRole: 'Manager',
-        innerRoutes: [
-          {
-            path: '',
-            lazyElement: lazy(() => import('../pages/admin/timetable/ViewTimetable')),
-          },
-          {
-            path: ':id',
-            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
-          },
-          {
-            path: 'create',
-            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
-          },
-        ],
-      },
     ],
   },
   {
@@ -196,7 +177,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Klasės',
         path: '/school/classrooms',
-        accessRole: 'Admin',
+        accessRole: 'Manager',
         innerRoutes: [
           {
             path: '',
@@ -215,7 +196,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Pamokos',
         path: '/school/classtimes',
-        accessRole: 'Admin',
+        accessRole: 'Manager',
         innerRoutes: [
           {
             path: '',
@@ -228,6 +209,29 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditClasstime')),
+          },
+        ],
+      },
+      {
+        name: 'Tvarkaraštis',
+        path: '/admin/timetable',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/timetable/ViewTimetable')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/admin/timetable/EditTimetable')),
+          },
+          {
+            path: 'prune',
+            lazyElement: lazy(() => import('../pages/admin/timetable/DeleteTimetableDay')),
           },
         ],
       },

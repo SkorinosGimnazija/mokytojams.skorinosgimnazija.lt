@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { LocalizationProvider, YearCalendar } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -30,6 +30,9 @@ export default function ViewTimetable() {
     <Box>
       <Stack direction="row" gap={4}>
         <CreateItemButton />
+        <Button color="error" component={RouterLink} to="prune" variant="contained">
+          Ištrinti tvarkaraštį
+        </Button>
       </Stack>
       <Box mt={4}>
         <DefaultTable

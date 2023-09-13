@@ -65,27 +65,33 @@ export default function EditTimetable() {
     }));
   }, [timetableQuery]);
 
+  const getNextTimeId = (timeId: number) => {
+    const times = timeQuery.data!;
+    const nextIndex = times.findIndex((x) => x.id === timeId) + 1;
+
+    if (nextIndex >= times.length) {
+      return times[0].id;
+    }
+
+    return times[nextIndex].id;
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = {
-      ...formData,
-      className: formData.className?.trim()?.replace(/\s+/g, ' '),
-    };
-
     if (timetableId) {
-      editTimetableMutation({ timetableEditDto: data }).then((response: any) => {
+      editTimetableMutation({ timetableEditDto: formData }).then((response: any) => {
         if (!response.error) {
           itemSavedToast();
           navigate(`../`);
         }
       });
     } else {
-      createTimetableMutation({ timetableCreateDto: data }).then((response: any) => {
+      createTimetableMutation({ timetableCreateDto: formData }).then((response: any) => {
         const dto = response.data as TimetableDto;
         if (dto) {
           itemSavedToast();
-          setFormData((x) => ({ ...x, className: '' }));
+          setFormData((x) => ({ ...x, className: '', timeId: getNextTimeId(x.timeId) }));
           // navigate(`../`);
         }
       });
@@ -98,6 +104,19 @@ export default function EditTimetable() {
     setFormData((x) => ({ ...x, [e.target.name]: e.target.value }));
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const text = e.clipboardData
+      .getData('text/plain')
+      .replaceAll('/', ' / ')
+      .replace(/\s+/g, ' ')
+      .replace(/-{2,}/g, '----')
+      .trim();
+
+    setFormData((x) => ({ ...x, className: text }));
+  };
+
   return (
     <form autoComplete="off" onSubmit={handleSubmit}>
       <Grid container gap={4} direction="column" flexWrap="nowrap">
@@ -106,8 +125,10 @@ export default function EditTimetable() {
           name="className"
           label="Pamoka"
           fullWidth
+          required
           value={formData.className ?? ''}
           onChange={handleChange}
+          onPaste={handlePaste}
         />
 
         <FormControl>
@@ -117,6 +138,7 @@ export default function EditTimetable() {
             name="roomId"
             labelId="roomId-label"
             label="Klasė"
+            required
             value={formData.roomId}
             onChange={handleChange}
             sx={{ width: '300px' }}
@@ -138,6 +160,7 @@ export default function EditTimetable() {
             name="dayId"
             labelId="dayId-label"
             label="Diena"
+            required
             value={formData.dayId}
             onChange={handleChange}
             sx={{ width: '300px' }}
@@ -159,6 +182,7 @@ export default function EditTimetable() {
             name="timeId"
             labelId="timeId-label"
             label="Laikas"
+            required
             value={formData.timeId}
             onChange={handleChange}
             sx={{ width: '300px' }}

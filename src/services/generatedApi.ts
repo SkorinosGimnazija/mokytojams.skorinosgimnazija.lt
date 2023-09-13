@@ -485,6 +485,14 @@ const injectedRtkApi = api.injectEndpoints({
     getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
       query: () => ({ url: `/School/classdays` }),
     }),
+    getPublicAnnouncements: build.query<GetPublicAnnouncementsApiResponse, GetPublicAnnouncementsApiArg>(
+      {
+        query: () => ({ url: `/School/public/announcements` }),
+      }
+    ),
+    getPublicRandomImage: build.query<GetPublicRandomImageApiResponse, GetPublicRandomImageApiArg>({
+      query: () => ({ url: `/School/public/random-image` }),
+    }),
     getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
       query: (queryArg) => ({
         url: `/TechJournal`,
@@ -549,6 +557,13 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     deleteTimetable: build.mutation<DeleteTimetableApiResponse, DeleteTimetableApiArg>({
       query: (queryArg) => ({ url: `/Timetable/${queryArg.id}`, method: 'DELETE' }),
+    }),
+    deleteTimetableDay: build.mutation<DeleteTimetableDayApiResponse, DeleteTimetableDayApiArg>({
+      query: (queryArg) => ({
+        url: `/Timetable/days`,
+        method: 'DELETE',
+        body: queryArg.timetableDeleteDayDto,
+      }),
     }),
     getPublicTimetable: build.query<GetPublicTimetableApiResponse, GetPublicTimetableApiArg>({
       query: () => ({ url: `/Timetable/public/today` }),
@@ -1013,6 +1028,10 @@ export type EditClasstimeApiArg = {
 };
 export type GetClassdaysApiResponse = /** status 200 Success */ ClassdayDto[];
 export type GetClassdaysApiArg = void;
+export type GetPublicAnnouncementsApiResponse = /** status 200 Success */ any[];
+export type GetPublicAnnouncementsApiArg = void;
+export type GetPublicRandomImageApiResponse = /** status 200 Success */ string;
+export type GetPublicRandomImageApiArg = void;
 export type GetTechJournalReportsApiResponse =
   /** status 200 Success */ TechJournalReportDtoPaginatedList;
 export type GetTechJournalReportsApiArg = {
@@ -1063,7 +1082,11 @@ export type DeleteTimetableApiResponse = /** status 204 No Content */ undefined;
 export type DeleteTimetableApiArg = {
   id: number;
 };
-export type GetPublicTimetableApiResponse = /** status 200 Success */ TimetableDto[];
+export type DeleteTimetableDayApiResponse = unknown;
+export type DeleteTimetableDayApiArg = {
+  timetableDeleteDayDto: TimetableDeleteDayDto;
+};
+export type GetPublicTimetableApiResponse = /** status 200 Success */ TimetablePublicDto;
 export type GetPublicTimetableApiArg = void;
 export type AccomplishmentTeacherDto = {
   id: number;
@@ -1652,7 +1675,7 @@ export type TimetableDto = {
   day: ClassdayDto;
   room: ClassroomDto;
   time: ClasstimeDto;
-  className?: string | null;
+  className: string;
 };
 export type TimetableDtoPaginatedList = {
   items: TimetableDto[];
@@ -1666,12 +1689,30 @@ export type TimetableCreateDto = {
   dayId: number;
   timeId: number;
   roomId: number;
-  className?: string | null;
+  className: string;
 };
 export type TimetableEditDto = {
   dayId: number;
   timeId: number;
   roomId: number;
-  className?: string | null;
+  className: string;
   id: number;
+};
+export type TimetableDeleteDayDto = {
+  dayIds: number[];
+};
+export type TimetableSimpleDto = {
+  id: number;
+  classRoom: string;
+  className: string;
+};
+export type ClasstimeSimpleDto = {
+  number: number;
+  startTime: string;
+  endTime: string;
+};
+export type TimetablePublicDto = {
+  timetable: TimetableSimpleDto[];
+  classtime: ClasstimeSimpleDto;
+  currentTime: string;
 };
