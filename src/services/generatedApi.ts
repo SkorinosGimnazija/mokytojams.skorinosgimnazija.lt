@@ -584,6 +584,13 @@ const injectedRtkApi = api.injectEndpoints({
     deleteTimetable: build.mutation<DeleteTimetableApiResponse, DeleteTimetableApiArg>({
       query: (queryArg) => ({ url: `/Timetable/${queryArg.id}`, method: 'DELETE' }),
     }),
+    importTimetable: build.mutation<ImportTimetableApiResponse, ImportTimetableApiArg>({
+      query: (queryArg) => ({
+        url: `/Timetable/import`,
+        method: 'POST',
+        body: queryArg.timetableImportDto,
+      }),
+    }),
     deleteTimetableDay: build.mutation<DeleteTimetableDayApiResponse, DeleteTimetableDayApiArg>({
       query: (queryArg) => ({
         url: `/Timetable/days`,
@@ -1077,7 +1084,7 @@ export type GetAnnouncementsApiArg = {
 };
 export type GetPublicAnnouncementsApiResponse = /** status 200 Success */ AnnouncementDto[];
 export type GetPublicAnnouncementsApiArg = void;
-export type GetPublicRandomImageApiResponse = /** status 200 Success */ string;
+export type GetPublicRandomImageApiResponse = /** status 200 Success */ RandomImageDto;
 export type GetPublicRandomImageApiArg = void;
 export type GetTechJournalReportsApiResponse =
   /** status 200 Success */ TechJournalReportDtoPaginatedList;
@@ -1128,6 +1135,10 @@ export type GetTimetableByIdApiArg = {
 export type DeleteTimetableApiResponse = /** status 204 No Content */ undefined;
 export type DeleteTimetableApiArg = {
   id: number;
+};
+export type ImportTimetableApiResponse = /** status 201 Created */ undefined;
+export type ImportTimetableApiArg = {
+  timetableImportDto: TimetableImportDto;
 };
 export type DeleteTimetableDayApiResponse = unknown;
 export type DeleteTimetableDayApiArg = {
@@ -1710,6 +1721,9 @@ export type AnnouncementDtoPaginatedList = {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
 };
+export type RandomImageDto = {
+  url: string;
+};
 export type TechJournalReportDto = {
   id: number;
   userId: number;
@@ -1769,6 +1783,9 @@ export type TimetableEditDto = {
   roomId: number;
   className: string;
   id: number;
+};
+export type TimetableImportDto = {
+  timetableList: TimetableCreateDto[];
 };
 export type TimetableDeleteDayDto = {
   dayIds: number[];

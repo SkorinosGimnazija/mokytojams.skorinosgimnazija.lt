@@ -318,6 +318,9 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteTimetableDay: {
       invalidatesTags: ['Timetable'],
     },
+    importTimetable: {
+      invalidatesTags: ['Timetable'],
+    },
     getAnnouncementById: {
       providesTags: ['Announcements'],
     },
@@ -454,6 +457,7 @@ export const {
   useEditTimetableMutation,
   useGetTimetableByIdQuery,
   useDeleteTimetableMutation,
+  useImportTimetableMutation,
   useDeleteTimetableDayMutation,
   useGetPublicTimetableQuery,
 } = enhancedApi;

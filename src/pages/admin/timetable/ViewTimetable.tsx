@@ -30,6 +30,9 @@ export default function ViewTimetable() {
     <Box>
       <Stack direction="row" gap={4}>
         <CreateItemButton />
+        <Button color="info" component={RouterLink} to="import" variant="contained">
+          Importuoti tvarkaraštį
+        </Button>
         <Button color="error" component={RouterLink} to="prune" variant="contained">
           Ištrinti tvarkaraštį
         </Button>

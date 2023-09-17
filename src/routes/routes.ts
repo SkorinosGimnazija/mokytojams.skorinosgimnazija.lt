@@ -228,6 +228,10 @@ export const routes: RoutesGroup[] = [
             path: 'prune',
             lazyElement: lazy(() => import('../pages/admin/timetable/DeleteTimetableDay')),
           },
+          {
+            path: 'import',
+            lazyElement: lazy(() => import('../pages/admin/timetable/ImportTimetable')),
+          },
         ],
       },
       {
