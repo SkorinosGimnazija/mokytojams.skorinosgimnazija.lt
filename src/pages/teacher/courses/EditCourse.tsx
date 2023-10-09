@@ -199,41 +199,48 @@ export default function EditCourse() {
         </Grid>
 
         <Grid item>
-          <Grid container gap={4} minHeight={'3.5rem'}>
-            <FormControlLabel
-              label="Mokymai buvo finansuoti mokyklos kvalifikacijos lėšomis"
-              control={
-                <Checkbox
-                  checked={formData.price != null}
-                  onChange={(e) => setFormData((x) => ({ ...x, price: e.target.checked ? 0 : null }))}
-                />
-              }
-            />
-
-            {formData.price != null && (
-              <TextField
-                id="price"
-                name="price"
-                label="Kaina"
-                type="number"
-                required
-                value={formData.price || ''}
-                onChange={handleChange}
-                InputProps={{ endAdornment: <InputAdornment position="end">€</InputAdornment> }}
-                inputProps={{ min: '0.1', step: '0.1' }}
-                InputLabelProps={{ shrink: true }}
+          <Grid container direction="column">
+            <Grid item height={'40px'}>
+              <FormControlLabel
+                label="Mokymai buvo finansuoti mokyklos kvalifikacijos lėšomis"
+                control={
+                  <Checkbox
+                    checked={formData.price != null}
+                    onChange={(e) => setFormData((x) => ({ ...x, price: e.target.checked ? 0 : null }))}
+                  />
+                }
               />
-            )}
-          </Grid>
-        </Grid>
 
-        <Grid item>
-          <FormControlLabel
-            label="Mokymai buvo naudingi"
-            control={
-              <Checkbox name="isUseful" checked={formData.isUseful} onChange={handleCheckboxChange} />
-            }
-          />
+              {formData.price != null && (
+                <TextField
+                  id="price"
+                  name="price"
+                  label="Kaina"
+                  type="number"
+                  required
+                  value={formData.price || ''}
+                  onChange={handleChange}
+                  InputProps={{ endAdornment: <InputAdornment position="end">€</InputAdornment> }}
+                  inputProps={{ min: '0.1', step: '0.1' }}
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+            </Grid>
+            <Grid item>
+              <Grid item>
+                <FormControlLabel
+                  label="Mokymai buvo naudingi"
+                  control={
+                    <Checkbox
+                      name="isUseful"
+                      checked={formData.isUseful}
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item>
