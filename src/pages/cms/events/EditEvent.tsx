@@ -1,6 +1,6 @@
-import { Checkbox, FormControlLabel, SelectChangeEvent, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { addHours } from 'date-fns';
+import { addDays, addHours } from 'date-fns';
 import format from 'date-fns/format';
 import React, { useState } from 'react';
 import { SaveButton } from '../../../components/buttons/SaveButton';
@@ -36,7 +36,7 @@ export default function EditEvent() {
     createEventMutation({ eventCreateDto: data }).then((response: any) => {
       const responseData = response.data as EventDto;
       if (responseData) {
-        setFormData({ title: '', allDay: true, endDate: '', startDate: '' });
+        setFormData((x) => ({ ...x, title: '', endDate: '', startDate: '' }));
         itemSavedToast();
       }
     });
@@ -61,6 +61,25 @@ export default function EditEvent() {
       setStartTime(time);
       setEndTime(format(addHours(date, 1), 'HH:mm'));
     } catch {}
+  };
+
+  const addStartDays = (count: number) => () => {
+    if (!startDate) {
+      return;
+    }
+
+    const newDate = format(addDays(new Date(startDate), count), 'yyyy-MM-dd');
+    setStartDate(newDate);
+    setEndDate(newDate);
+  };
+
+  const addEndDays = (count: number) => () => {
+    if (!endDate) {
+      return;
+    }
+
+    const newDate = format(addDays(new Date(endDate), count), 'yyyy-MM-dd');
+    setEndDate(newDate);
   };
 
   return (
@@ -94,7 +113,7 @@ export default function EditEvent() {
               const match = regex.exec(text);
 
               if (!match) {
-                setFormData((x) => ({ ...x, title: text }));
+                setFormData((x) => ({ ...x, allDay: true, title: text }));
                 return;
               }
 
@@ -114,6 +133,14 @@ export default function EditEvent() {
         </Grid>
 
         <Grid container gap={4}>
+          <Grid container item direction="column" gap={7} maxWidth={100}>
+            <Button variant="outlined" type="button" onClick={addStartDays(1)}>
+              +1 day
+            </Button>
+            <Button variant="outlined" type="button" onClick={addEndDays(1)}>
+              +1 day
+            </Button>
+          </Grid>
           <Grid container item direction="column" gap={4} maxWidth={200}>
             <TextField
               id="startDate"
