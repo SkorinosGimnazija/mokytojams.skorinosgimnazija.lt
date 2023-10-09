@@ -112,7 +112,7 @@ export const PostEditor: React.FC<Props> = ({ previewMode, values, setValues }) 
           }
 
           if (!values.meta && firstParagraph) {
-            setValues((x: any) => ({ ...x, meta: firstParagraph.textContent }));
+            setValues((x: any) => ({ ...x, meta: htmlToMarkdown(firstParagraph.textContent!) }));
           }
 
           e.preventDefault();
@@ -124,6 +124,7 @@ export const PostEditor: React.FC<Props> = ({ previewMode, values, setValues }) 
         label="Meta description"
         autoComplete="off"
         multiline
+        error={values.meta?.length > 200}
         rows={3}
         value={values.meta}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

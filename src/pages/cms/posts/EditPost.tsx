@@ -145,6 +145,7 @@ export default function EditPost() {
       createPostMutation({ body: form as any }).then((response: any) => {
         const postData = response.data as PostDetailsDto;
         if (postData) {
+          setFormData((x) => ({ ...x, id: postData.id }));
           navigate({ pathname: `../${postData.id}`, search: 'new' });
         }
       });

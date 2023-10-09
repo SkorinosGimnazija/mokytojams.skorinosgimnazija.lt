@@ -1,6 +1,7 @@
 export const htmlToMarkdown = (html: string) => {
   const md = html
     .replaceAll('&nbsp;', ' ')
+    .replaceAll(',,', '„')
     .replaceAll(/<[/]?span>/g, '')
     .replaceAll(/<(?:i|em)>(.*?)<\/(?:i|em)>/g, '*$1*')
     .replaceAll(/<(?:b|strong)>(.*?)<\/(?:b|strong)>/g, '**$1**')
