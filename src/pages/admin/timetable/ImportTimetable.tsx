@@ -107,6 +107,11 @@ export default function ImportTimetable() {
       const doc = parser.parseFromString(html.replaceAll(/\n|\r/g, ' '), 'text/html');
       const body = doc.body;
 
+      if (body.innerHTML.includes('rowspan') || body.innerHTML.includes('colspan')) {
+        errorToast('rowspan');
+        return;
+      }
+
       const tableRows = body.querySelectorAll('tr');
       if (tableRows.length < 2) {
         return;
