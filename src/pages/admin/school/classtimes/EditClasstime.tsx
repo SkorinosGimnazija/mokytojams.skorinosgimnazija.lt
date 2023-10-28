@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { Grid, SelectChangeEvent, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { SaveButton } from '../../../../components/buttons/SaveButton';
+import { itemSavedToast } from '../../../../lib/toasts';
 import {
   useCreateClasstimeMutation,
   useEditClasstimeMutation,
   useGetClasstimeByIdQuery,
 } from '../../../../services/api';
-import { ClasstimeCreateDto, ClasstimeDto, ClasstimeEditDto } from '../../../../services/generatedApi';
-import { Grid, TextField, SelectChangeEvent } from '@mui/material';
-import { itemSavedToast } from '../../../../lib/toasts';
-import { SaveButton } from '../../../../components/buttons/SaveButton';
-import { addDays, addYears, format, parse, parseISO } from 'date-fns';
+import { ClasstimeDto, ClasstimeEditDto } from '../../../../services/generatedApi';
 
 export default function EditClasstime() {
   const navigate = useNavigate();
@@ -25,6 +24,8 @@ export default function EditClasstime() {
     id: classtimeId,
     startTime: '',
     endTime: '',
+    endTimeShort: '',
+    startTimeShort: '',
     number: '' as any,
   });
 
@@ -38,6 +39,8 @@ export default function EditClasstime() {
       startTime: classtimeQuery.data.startTime,
       endTime: classtimeQuery.data.endTime,
       number: classtimeQuery.data.number,
+      startTimeShort: classtimeQuery.data.startTimeShort,
+      endTimeShort: classtimeQuery.data.endTimeShort,
     }));
   }, [classtimeQuery]);
 
@@ -106,6 +109,33 @@ export default function EditClasstime() {
           fullWidth
           required
           value={formData.endTime}
+          onChange={handleChange}
+          InputLabelProps={{ shrink: true }}
+        />
+
+        <TextField
+          id="startTimeShort"
+          name="startTimeShort"
+          label="Pradžia (sutrumpinta)"
+          autoComplete="classt-startShort"
+          type="time"
+          inputProps={{ step: 1 }}
+          fullWidth
+          required
+          value={formData.startTimeShort}
+          onChange={handleChange}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          id="endTimeShort"
+          name="endTimeShort"
+          label="Pabaiga (sutrumpinta)"
+          autoComplete="classt-endShort"
+          type="time"
+          inputProps={{ step: 1 }}
+          fullWidth
+          required
+          value={formData.endTimeShort}
           onChange={handleChange}
           InputLabelProps={{ shrink: true }}
         />

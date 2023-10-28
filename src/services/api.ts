@@ -21,6 +21,18 @@ const enhancedApi = generatedApi.enhanceEndpoints({
   ],
   endpoints: {
     authorize: {},
+    getLocalesMeta: {},
+    getMenusMeta: {},
+    getPostsMeta: {},
+    getPublicAnnouncements: {},
+    getPublicAppointmentAvailableDates: {},
+    getPublicAppointmentAvailableHosts: {},
+    getPublicDayEvents: {},
+    getPublicEvents: {},
+    getPublicRandomImage: {},
+    getPublicTimetable: {},
+    createPublicAppointment: {},
+    getClassdays: {},
     getPublicLanguages: {
       keepUnusedDataFor: 600,
     },
@@ -336,6 +348,21 @@ const enhancedApi = generatedApi.enhanceEndpoints({
     deleteAnnouncement: {
       invalidatesTags: ['Announcements'],
     },
+    createClasstimeShortDay: {
+      invalidatesTags: ['Classtimes'],
+    },
+    deleteClasstimeShortDay: {
+      invalidatesTags: ['Classtimes'],
+    },
+    editClasstimeShortDay: {
+      invalidatesTags: ['Classtimes'],
+    },
+    getClasstimeShortDayById: {
+      providesTags: ['Classtimes'],
+    },
+    getClasstimesShortDays: {
+      providesTags: ['Classtimes'],
+    },
   },
 });
 
@@ -438,6 +465,11 @@ export const {
   useGetClasstimeByIdQuery,
   useDeleteClasstimeMutation,
   useEditClasstimeMutation,
+  useGetClasstimesShortDaysQuery,
+  useCreateClasstimeShortDayMutation,
+  useEditClasstimeShortDayMutation,
+  useGetClasstimeShortDayByIdQuery,
+  useDeleteClasstimeShortDayMutation,
   useGetClassdaysQuery,
   useGetAnnouncementByIdQuery,
   useDeleteAnnouncementMutation,

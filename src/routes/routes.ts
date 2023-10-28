@@ -205,6 +205,18 @@ export const routes: RoutesGroup[] = [
             path: ':id',
             lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditClasstime')),
           },
+          {
+            path: 'shortdays',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/ViewShortDays')),
+          },
+          {
+            path: 'shortdays/create',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditShortDay')),
+          },
+          {
+            path: 'shortdays/:id',
+            lazyElement: lazy(() => import('../pages/admin/school/classtimes/EditShortDay')),
+          },
         ],
       },
       {

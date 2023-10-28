@@ -482,6 +482,45 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.classtimeEditDto,
       }),
     }),
+    getClasstimesShortDays: build.query<GetClasstimesShortDaysApiResponse, GetClasstimesShortDaysApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/School/classtimesshort`,
+          params: { Items: queryArg.items, Page: queryArg.page },
+        }),
+      }
+    ),
+    createClasstimeShortDay: build.mutation<
+      CreateClasstimeShortDayApiResponse,
+      CreateClasstimeShortDayApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/School/classtimesshort`,
+        method: 'POST',
+        body: queryArg.classtimeShortDayCreateDto,
+      }),
+    }),
+    editClasstimeShortDay: build.mutation<EditClasstimeShortDayApiResponse, EditClasstimeShortDayApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/School/classtimesshort`,
+          method: 'PUT',
+          body: queryArg.classtimeShortDayEditDto,
+        }),
+      }
+    ),
+    getClasstimeShortDayById: build.query<
+      GetClasstimeShortDayByIdApiResponse,
+      GetClasstimeShortDayByIdApiArg
+    >({
+      query: (queryArg) => ({ url: `/School/classtimesshort/${queryArg.id}` }),
+    }),
+    deleteClasstimeShortDay: build.mutation<
+      DeleteClasstimeShortDayApiResponse,
+      DeleteClasstimeShortDayApiArg
+    >({
+      query: (queryArg) => ({ url: `/School/classtimesshort/${queryArg.id}`, method: 'DELETE' }),
+    }),
     getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
       query: () => ({ url: `/School/classdays` }),
     }),
@@ -1058,6 +1097,28 @@ export type DeleteClasstimeApiArg = {
 export type EditClasstimeApiResponse = /** status 200 Success */ undefined;
 export type EditClasstimeApiArg = {
   classtimeEditDto: ClasstimeEditDto;
+};
+export type GetClasstimesShortDaysApiResponse =
+  /** status 200 Success */ ClasstimeShortDayDtoPaginatedList;
+export type GetClasstimesShortDaysApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateClasstimeShortDayApiResponse = /** status 201 Created */ ClasstimeShortDayDto;
+export type CreateClasstimeShortDayApiArg = {
+  classtimeShortDayCreateDto: ClasstimeShortDayCreateDto;
+};
+export type EditClasstimeShortDayApiResponse = /** status 200 Success */ undefined;
+export type EditClasstimeShortDayApiArg = {
+  classtimeShortDayEditDto: ClasstimeShortDayEditDto;
+};
+export type GetClasstimeShortDayByIdApiResponse = /** status 200 Success */ ClasstimeShortDayDto;
+export type GetClasstimeShortDayByIdApiArg = {
+  id: number;
+};
+export type DeleteClasstimeShortDayApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClasstimeShortDayApiArg = {
+  id: number;
 };
 export type GetClassdaysApiResponse = /** status 200 Success */ ClassdayDto[];
 export type GetClassdaysApiArg = void;
@@ -1678,17 +1739,42 @@ export type ClasstimeDto = {
   id: number;
   number: number;
   startTime: string;
+  startTimeShort: string;
   endTime: string;
+  endTimeShort: string;
 };
 export type ClasstimeCreateDto = {
   number: number;
   startTime: string;
+  startTimeShort: string;
   endTime: string;
+  endTimeShort: string;
 };
 export type ClasstimeEditDto = {
   number: number;
   startTime: string;
+  startTimeShort: string;
   endTime: string;
+  endTimeShort: string;
+  id: number;
+};
+export type ClasstimeShortDayDto = {
+  id: number;
+  date: string;
+};
+export type ClasstimeShortDayDtoPaginatedList = {
+  items: ClasstimeShortDayDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type ClasstimeShortDayCreateDto = {
+  date: string;
+};
+export type ClasstimeShortDayEditDto = {
+  date: string;
   id: number;
 };
 export type ClassdayDto = {
