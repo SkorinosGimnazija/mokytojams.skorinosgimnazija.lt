@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import React from 'react';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
@@ -41,8 +41,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   React.useEffect(() => {
     if (token) {
       try {
-        const payload = jwtDecode<{ exp: number }>(token);
-        if (Date.now() >= payload.exp * 1000) {
+        const payload = jwtDecode(token);
+        if (Date.now() >= payload.exp! * 1000) {
           dispatch(resetAuthState());
         }
       } catch {
