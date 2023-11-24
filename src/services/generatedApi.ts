@@ -98,6 +98,9 @@ const injectedRtkApi = api.injectEndpoints({
         query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}`, method: 'DELETE' }),
       }
     ),
+    resetAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>({
+      query: (queryArg) => ({ url: `/Appointments/types/reset/${queryArg.id}`, method: 'POST' }),
+    }),
     getAppointmentTypeById: build.query<GetAppointmentTypeByIdApiResponse, GetAppointmentTypeByIdApiArg>(
       {
         query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}` }),
