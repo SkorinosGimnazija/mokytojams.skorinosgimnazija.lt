@@ -36,7 +36,7 @@ export const NavigationList = () => {
                 {group.name === 'Mokytojams' && (
                   <NavigationButton
                     name="UTA bankas"
-                    slug={`https://drive.google.com/drive/u/${auth.email}/folders/0ANgMsvl4XlSlUk9PVA`}
+                    slug="https://drive.google.com/drive/folders/0ANgMsvl4XlSlUk9PVA"
                   />
                 )}
               </List>
