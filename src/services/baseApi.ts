@@ -12,5 +12,6 @@ export const baseApi = createApi({
       return headers;
     },
   }),
+  keepUnusedDataFor: 600, // 10 min
   endpoints: () => ({}),
 });

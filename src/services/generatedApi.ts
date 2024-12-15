@@ -1,766 +1,1542 @@
-import { baseApi as api } from './baseApi';
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    getAccomplishmentsByDate: build.query<
-      GetAccomplishmentsByDateApiResponse,
-      GetAccomplishmentsByDateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Accomplishment/all`,
-        params: { start: queryArg.start, end: queryArg.end },
-      }),
-    }),
-    getAccomplishmentScales: build.query<
-      GetAccomplishmentScalesApiResponse,
-      GetAccomplishmentScalesApiArg
-    >({
-      query: () => ({ url: `/Accomplishment/scales` }),
-    }),
-    getAccomplishmentAchievements: build.query<
-      GetAccomplishmentAchievementsApiResponse,
-      GetAccomplishmentAchievementsApiArg
-    >({
-      query: () => ({ url: `/Accomplishment/achievements` }),
-    }),
-    getMyAccomplishments: build.query<GetMyAccomplishmentsApiResponse, GetMyAccomplishmentsApiArg>({
-      query: (queryArg) => ({
-        url: `/Accomplishment`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    createAccomplishment: build.mutation<CreateAccomplishmentApiResponse, CreateAccomplishmentApiArg>({
-      query: (queryArg) => ({
-        url: `/Accomplishment`,
-        method: 'POST',
-        body: queryArg.accomplishmentCreateDto,
-      }),
-    }),
-    editAccomplishment: build.mutation<EditAccomplishmentApiResponse, EditAccomplishmentApiArg>({
-      query: (queryArg) => ({
-        url: `/Accomplishment`,
-        method: 'PUT',
-        body: queryArg.accomplishmentEditDto,
-      }),
-    }),
-    getAccomplishmentById: build.query<GetAccomplishmentByIdApiResponse, GetAccomplishmentByIdApiArg>({
-      query: (queryArg) => ({ url: `/Accomplishment/${queryArg.id}` }),
-    }),
-    deleteAccomplishment: build.mutation<DeleteAccomplishmentApiResponse, DeleteAccomplishmentApiArg>({
-      query: (queryArg) => ({ url: `/Accomplishment/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getMyAppointments: build.query<GetMyAppointmentsApiResponse, GetMyAppointmentsApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/my/appointments/${queryArg.typeSlug}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getMyRegistrations: build.query<GetMyRegistrationsApiResponse, GetMyRegistrationsApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/my/registrations/${queryArg.typeSlug}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    createAppointment: build.mutation<CreateAppointmentApiResponse, CreateAppointmentApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/create`,
-        method: 'POST',
-        body: queryArg.appointmentCreateDto,
-      }),
-    }),
-    deleteAppointment: build.mutation<DeleteAppointmentApiResponse, DeleteAppointmentApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getAppointmentById: build.query<GetAppointmentByIdApiResponse, GetAppointmentByIdApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/${queryArg.id}` }),
-    }),
-    getAppointmentAvailableHosts: build.query<
-      GetAppointmentAvailableHostsApiResponse,
-      GetAppointmentAvailableHostsApiArg
-    >({
-      query: (queryArg) => ({ url: `/Appointments/hosts/available/${queryArg.typeSlug}` }),
-    }),
-    getAppointmentAvailableDates: build.query<
-      GetAppointmentAvailableDatesApiResponse,
-      GetAppointmentAvailableDatesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Appointments/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
-      }),
-    }),
-    getAllAppointments: build.query<GetAllAppointmentsApiResponse, GetAllAppointmentsApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments`,
-        params: { Items: queryArg.items, Page: queryArg.page, query: queryArg.query },
-      }),
-    }),
-    deleteAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>(
-      {
-        query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}`, method: 'DELETE' }),
-      }
-    ),
-    resetAppointmentType: build.mutation<DeleteAppointmentTypeApiResponse, DeleteAppointmentTypeApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/types/reset/${queryArg.id}`, method: 'POST' }),
-    }),
-    getAppointmentTypeById: build.query<GetAppointmentTypeByIdApiResponse, GetAppointmentTypeByIdApiArg>(
-      {
-        query: (queryArg) => ({ url: `/Appointments/types/${queryArg.id}` }),
-      }
-    ),
-    editAppointmentType: build.mutation<EditAppointmentTypeApiResponse, EditAppointmentTypeApiArg>({
-      query: (queryArg) => ({
-        url: `/Appointments/types`,
-        method: 'PUT',
-        body: queryArg.appointmentTypeEditDto,
-      }),
-    }),
-    getAppointmentTypes: build.query<GetAppointmentTypesApiResponse, GetAppointmentTypesApiArg>({
-      query: () => ({ url: `/Appointments/types` }),
-    }),
-    createAppointmentType: build.mutation<CreateAppointmentTypeApiResponse, CreateAppointmentTypeApiArg>(
-      {
+import { baseApi as api } from "./baseApi";
+export const addTagTypes = [
+  "Accomplishment",
+  "Appointments",
+  "Auth",
+  "Banners",
+  "BullyJournal",
+  "BullyReports",
+  "Courses",
+  "Employees",
+  "Events",
+  "Languages",
+  "Menus",
+  "Meta",
+  "ObservationLessons",
+  "ObservationTargets",
+  "ObservationTypes",
+  "Posts",
+  "School",
+  "StudentObservation",
+  "TechJournal",
+  "Timetable",
+] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      getAccomplishmentsByDate: build.query<
+        GetAccomplishmentsByDateApiResponse,
+        GetAccomplishmentsByDateApiArg
+      >({
         query: (queryArg) => ({
-          url: `/Appointments/types`,
-          method: 'POST',
+          url: `/accomplishment/all`,
+          params: {
+            start: queryArg.start,
+            end: queryArg.end,
+          },
+        }),
+        providesTags: ["Accomplishment"],
+      }),
+      getAccomplishmentScales: build.query<
+        GetAccomplishmentScalesApiResponse,
+        GetAccomplishmentScalesApiArg
+      >({
+        query: () => ({ url: `/accomplishment/scales` }),
+        providesTags: ["Accomplishment"],
+      }),
+      getAccomplishmentAchievements: build.query<
+        GetAccomplishmentAchievementsApiResponse,
+        GetAccomplishmentAchievementsApiArg
+      >({
+        query: () => ({ url: `/accomplishment/achievements` }),
+        providesTags: ["Accomplishment"],
+      }),
+      getMyAccomplishments: build.query<
+        GetMyAccomplishmentsApiResponse,
+        GetMyAccomplishmentsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accomplishment`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Accomplishment"],
+      }),
+      createAccomplishment: build.mutation<
+        CreateAccomplishmentApiResponse,
+        CreateAccomplishmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accomplishment`,
+          method: "POST",
+          body: queryArg.accomplishmentCreateDto,
+        }),
+        invalidatesTags: ["Accomplishment"],
+      }),
+      editAccomplishment: build.mutation<
+        EditAccomplishmentApiResponse,
+        EditAccomplishmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accomplishment`,
+          method: "PUT",
+          body: queryArg.accomplishmentEditDto,
+        }),
+        invalidatesTags: ["Accomplishment"],
+      }),
+      getAccomplishmentById: build.query<
+        GetAccomplishmentByIdApiResponse,
+        GetAccomplishmentByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/accomplishment/${queryArg.id}` }),
+        providesTags: ["Accomplishment"],
+      }),
+      deleteAccomplishment: build.mutation<
+        DeleteAccomplishmentApiResponse,
+        DeleteAccomplishmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accomplishment/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Accomplishment"],
+      }),
+      getMyAppointments: build.query<
+        GetMyAppointmentsApiResponse,
+        GetMyAppointmentsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/my/appointments/${queryArg.typeSlug}`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Appointments"],
+      }),
+      getMyRegistrations: build.query<
+        GetMyRegistrationsApiResponse,
+        GetMyRegistrationsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/my/registrations/${queryArg.typeSlug}`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Appointments"],
+      }),
+      createAppointment: build.mutation<
+        CreateAppointmentApiResponse,
+        CreateAppointmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/create`,
+          method: "POST",
+          body: queryArg.appointmentCreateDto,
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      deleteAppointment: build.mutation<
+        DeleteAppointmentApiResponse,
+        DeleteAppointmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      getAppointmentById: build.query<
+        GetAppointmentByIdApiResponse,
+        GetAppointmentByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/appointments/${queryArg.id}` }),
+        providesTags: ["Appointments"],
+      }),
+      getAppointmentAvailableHosts: build.query<
+        GetAppointmentAvailableHostsApiResponse,
+        GetAppointmentAvailableHostsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/hosts/available/${queryArg.typeSlug}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      getAppointmentAvailableDates: build.query<
+        GetAppointmentAvailableDatesApiResponse,
+        GetAppointmentAvailableDatesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      getAllAppointments: build.query<
+        GetAllAppointmentsApiResponse,
+        GetAllAppointmentsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+            query: queryArg.query,
+          },
+        }),
+        providesTags: ["Appointments"],
+      }),
+      deleteAppointmentType: build.mutation<
+        DeleteAppointmentTypeApiResponse,
+        DeleteAppointmentTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/types/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      getAppointmentTypeById: build.query<
+        GetAppointmentTypeByIdApiResponse,
+        GetAppointmentTypeByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/appointments/types/${queryArg.id}` }),
+        providesTags: ["Appointments"],
+      }),
+      resetAppointmentType: build.mutation<
+        ResetAppointmentTypeApiResponse,
+        ResetAppointmentTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/types/reset/${queryArg.id}`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      editAppointmentType: build.mutation<
+        EditAppointmentTypeApiResponse,
+        EditAppointmentTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/types`,
+          method: "PUT",
+          body: queryArg.appointmentTypeEditDto,
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      getAppointmentTypes: build.query<
+        GetAppointmentTypesApiResponse,
+        GetAppointmentTypesApiArg
+      >({
+        query: () => ({ url: `/appointments/types` }),
+        providesTags: ["Appointments"],
+      }),
+      createAppointmentType: build.mutation<
+        CreateAppointmentTypeApiResponse,
+        CreateAppointmentTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/types`,
+          method: "POST",
           body: queryArg.appointmentTypeCreateDto,
         }),
-      }
-    ),
-    createAppointmentHost: build.mutation<CreateAppointmentHostApiResponse, CreateAppointmentHostApiArg>(
-      {
+        invalidatesTags: ["Appointments"],
+      }),
+      createAppointmentHost: build.mutation<
+        CreateAppointmentHostApiResponse,
+        CreateAppointmentHostApiArg
+      >({
         query: (queryArg) => ({
-          url: `/Appointments/hosts`,
-          method: 'POST',
+          url: `/appointments/hosts`,
+          method: "POST",
           body: queryArg.appointmentExclusiveHostCreateDto,
         }),
-      }
-    ),
-    deleteAppointmentHost: build.mutation<DeleteAppointmentHostApiResponse, DeleteAppointmentHostApiArg>(
-      {
-        query: (queryArg) => ({ url: `/Appointments/hosts/${queryArg.id}`, method: 'DELETE' }),
-      }
-    ),
-    getAppointmentHosts: build.query<GetAppointmentHostsApiResponse, GetAppointmentHostsApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/hosts/${queryArg.typeId}` }),
-    }),
-    createAppointmentDate: build.mutation<CreateAppointmentDateApiResponse, CreateAppointmentDateApiArg>(
-      {
+        invalidatesTags: ["Appointments"],
+      }),
+      deleteAppointmentHost: build.mutation<
+        DeleteAppointmentHostApiResponse,
+        DeleteAppointmentHostApiArg
+      >({
         query: (queryArg) => ({
-          url: `/Appointments/dates`,
-          method: 'POST',
+          url: `/appointments/hosts/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      getAppointmentHosts: build.query<
+        GetAppointmentHostsApiResponse,
+        GetAppointmentHostsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/hosts/${queryArg.typeId}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      createAppointmentDate: build.mutation<
+        CreateAppointmentDateApiResponse,
+        CreateAppointmentDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/dates`,
+          method: "POST",
           body: queryArg.appointmentDateCreateDto,
         }),
-      }
-    ),
-    deleteAppointmentDate: build.mutation<DeleteAppointmentDateApiResponse, DeleteAppointmentDateApiArg>(
-      {
-        query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.id}`, method: 'DELETE' }),
-      }
-    ),
-    getAppointmentDates: build.query<GetAppointmentDatesApiResponse, GetAppointmentDatesApiArg>({
-      query: (queryArg) => ({ url: `/Appointments/dates/${queryArg.typeId}` }),
-    }),
-    getAppointmentReservedDates: build.query<
-      GetAppointmentReservedDatesApiResponse,
-      GetAppointmentReservedDatesApiArg
-    >({
-      query: (queryArg) => ({ url: `/Appointments/dates/reserved/${queryArg.userName}` }),
-    }),
-    createAppointmentReservedDate: build.mutation<
-      CreateAppointmentReservedDateApiResponse,
-      CreateAppointmentReservedDateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Appointments/dates/reserved`,
-        method: 'POST',
-        body: queryArg.appointmentReservedDateCreateDto,
+        invalidatesTags: ["Appointments"],
       }),
-    }),
-    deleteAppointmentReservedDate: build.mutation<
-      DeleteAppointmentReservedDateApiResponse,
-      DeleteAppointmentReservedDateApiArg
-    >({
-      query: (queryArg) => ({ url: `/Appointments/dates/reserved/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getPublicAppointmentAvailableHosts: build.query<
-      GetPublicAppointmentAvailableHostsApiResponse,
-      GetPublicAppointmentAvailableHostsApiArg
-    >({
-      query: (queryArg) => ({ url: `/Appointments/public/hosts/available/${queryArg.typeSlug}` }),
-    }),
-    getPublicAppointmentAvailableDates: build.query<
-      GetPublicAppointmentAvailableDatesApiResponse,
-      GetPublicAppointmentAvailableDatesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Appointments/public/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
-      }),
-    }),
-    createPublicAppointment: build.mutation<
-      CreatePublicAppointmentApiResponse,
-      CreatePublicAppointmentApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Appointments/public/create`,
-        method: 'POST',
-        body: queryArg.appointmentPublicCreateDto,
-      }),
-    }),
-    authorize: build.mutation<AuthorizeApiResponse, AuthorizeApiArg>({
-      query: (queryArg) => ({ url: `/Auth/authorize`, method: 'POST', body: queryArg.googleAuthDto }),
-    }),
-    getBanners: build.query<GetBannersApiResponse, GetBannersApiArg>({
-      query: (queryArg) => ({ url: `/Banners`, params: { Items: queryArg.items, Page: queryArg.page } }),
-    }),
-    createBanner: build.mutation<CreateBannerApiResponse, CreateBannerApiArg>({
-      query: (queryArg) => ({ url: `/Banners`, method: 'POST', body: queryArg.body }),
-    }),
-    editBanner: build.mutation<EditBannerApiResponse, EditBannerApiArg>({
-      query: (queryArg) => ({ url: `/Banners`, method: 'PUT', body: queryArg.body }),
-    }),
-    getBannerById: build.query<GetBannerByIdApiResponse, GetBannerByIdApiArg>({
-      query: (queryArg) => ({ url: `/Banners/${queryArg.id}` }),
-    }),
-    deleteBanner: build.mutation<DeleteBannerApiResponse, DeleteBannerApiArg>({
-      query: (queryArg) => ({ url: `/Banners/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    searchBanners: build.query<SearchBannersApiResponse, SearchBannersApiArg>({
-      query: (queryArg) => ({
-        url: `/Banners/search/${queryArg.text}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getPublicBannersByLanguage: build.query<
-      GetPublicBannersByLanguageApiResponse,
-      GetPublicBannersByLanguageApiArg
-    >({
-      query: (queryArg) => ({ url: `/Banners/public/${queryArg.language}` }),
-    }),
-    getBullyJournalReports: build.query<GetBullyJournalReportsApiResponse, GetBullyJournalReportsApiArg>(
-      {
+      deleteAppointmentDate: build.mutation<
+        DeleteAppointmentDateApiResponse,
+        DeleteAppointmentDateApiArg
+      >({
         query: (queryArg) => ({
-          url: `/BullyJournal`,
-          params: { Items: queryArg.items, Page: queryArg.page },
+          url: `/appointments/dates/${queryArg.id}`,
+          method: "DELETE",
         }),
-      }
-    ),
-    createBullyJournalReport: build.mutation<
-      CreateBullyJournalReportApiResponse,
-      CreateBullyJournalReportApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/BullyJournal`,
-        method: 'POST',
-        body: queryArg.bullyJournalReportCreateDto,
+        invalidatesTags: ["Appointments"],
       }),
-    }),
-    editBullyJournalReport: build.mutation<
-      EditBullyJournalReportApiResponse,
-      EditBullyJournalReportApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/BullyJournal`,
-        method: 'PUT',
-        body: queryArg.bullyJournalReportEditDto,
-      }),
-    }),
-    getBullyJournalReportById: build.query<
-      GetBullyJournalReportByIdApiResponse,
-      GetBullyJournalReportByIdApiArg
-    >({
-      query: (queryArg) => ({ url: `/BullyJournal/${queryArg.id}` }),
-    }),
-    deleteBullyJournalReport: build.mutation<
-      DeleteBullyJournalReportApiResponse,
-      DeleteBullyJournalReportApiArg
-    >({
-      query: (queryArg) => ({ url: `/BullyJournal/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getBullyReports: build.query<GetBullyReportsApiResponse, GetBullyReportsApiArg>({
-      query: (queryArg) => ({
-        url: `/BullyReports`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getBullyReportById: build.query<GetBullyReportByIdApiResponse, GetBullyReportByIdApiArg>({
-      query: (queryArg) => ({ url: `/BullyReports/${queryArg.id}` }),
-    }),
-    deleteBullyReport: build.mutation<DeleteBullyReportApiResponse, DeleteBullyReportApiArg>({
-      query: (queryArg) => ({ url: `/BullyReports/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    createPublicBullyReport: build.mutation<
-      CreatePublicBullyReportApiResponse,
-      CreatePublicBullyReportApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/BullyReports/public`,
-        method: 'POST',
-        body: queryArg.bullyReportCreateDto,
-      }),
-    }),
-    getCoursesStatsByDate: build.query<GetCoursesStatsByDateApiResponse, GetCoursesStatsByDateApiArg>({
-      query: (queryArg) => ({
-        url: `/Courses/stats`,
-        params: { start: queryArg.start, end: queryArg.end },
-      }),
-    }),
-    getTeacherCoursesByIdAndDate: build.query<
-      GetTeacherCoursesByIdAndDateApiResponse,
-      GetTeacherCoursesByIdAndDateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Courses/teacher/${queryArg.id}`,
-        params: { start: queryArg.start, end: queryArg.end },
-      }),
-    }),
-    getMyCourses: build.query<GetMyCoursesApiResponse, GetMyCoursesApiArg>({
-      query: (queryArg) => ({ url: `/Courses`, params: { Items: queryArg.items, Page: queryArg.page } }),
-    }),
-    createCourse: build.mutation<CreateCourseApiResponse, CreateCourseApiArg>({
-      query: (queryArg) => ({ url: `/Courses`, method: 'POST', body: queryArg.courseCreateDto }),
-    }),
-    editCourse: build.mutation<EditCourseApiResponse, EditCourseApiArg>({
-      query: (queryArg) => ({ url: `/Courses`, method: 'PUT', body: queryArg.courseEditDto }),
-    }),
-    getCourseById: build.query<GetCourseByIdApiResponse, GetCourseByIdApiArg>({
-      query: (queryArg) => ({ url: `/Courses/${queryArg.id}` }),
-    }),
-    deleteCourse: build.mutation<DeleteCourseApiResponse, DeleteCourseApiArg>({
-      query: (queryArg) => ({ url: `/Courses/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getTeachers: build.query<GetTeachersApiResponse, GetTeachersApiArg>({
-      query: () => ({ url: `/Employees/teachers` }),
-    }),
-    getEventsByDate: build.query<GetEventsByDateApiResponse, GetEventsByDateApiArg>({
-      query: (queryArg) => ({ url: `/Events`, params: { start: queryArg.start, end: queryArg.end } }),
-    }),
-    createEvent: build.mutation<CreateEventApiResponse, CreateEventApiArg>({
-      query: (queryArg) => ({ url: `/Events`, method: 'POST', body: queryArg.eventCreateDto }),
-    }),
-    deleteEvent: build.mutation<DeleteEventApiResponse, DeleteEventApiArg>({
-      query: (queryArg) => ({ url: `/Events/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getPublicEvents: build.query<GetPublicEventsApiResponse, GetPublicEventsApiArg>({
-      query: (queryArg) => ({ url: `/Events/public/${queryArg.week}` }),
-    }),
-    getPublicDayEvents: build.query<GetPublicDayEventsApiResponse, GetPublicDayEventsApiArg>({
-      query: () => ({ url: `/Events/public/today` }),
-    }),
-    getPublicLanguages: build.query<GetPublicLanguagesApiResponse, GetPublicLanguagesApiArg>({
-      query: () => ({ url: `/Languages/public` }),
-    }),
-    getMenus: build.query<GetMenusApiResponse, GetMenusApiArg>({
-      query: (queryArg) => ({ url: `/Menus`, params: { Items: queryArg.items, Page: queryArg.page } }),
-    }),
-    createMenu: build.mutation<CreateMenuApiResponse, CreateMenuApiArg>({
-      query: (queryArg) => ({ url: `/Menus`, method: 'POST', body: queryArg.menuCreateDto }),
-    }),
-    editMenu: build.mutation<EditMenuApiResponse, EditMenuApiArg>({
-      query: (queryArg) => ({ url: `/Menus`, method: 'PUT', body: queryArg.menuEditDto }),
-    }),
-    getMenuLocations: build.query<GetMenuLocationsApiResponse, GetMenuLocationsApiArg>({
-      query: () => ({ url: `/Menus/locations` }),
-    }),
-    getMenuById: build.query<GetMenuByIdApiResponse, GetMenuByIdApiArg>({
-      query: (queryArg) => ({ url: `/Menus/${queryArg.id}` }),
-    }),
-    deleteMenu: build.mutation<DeleteMenuApiResponse, DeleteMenuApiArg>({
-      query: (queryArg) => ({ url: `/Menus/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    searchMenus: build.query<SearchMenusApiResponse, SearchMenusApiArg>({
-      query: (queryArg) => ({
-        url: `/Menus/search/${queryArg.text}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getPublicMenusByLanguage: build.query<
-      GetPublicMenusByLanguageApiResponse,
-      GetPublicMenusByLanguageApiArg
-    >({
-      query: (queryArg) => ({ url: `/Menus/public/${queryArg.language}` }),
-    }),
-    getMenusMeta: build.query<GetMenusMetaApiResponse, GetMenusMetaApiArg>({
-      query: () => ({ url: `/Meta/menus` }),
-    }),
-    getPostsMeta: build.query<GetPostsMetaApiResponse, GetPostsMetaApiArg>({
-      query: () => ({ url: `/Meta/posts` }),
-    }),
-    getLocalesMeta: build.query<GetLocalesMetaApiResponse, GetLocalesMetaApiArg>({
-      query: () => ({ url: `/Meta/locales` }),
-    }),
-    getPosts: build.query<GetPostsApiResponse, GetPostsApiArg>({
-      query: (queryArg) => ({ url: `/Posts`, params: { Items: queryArg.items, Page: queryArg.page } }),
-    }),
-    createPost: build.mutation<CreatePostApiResponse, CreatePostApiArg>({
-      query: (queryArg) => ({ url: `/Posts`, method: 'POST', body: queryArg.body }),
-    }),
-    editPost: build.mutation<EditPostApiResponse, EditPostApiArg>({
-      query: (queryArg) => ({ url: `/Posts`, method: 'PUT', body: queryArg.body }),
-    }),
-    getPostById: build.query<GetPostByIdApiResponse, GetPostByIdApiArg>({
-      query: (queryArg) => ({ url: `/Posts/${queryArg.id}` }),
-    }),
-    patchPost: build.mutation<PatchPostApiResponse, PatchPostApiArg>({
-      query: (queryArg) => ({
-        url: `/Posts/${queryArg.id}`,
-        method: 'PATCH',
-        body: queryArg.postPatchDto,
-      }),
-    }),
-    deletePost: build.mutation<DeletePostApiResponse, DeletePostApiArg>({
-      query: (queryArg) => ({ url: `/Posts/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    searchPosts: build.query<SearchPostsApiResponse, SearchPostsApiArg>({
-      query: (queryArg) => ({
-        url: `/Posts/search/${queryArg.text}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getPublicPostById: build.query<GetPublicPostByIdApiResponse, GetPublicPostByIdApiArg>({
-      query: (queryArg) => ({ url: `/Posts/public/${queryArg.id}` }),
-    }),
-    getPublicPostByMenuLanguageAndPath: build.query<
-      GetPublicPostByMenuLanguageAndPathApiResponse,
-      GetPublicPostByMenuLanguageAndPathApiArg
-    >({
-      query: (queryArg) => ({ url: `/Posts/public/${queryArg.language}/${queryArg.path}` }),
-    }),
-    getPublicPostsByLanguage: build.query<
-      GetPublicPostsByLanguageApiResponse,
-      GetPublicPostsByLanguageApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/Posts/public/${queryArg.language}/all`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    searchPublicPosts: build.query<SearchPublicPostsApiResponse, SearchPublicPostsApiArg>({
-      query: (queryArg) => ({
-        url: `/Posts/public/search/${queryArg.text}`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getClassrooms: build.query<GetClassroomsApiResponse, GetClassroomsApiArg>({
-      query: () => ({ url: `/School/classrooms` }),
-    }),
-    createClassroom: build.mutation<CreateClassroomApiResponse, CreateClassroomApiArg>({
-      query: (queryArg) => ({
-        url: `/School/classrooms`,
-        method: 'POST',
-        body: queryArg.classroomCreateDto,
-      }),
-    }),
-    editClassroom: build.mutation<EditClassroomApiResponse, EditClassroomApiArg>({
-      query: (queryArg) => ({
-        url: `/School/classrooms`,
-        method: 'PUT',
-        body: queryArg.classroomEditDto,
-      }),
-    }),
-    getClassroomById: build.query<GetClassroomByIdApiResponse, GetClassroomByIdApiArg>({
-      query: (queryArg) => ({ url: `/School/classrooms/${queryArg.id}` }),
-    }),
-    deleteClassroom: build.mutation<DeleteClassroomApiResponse, DeleteClassroomApiArg>({
-      query: (queryArg) => ({ url: `/School/classrooms/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getClasstimes: build.query<GetClasstimesApiResponse, GetClasstimesApiArg>({
-      query: () => ({ url: `/School/classtimes` }),
-    }),
-    createClasstime: build.mutation<CreateClasstimeApiResponse, CreateClasstimeApiArg>({
-      query: (queryArg) => ({
-        url: `/School/classtimes`,
-        method: 'POST',
-        body: queryArg.classtimeCreateDto,
-      }),
-    }),
-    getClasstimeById: build.query<GetClasstimeByIdApiResponse, GetClasstimeByIdApiArg>({
-      query: (queryArg) => ({ url: `/School/classtimes/${queryArg.id}` }),
-    }),
-    deleteClasstime: build.mutation<DeleteClasstimeApiResponse, DeleteClasstimeApiArg>({
-      query: (queryArg) => ({ url: `/School/classtimes/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    editClasstime: build.mutation<EditClasstimeApiResponse, EditClasstimeApiArg>({
-      query: (queryArg) => ({
-        url: `/School/classtime`,
-        method: 'PUT',
-        body: queryArg.classtimeEditDto,
-      }),
-    }),
-    getClasstimesShortDays: build.query<GetClasstimesShortDaysApiResponse, GetClasstimesShortDaysApiArg>(
-      {
+      getAppointmentDates: build.query<
+        GetAppointmentDatesApiResponse,
+        GetAppointmentDatesApiArg
+      >({
         query: (queryArg) => ({
-          url: `/School/classtimesshort`,
-          params: { Items: queryArg.items, Page: queryArg.page },
+          url: `/appointments/dates/${queryArg.typeId}`,
         }),
-      }
-    ),
-    createClasstimeShortDay: build.mutation<
-      CreateClasstimeShortDayApiResponse,
-      CreateClasstimeShortDayApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/School/classtimesshort`,
-        method: 'POST',
-        body: queryArg.classtimeShortDayCreateDto,
+        providesTags: ["Appointments"],
       }),
-    }),
-    editClasstimeShortDay: build.mutation<EditClasstimeShortDayApiResponse, EditClasstimeShortDayApiArg>(
-      {
+      getAppointmentReservedDates: build.query<
+        GetAppointmentReservedDatesApiResponse,
+        GetAppointmentReservedDatesApiArg
+      >({
         query: (queryArg) => ({
-          url: `/School/classtimesshort`,
-          method: 'PUT',
+          url: `/appointments/dates/reserved/${queryArg.userName}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      createAppointmentReservedDate: build.mutation<
+        CreateAppointmentReservedDateApiResponse,
+        CreateAppointmentReservedDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/dates/reserved`,
+          method: "POST",
+          body: queryArg.appointmentReservedDateCreateDto,
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      deleteAppointmentReservedDate: build.mutation<
+        DeleteAppointmentReservedDateApiResponse,
+        DeleteAppointmentReservedDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/dates/reserved/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      getPublicAppointmentAvailableHosts: build.query<
+        GetPublicAppointmentAvailableHostsApiResponse,
+        GetPublicAppointmentAvailableHostsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/public/hosts/available/${queryArg.typeSlug}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      getPublicAppointmentAvailableDates: build.query<
+        GetPublicAppointmentAvailableDatesApiResponse,
+        GetPublicAppointmentAvailableDatesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/public/dates/available/${queryArg.typeSlug}/${queryArg.userName}`,
+        }),
+        providesTags: ["Appointments"],
+      }),
+      createPublicAppointment: build.mutation<
+        CreatePublicAppointmentApiResponse,
+        CreatePublicAppointmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/appointments/public/create`,
+          method: "POST",
+          body: queryArg.appointmentPublicCreateDto,
+        }),
+        invalidatesTags: ["Appointments"],
+      }),
+      authorize: build.mutation<AuthorizeApiResponse, AuthorizeApiArg>({
+        query: (queryArg) => ({
+          url: `/auth/authorize`,
+          method: "POST",
+          body: queryArg.googleAuthDto,
+        }),
+        invalidatesTags: ["Auth"],
+      }),
+      getBanners: build.query<GetBannersApiResponse, GetBannersApiArg>({
+        query: (queryArg) => ({
+          url: `/banners`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Banners"],
+      }),
+      createBanner: build.mutation<CreateBannerApiResponse, CreateBannerApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/banners`,
+            method: "POST",
+            body: queryArg.body,
+          }),
+          invalidatesTags: ["Banners"],
+        },
+      ),
+      editBanner: build.mutation<EditBannerApiResponse, EditBannerApiArg>({
+        query: (queryArg) => ({
+          url: `/banners`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Banners"],
+      }),
+      getBannerById: build.query<GetBannerByIdApiResponse, GetBannerByIdApiArg>(
+        {
+          query: (queryArg) => ({ url: `/banners/${queryArg.id}` }),
+          providesTags: ["Banners"],
+        },
+      ),
+      deleteBanner: build.mutation<DeleteBannerApiResponse, DeleteBannerApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/banners/${queryArg.id}`,
+            method: "DELETE",
+          }),
+          invalidatesTags: ["Banners"],
+        },
+      ),
+      searchBanners: build.query<SearchBannersApiResponse, SearchBannersApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/banners/search/${queryArg.text}`,
+            params: {
+              Items: queryArg.items,
+              Page: queryArg.page,
+            },
+          }),
+          providesTags: ["Banners"],
+        },
+      ),
+      getPublicBannersByLanguage: build.query<
+        GetPublicBannersByLanguageApiResponse,
+        GetPublicBannersByLanguageApiArg
+      >({
+        query: (queryArg) => ({ url: `/banners/public/${queryArg.language}` }),
+        providesTags: ["Banners"],
+      }),
+      getBullyJournalReports: build.query<
+        GetBullyJournalReportsApiResponse,
+        GetBullyJournalReportsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyjournal`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["BullyJournal"],
+      }),
+      createBullyJournalReport: build.mutation<
+        CreateBullyJournalReportApiResponse,
+        CreateBullyJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyjournal`,
+          method: "POST",
+          body: queryArg.bullyJournalReportCreateDto,
+        }),
+        invalidatesTags: ["BullyJournal"],
+      }),
+      editBullyJournalReport: build.mutation<
+        EditBullyJournalReportApiResponse,
+        EditBullyJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyjournal`,
+          method: "PUT",
+          body: queryArg.bullyJournalReportEditDto,
+        }),
+        invalidatesTags: ["BullyJournal"],
+      }),
+      getBullyJournalReportById: build.query<
+        GetBullyJournalReportByIdApiResponse,
+        GetBullyJournalReportByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/bullyjournal/${queryArg.id}` }),
+        providesTags: ["BullyJournal"],
+      }),
+      deleteBullyJournalReport: build.mutation<
+        DeleteBullyJournalReportApiResponse,
+        DeleteBullyJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyjournal/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["BullyJournal"],
+      }),
+      getBullyReports: build.query<
+        GetBullyReportsApiResponse,
+        GetBullyReportsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyreports`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["BullyReports"],
+      }),
+      getBullyReportById: build.query<
+        GetBullyReportByIdApiResponse,
+        GetBullyReportByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/bullyreports/${queryArg.id}` }),
+        providesTags: ["BullyReports"],
+      }),
+      deleteBullyReport: build.mutation<
+        DeleteBullyReportApiResponse,
+        DeleteBullyReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyreports/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["BullyReports"],
+      }),
+      createPublicBullyReport: build.mutation<
+        CreatePublicBullyReportApiResponse,
+        CreatePublicBullyReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/bullyreports/public`,
+          method: "POST",
+          body: queryArg.bullyReportCreateDto,
+        }),
+        invalidatesTags: ["BullyReports"],
+      }),
+      getCoursesStatsByDate: build.query<
+        GetCoursesStatsByDateApiResponse,
+        GetCoursesStatsByDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/courses/stats`,
+          params: {
+            start: queryArg.start,
+            end: queryArg.end,
+          },
+        }),
+        providesTags: ["Courses"],
+      }),
+      getTeacherCoursesByIdAndDate: build.query<
+        GetTeacherCoursesByIdAndDateApiResponse,
+        GetTeacherCoursesByIdAndDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/courses/teacher/${queryArg.id}`,
+          params: {
+            start: queryArg.start,
+            end: queryArg.end,
+          },
+        }),
+        providesTags: ["Courses"],
+      }),
+      getMyCourses: build.query<GetMyCoursesApiResponse, GetMyCoursesApiArg>({
+        query: (queryArg) => ({
+          url: `/courses`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Courses"],
+      }),
+      createCourse: build.mutation<CreateCourseApiResponse, CreateCourseApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/courses`,
+            method: "POST",
+            body: queryArg.courseCreateDto,
+          }),
+          invalidatesTags: ["Courses"],
+        },
+      ),
+      editCourse: build.mutation<EditCourseApiResponse, EditCourseApiArg>({
+        query: (queryArg) => ({
+          url: `/courses`,
+          method: "PUT",
+          body: queryArg.courseEditDto,
+        }),
+        invalidatesTags: ["Courses"],
+      }),
+      getCourseById: build.query<GetCourseByIdApiResponse, GetCourseByIdApiArg>(
+        {
+          query: (queryArg) => ({ url: `/courses/${queryArg.id}` }),
+          providesTags: ["Courses"],
+        },
+      ),
+      deleteCourse: build.mutation<DeleteCourseApiResponse, DeleteCourseApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/courses/${queryArg.id}`,
+            method: "DELETE",
+          }),
+          invalidatesTags: ["Courses"],
+        },
+      ),
+      getTeachers: build.query<GetTeachersApiResponse, GetTeachersApiArg>({
+        query: () => ({ url: `/employees/teachers` }),
+        providesTags: ["Employees"],
+      }),
+      getEventsByDate: build.query<
+        GetEventsByDateApiResponse,
+        GetEventsByDateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/events`,
+          params: {
+            start: queryArg.start,
+            end: queryArg.end,
+          },
+        }),
+        providesTags: ["Events"],
+      }),
+      createEvent: build.mutation<CreateEventApiResponse, CreateEventApiArg>({
+        query: (queryArg) => ({
+          url: `/events`,
+          method: "POST",
+          body: queryArg.eventCreateDto,
+        }),
+        invalidatesTags: ["Events"],
+      }),
+      deleteEvent: build.mutation<DeleteEventApiResponse, DeleteEventApiArg>({
+        query: (queryArg) => ({
+          url: `/events/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Events"],
+      }),
+      getPublicEvents: build.query<
+        GetPublicEventsApiResponse,
+        GetPublicEventsApiArg
+      >({
+        query: (queryArg) => ({ url: `/events/public/${queryArg.week}` }),
+        providesTags: ["Events"],
+      }),
+      getPublicDayEvents: build.query<
+        GetPublicDayEventsApiResponse,
+        GetPublicDayEventsApiArg
+      >({
+        query: () => ({ url: `/events/public/today` }),
+        providesTags: ["Events"],
+      }),
+      getPublicLanguages: build.query<
+        GetPublicLanguagesApiResponse,
+        GetPublicLanguagesApiArg
+      >({
+        query: () => ({ url: `/languages/public` }),
+        providesTags: ["Languages"],
+      }),
+      getMenus: build.query<GetMenusApiResponse, GetMenusApiArg>({
+        query: (queryArg) => ({
+          url: `/menus`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Menus"],
+      }),
+      createMenu: build.mutation<CreateMenuApiResponse, CreateMenuApiArg>({
+        query: (queryArg) => ({
+          url: `/menus`,
+          method: "POST",
+          body: queryArg.menuCreateDto,
+        }),
+        invalidatesTags: ["Menus"],
+      }),
+      editMenu: build.mutation<EditMenuApiResponse, EditMenuApiArg>({
+        query: (queryArg) => ({
+          url: `/menus`,
+          method: "PUT",
+          body: queryArg.menuEditDto,
+        }),
+        invalidatesTags: ["Menus"],
+      }),
+      getMenuLocations: build.query<
+        GetMenuLocationsApiResponse,
+        GetMenuLocationsApiArg
+      >({
+        query: () => ({ url: `/menus/locations` }),
+        providesTags: ["Menus"],
+      }),
+      getMenuById: build.query<GetMenuByIdApiResponse, GetMenuByIdApiArg>({
+        query: (queryArg) => ({ url: `/menus/${queryArg.id}` }),
+        providesTags: ["Menus"],
+      }),
+      deleteMenu: build.mutation<DeleteMenuApiResponse, DeleteMenuApiArg>({
+        query: (queryArg) => ({
+          url: `/menus/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Menus"],
+      }),
+      searchMenus: build.query<SearchMenusApiResponse, SearchMenusApiArg>({
+        query: (queryArg) => ({
+          url: `/menus/search/${queryArg.text}`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Menus"],
+      }),
+      getPublicMenusByLanguage: build.query<
+        GetPublicMenusByLanguageApiResponse,
+        GetPublicMenusByLanguageApiArg
+      >({
+        query: (queryArg) => ({ url: `/menus/public/${queryArg.language}` }),
+        providesTags: ["Menus"],
+      }),
+      getMenusMeta: build.query<GetMenusMetaApiResponse, GetMenusMetaApiArg>({
+        query: () => ({ url: `/meta/menus` }),
+        providesTags: ["Meta"],
+      }),
+      getPostsMeta: build.query<GetPostsMetaApiResponse, GetPostsMetaApiArg>({
+        query: () => ({ url: `/meta/posts` }),
+        providesTags: ["Meta"],
+      }),
+      getLocalesMeta: build.query<
+        GetLocalesMetaApiResponse,
+        GetLocalesMetaApiArg
+      >({
+        query: () => ({ url: `/meta/locales` }),
+        providesTags: ["Meta"],
+      }),
+      getObservationLessons: build.query<
+        GetObservationLessonsApiResponse,
+        GetObservationLessonsApiArg
+      >({
+        query: () => ({ url: `/studentobservation/lessons` }),
+        providesTags: ["ObservationLessons"],
+      }),
+      createObservationLesson: build.mutation<
+        CreateObservationLessonApiResponse,
+        CreateObservationLessonApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/lessons`,
+          method: "POST",
+          body: queryArg.observationLessonCreateDto,
+        }),
+        invalidatesTags: ["ObservationLessons"],
+      }),
+      editObservationLesson: build.mutation<
+        EditObservationLessonApiResponse,
+        EditObservationLessonApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/lessons`,
+          method: "PUT",
+          body: queryArg.observationLessonEditDto,
+        }),
+        invalidatesTags: ["ObservationLessons"],
+      }),
+      getObservationLessonById: build.query<
+        GetObservationLessonByIdApiResponse,
+        GetObservationLessonByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/lessons/${queryArg.id}`,
+        }),
+        providesTags: ["ObservationLessons"],
+      }),
+      deleteObservationLesson: build.mutation<
+        DeleteObservationLessonApiResponse,
+        DeleteObservationLessonApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/lessons/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["ObservationLessons"],
+      }),
+      getObservationTargets: build.query<
+        GetObservationTargetsApiResponse,
+        GetObservationTargetsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/targets`,
+          params: {
+            enabledOnly: queryArg.enabledOnly,
+          },
+        }),
+        providesTags: ["ObservationTargets"],
+      }),
+      createObservationTarget: build.mutation<
+        CreateObservationTargetApiResponse,
+        CreateObservationTargetApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/targets`,
+          method: "POST",
+          body: queryArg.observationTargetCreateDto,
+        }),
+        invalidatesTags: ["ObservationTargets"],
+      }),
+      editObservationTarget: build.mutation<
+        EditObservationTargetApiResponse,
+        EditObservationTargetApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/targets`,
+          method: "PUT",
+          body: queryArg.observationTargetEditDto,
+        }),
+        invalidatesTags: ["ObservationTargets"],
+      }),
+      getObservationTargetById: build.query<
+        GetObservationTargetByIdApiResponse,
+        GetObservationTargetByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/targets/${queryArg.id}`,
+        }),
+        providesTags: ["ObservationTargets"],
+      }),
+      deleteObservationTarget: build.mutation<
+        DeleteObservationTargetApiResponse,
+        DeleteObservationTargetApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/targets/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["ObservationTargets"],
+      }),
+      getObservationTypes: build.query<
+        GetObservationTypesApiResponse,
+        GetObservationTypesApiArg
+      >({
+        query: () => ({ url: `/studentobservation/types` }),
+        providesTags: ["ObservationTypes"],
+      }),
+      createObservationType: build.mutation<
+        CreateObservationTypeApiResponse,
+        CreateObservationTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/types`,
+          method: "POST",
+          body: queryArg.observationTypeCreateDto,
+        }),
+        invalidatesTags: ["ObservationTypes"],
+      }),
+      editObservationType: build.mutation<
+        EditObservationTypeApiResponse,
+        EditObservationTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/types`,
+          method: "PUT",
+          body: queryArg.observationTypeEditDto,
+        }),
+        invalidatesTags: ["ObservationTypes"],
+      }),
+      getObservationTypeById: build.query<
+        GetObservationTypeByIdApiResponse,
+        GetObservationTypeByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/types/${queryArg.id}`,
+        }),
+        providesTags: ["ObservationTypes"],
+      }),
+      deleteObservationType: build.mutation<
+        DeleteObservationTypeApiResponse,
+        DeleteObservationTypeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/types/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["ObservationTypes"],
+      }),
+      getPosts: build.query<GetPostsApiResponse, GetPostsApiArg>({
+        query: (queryArg) => ({
+          url: `/posts`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Posts"],
+      }),
+      createPost: build.mutation<CreatePostApiResponse, CreatePostApiArg>({
+        query: (queryArg) => ({
+          url: `/posts`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Posts"],
+      }),
+      editPost: build.mutation<EditPostApiResponse, EditPostApiArg>({
+        query: (queryArg) => ({
+          url: `/posts`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Posts"],
+      }),
+      getPostById: build.query<GetPostByIdApiResponse, GetPostByIdApiArg>({
+        query: (queryArg) => ({ url: `/posts/${queryArg.id}` }),
+        providesTags: ["Posts"],
+      }),
+      patchPost: build.mutation<PatchPostApiResponse, PatchPostApiArg>({
+        query: (queryArg) => ({
+          url: `/posts/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.postPatchDto,
+        }),
+        invalidatesTags: ["Posts"],
+      }),
+      deletePost: build.mutation<DeletePostApiResponse, DeletePostApiArg>({
+        query: (queryArg) => ({
+          url: `/posts/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Posts"],
+      }),
+      searchPosts: build.query<SearchPostsApiResponse, SearchPostsApiArg>({
+        query: (queryArg) => ({
+          url: `/posts/search/${queryArg.text}`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Posts"],
+      }),
+      getPublicPostById: build.query<
+        GetPublicPostByIdApiResponse,
+        GetPublicPostByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/posts/public/${queryArg.id}` }),
+        providesTags: ["Posts"],
+      }),
+      getPublicPostByMenuLanguageAndPath: build.query<
+        GetPublicPostByMenuLanguageAndPathApiResponse,
+        GetPublicPostByMenuLanguageAndPathApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/posts/public/${queryArg.language}/${queryArg.path}`,
+        }),
+        providesTags: ["Posts"],
+      }),
+      getPublicPostsByLanguage: build.query<
+        GetPublicPostsByLanguageApiResponse,
+        GetPublicPostsByLanguageApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/posts/public/${queryArg.language}/all`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Posts"],
+      }),
+      searchPublicPosts: build.query<
+        SearchPublicPostsApiResponse,
+        SearchPublicPostsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/posts/public/search/${queryArg.text}`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Posts"],
+      }),
+      getClassrooms: build.query<GetClassroomsApiResponse, GetClassroomsApiArg>(
+        {
+          query: () => ({ url: `/school/classrooms` }),
+          providesTags: ["School"],
+        },
+      ),
+      createClassroom: build.mutation<
+        CreateClassroomApiResponse,
+        CreateClassroomApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classrooms`,
+          method: "POST",
+          body: queryArg.classroomCreateDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      editClassroom: build.mutation<
+        EditClassroomApiResponse,
+        EditClassroomApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classrooms`,
+          method: "PUT",
+          body: queryArg.classroomEditDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getClassroomById: build.query<
+        GetClassroomByIdApiResponse,
+        GetClassroomByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/school/classrooms/${queryArg.id}` }),
+        providesTags: ["School"],
+      }),
+      deleteClassroom: build.mutation<
+        DeleteClassroomApiResponse,
+        DeleteClassroomApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classrooms/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getClasstimes: build.query<GetClasstimesApiResponse, GetClasstimesApiArg>(
+        {
+          query: () => ({ url: `/school/classtimes` }),
+          providesTags: ["School"],
+        },
+      ),
+      createClasstime: build.mutation<
+        CreateClasstimeApiResponse,
+        CreateClasstimeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimes`,
+          method: "POST",
+          body: queryArg.classtimeCreateDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getClasstimeById: build.query<
+        GetClasstimeByIdApiResponse,
+        GetClasstimeByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/school/classtimes/${queryArg.id}` }),
+        providesTags: ["School"],
+      }),
+      deleteClasstime: build.mutation<
+        DeleteClasstimeApiResponse,
+        DeleteClasstimeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimes/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["School"],
+      }),
+      editClasstime: build.mutation<
+        EditClasstimeApiResponse,
+        EditClasstimeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtime`,
+          method: "PUT",
+          body: queryArg.classtimeEditDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getClasstimesShortDays: build.query<
+        GetClasstimesShortDaysApiResponse,
+        GetClasstimesShortDaysApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimesshort`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["School"],
+      }),
+      createClasstimeShortDay: build.mutation<
+        CreateClasstimeShortDayApiResponse,
+        CreateClasstimeShortDayApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimesshort`,
+          method: "POST",
+          body: queryArg.classtimeShortDayCreateDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      editClasstimeShortDay: build.mutation<
+        EditClasstimeShortDayApiResponse,
+        EditClasstimeShortDayApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimesshort`,
+          method: "PUT",
           body: queryArg.classtimeShortDayEditDto,
         }),
-      }
-    ),
-    getClasstimeShortDayById: build.query<
-      GetClasstimeShortDayByIdApiResponse,
-      GetClasstimeShortDayByIdApiArg
-    >({
-      query: (queryArg) => ({ url: `/School/classtimesshort/${queryArg.id}` }),
-    }),
-    deleteClasstimeShortDay: build.mutation<
-      DeleteClasstimeShortDayApiResponse,
-      DeleteClasstimeShortDayApiArg
-    >({
-      query: (queryArg) => ({ url: `/School/classtimesshort/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
-      query: () => ({ url: `/School/classdays` }),
-    }),
-    getAnnouncementById: build.query<GetAnnouncementByIdApiResponse, GetAnnouncementByIdApiArg>({
-      query: (queryArg) => ({ url: `/School/announcements/${queryArg.id}` }),
-    }),
-    deleteAnnouncement: build.mutation<DeleteAnnouncementApiResponse, DeleteAnnouncementApiArg>({
-      query: (queryArg) => ({ url: `/School/announcements/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    createAnnouncement: build.mutation<CreateAnnouncementApiResponse, CreateAnnouncementApiArg>({
-      query: (queryArg) => ({
-        url: `/School/announcements`,
-        method: 'POST',
-        body: queryArg.announcementCreateDto,
+        invalidatesTags: ["School"],
       }),
-    }),
-    editAnnouncement: build.mutation<EditAnnouncementApiResponse, EditAnnouncementApiArg>({
-      query: (queryArg) => ({
-        url: `/School/announcements`,
-        method: 'PUT',
-        body: queryArg.announcementEditDto,
-      }),
-    }),
-    getAnnouncements: build.query<GetAnnouncementsApiResponse, GetAnnouncementsApiArg>({
-      query: (queryArg) => ({
-        url: `/School/announcements`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    getPublicAnnouncements: build.query<GetPublicAnnouncementsApiResponse, GetPublicAnnouncementsApiArg>(
-      {
-        query: () => ({ url: `/School/public/announcements` }),
-      }
-    ),
-    getPublicRandomImage: build.query<GetPublicRandomImageApiResponse, GetPublicRandomImageApiArg>({
-      query: () => ({ url: `/School/public/random-image` }),
-    }),
-    getTechJournalReports: build.query<GetTechJournalReportsApiResponse, GetTechJournalReportsApiArg>({
-      query: (queryArg) => ({
-        url: `/TechJournal`,
-        params: { Items: queryArg.items, Page: queryArg.page, start: queryArg.start, end: queryArg.end },
-      }),
-    }),
-    createTechJournalReport: build.mutation<
-      CreateTechJournalReportApiResponse,
-      CreateTechJournalReportApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/TechJournal`,
-        method: 'POST',
-        body: queryArg.techJournalReportCreateDto,
-      }),
-    }),
-    editTechJournalReport: build.mutation<EditTechJournalReportApiResponse, EditTechJournalReportApiArg>(
-      {
+      getClasstimeShortDayById: build.query<
+        GetClasstimeShortDayByIdApiResponse,
+        GetClasstimeShortDayByIdApiArg
+      >({
         query: (queryArg) => ({
-          url: `/TechJournal`,
-          method: 'PUT',
+          url: `/school/classtimesshort/${queryArg.id}`,
+        }),
+        providesTags: ["School"],
+      }),
+      deleteClasstimeShortDay: build.mutation<
+        DeleteClasstimeShortDayApiResponse,
+        DeleteClasstimeShortDayApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/classtimesshort/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getClassdays: build.query<GetClassdaysApiResponse, GetClassdaysApiArg>({
+        query: () => ({ url: `/school/classdays` }),
+        providesTags: ["School"],
+      }),
+      getAnnouncementById: build.query<
+        GetAnnouncementByIdApiResponse,
+        GetAnnouncementByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/school/announcements/${queryArg.id}` }),
+        providesTags: ["School"],
+      }),
+      deleteAnnouncement: build.mutation<
+        DeleteAnnouncementApiResponse,
+        DeleteAnnouncementApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/announcements/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["School"],
+      }),
+      createAnnouncement: build.mutation<
+        CreateAnnouncementApiResponse,
+        CreateAnnouncementApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/announcements`,
+          method: "POST",
+          body: queryArg.announcementCreateDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      editAnnouncement: build.mutation<
+        EditAnnouncementApiResponse,
+        EditAnnouncementApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/announcements`,
+          method: "PUT",
+          body: queryArg.announcementEditDto,
+        }),
+        invalidatesTags: ["School"],
+      }),
+      getAnnouncements: build.query<
+        GetAnnouncementsApiResponse,
+        GetAnnouncementsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/school/announcements`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["School"],
+      }),
+      getPublicAnnouncements: build.query<
+        GetPublicAnnouncementsApiResponse,
+        GetPublicAnnouncementsApiArg
+      >({
+        query: () => ({ url: `/school/public/announcements` }),
+        providesTags: ["School"],
+      }),
+      getPublicRandomImage: build.query<
+        GetPublicRandomImageApiResponse,
+        GetPublicRandomImageApiArg
+      >({
+        query: () => ({ url: `/school/public/random-image` }),
+        providesTags: ["School"],
+      }),
+      getStudentObservations: build.query<
+        GetStudentObservationsApiResponse,
+        GetStudentObservationsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["StudentObservation"],
+      }),
+      createStudentObservation: build.mutation<
+        CreateStudentObservationApiResponse,
+        CreateStudentObservationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation`,
+          method: "POST",
+          body: queryArg.studentObservationCreateDto,
+        }),
+        invalidatesTags: ["StudentObservation"],
+      }),
+      editStudentObservation: build.mutation<
+        EditStudentObservationApiResponse,
+        EditStudentObservationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation`,
+          method: "PUT",
+          body: queryArg.studentObservationEditDto,
+        }),
+        invalidatesTags: ["StudentObservation"],
+      }),
+      getMyStudentObservations: build.query<
+        GetMyStudentObservationsApiResponse,
+        GetMyStudentObservationsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/my`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["StudentObservation"],
+      }),
+      getStudentObservationById: build.query<
+        GetStudentObservationByIdApiResponse,
+        GetStudentObservationByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/studentobservation/${queryArg.id}` }),
+        providesTags: ["StudentObservation"],
+      }),
+      deleteStudentObservation: build.mutation<
+        DeleteStudentObservationApiResponse,
+        DeleteStudentObservationApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/studentobservation/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["StudentObservation"],
+      }),
+      getTechJournalReports: build.query<
+        GetTechJournalReportsApiResponse,
+        GetTechJournalReportsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/techjournal`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+            start: queryArg.start,
+            end: queryArg.end,
+          },
+        }),
+        providesTags: ["TechJournal"],
+      }),
+      createTechJournalReport: build.mutation<
+        CreateTechJournalReportApiResponse,
+        CreateTechJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/techjournal`,
+          method: "POST",
+          body: queryArg.techJournalReportCreateDto,
+        }),
+        invalidatesTags: ["TechJournal"],
+      }),
+      editTechJournalReport: build.mutation<
+        EditTechJournalReportApiResponse,
+        EditTechJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/techjournal`,
+          method: "PUT",
           body: queryArg.techJournalReportEditDto,
         }),
-      }
-    ),
-    getTechJournalReportById: build.query<
-      GetTechJournalReportByIdApiResponse,
-      GetTechJournalReportByIdApiArg
-    >({
-      query: (queryArg) => ({ url: `/TechJournal/${queryArg.id}` }),
-    }),
-    patchTechJournalReport: build.mutation<
-      PatchTechJournalReportApiResponse,
-      PatchTechJournalReportApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/TechJournal/${queryArg.id}`,
-        method: 'PATCH',
-        body: queryArg.techJournalReportPatchDto,
+        invalidatesTags: ["TechJournal"],
+      }),
+      getTechJournalReportById: build.query<
+        GetTechJournalReportByIdApiResponse,
+        GetTechJournalReportByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/techjournal/${queryArg.id}` }),
+        providesTags: ["TechJournal"],
+      }),
+      patchTechJournalReport: build.mutation<
+        PatchTechJournalReportApiResponse,
+        PatchTechJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/techjournal/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.techJournalReportPatchDto,
+        }),
+        invalidatesTags: ["TechJournal"],
+      }),
+      deleteTechJournalReport: build.mutation<
+        DeleteTechJournalReportApiResponse,
+        DeleteTechJournalReportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/techjournal/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["TechJournal"],
+      }),
+      getTimetable: build.query<GetTimetableApiResponse, GetTimetableApiArg>({
+        query: (queryArg) => ({
+          url: `/timetable`,
+          params: {
+            Items: queryArg.items,
+            Page: queryArg.page,
+          },
+        }),
+        providesTags: ["Timetable"],
+      }),
+      createTimetable: build.mutation<
+        CreateTimetableApiResponse,
+        CreateTimetableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/timetable`,
+          method: "POST",
+          body: queryArg.timetableCreateDto,
+        }),
+        invalidatesTags: ["Timetable"],
+      }),
+      editTimetable: build.mutation<
+        EditTimetableApiResponse,
+        EditTimetableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/timetable`,
+          method: "PUT",
+          body: queryArg.timetableEditDto,
+        }),
+        invalidatesTags: ["Timetable"],
+      }),
+      getTimetableById: build.query<
+        GetTimetableByIdApiResponse,
+        GetTimetableByIdApiArg
+      >({
+        query: (queryArg) => ({ url: `/timetable/${queryArg.id}` }),
+        providesTags: ["Timetable"],
+      }),
+      deleteTimetable: build.mutation<
+        DeleteTimetableApiResponse,
+        DeleteTimetableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/timetable/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Timetable"],
+      }),
+      importTimetable: build.mutation<
+        ImportTimetableApiResponse,
+        ImportTimetableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/timetable/import`,
+          method: "POST",
+          body: queryArg.timetableImportDto,
+        }),
+        invalidatesTags: ["Timetable"],
+      }),
+      deleteTimetableDay: build.mutation<
+        DeleteTimetableDayApiResponse,
+        DeleteTimetableDayApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/timetable/days`,
+          method: "DELETE",
+          body: queryArg.timetableDeleteDayDto,
+        }),
+        invalidatesTags: ["Timetable"],
+      }),
+      getPublicTimetable: build.query<
+        GetPublicTimetableApiResponse,
+        GetPublicTimetableApiArg
+      >({
+        query: () => ({ url: `/timetable/public/today` }),
+        providesTags: ["Timetable"],
       }),
     }),
-    deleteTechJournalReport: build.mutation<
-      DeleteTechJournalReportApiResponse,
-      DeleteTechJournalReportApiArg
-    >({
-      query: (queryArg) => ({ url: `/TechJournal/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    getTimetable: build.query<GetTimetableApiResponse, GetTimetableApiArg>({
-      query: (queryArg) => ({
-        url: `/Timetable`,
-        params: { Items: queryArg.items, Page: queryArg.page },
-      }),
-    }),
-    createTimetable: build.mutation<CreateTimetableApiResponse, CreateTimetableApiArg>({
-      query: (queryArg) => ({ url: `/Timetable`, method: 'POST', body: queryArg.timetableCreateDto }),
-    }),
-    editTimetable: build.mutation<EditTimetableApiResponse, EditTimetableApiArg>({
-      query: (queryArg) => ({ url: `/Timetable`, method: 'PUT', body: queryArg.timetableEditDto }),
-    }),
-    getTimetableById: build.query<GetTimetableByIdApiResponse, GetTimetableByIdApiArg>({
-      query: (queryArg) => ({ url: `/Timetable/${queryArg.id}` }),
-    }),
-    deleteTimetable: build.mutation<DeleteTimetableApiResponse, DeleteTimetableApiArg>({
-      query: (queryArg) => ({ url: `/Timetable/${queryArg.id}`, method: 'DELETE' }),
-    }),
-    importTimetable: build.mutation<ImportTimetableApiResponse, ImportTimetableApiArg>({
-      query: (queryArg) => ({
-        url: `/Timetable/import`,
-        method: 'POST',
-        body: queryArg.timetableImportDto,
-      }),
-    }),
-    deleteTimetableDay: build.mutation<DeleteTimetableDayApiResponse, DeleteTimetableDayApiArg>({
-      query: (queryArg) => ({
-        url: `/Timetable/days`,
-        method: 'DELETE',
-        body: queryArg.timetableDeleteDayDto,
-      }),
-    }),
-    getPublicTimetable: build.query<GetPublicTimetableApiResponse, GetPublicTimetableApiArg>({
-      query: () => ({ url: `/Timetable/public/today` }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as generatedApi };
-export type GetAccomplishmentsByDateApiResponse = /** status 200 Success */ AccomplishmentDto[];
+export type GetAccomplishmentsByDateApiResponse =
+  /** status 200 OK */ AccomplishmentDto[];
 export type GetAccomplishmentsByDateApiArg = {
   start?: string;
   end?: string;
 };
-export type GetAccomplishmentScalesApiResponse = /** status 200 Success */ AccomplishmentScaleDto[];
+export type GetAccomplishmentScalesApiResponse =
+  /** status 200 OK */ AccomplishmentScaleDto[];
 export type GetAccomplishmentScalesApiArg = void;
 export type GetAccomplishmentAchievementsApiResponse =
-  /** status 200 Success */ AccomplishmentAchievementDto[];
+  /** status 200 OK */ AccomplishmentAchievementDto[];
 export type GetAccomplishmentAchievementsApiArg = void;
-export type GetMyAccomplishmentsApiResponse = /** status 200 Success */ AccomplishmentDtoPaginatedList;
+export type GetMyAccomplishmentsApiResponse =
+  /** status 200 OK */ AccomplishmentDtoPaginatedListRead;
 export type GetMyAccomplishmentsApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateAccomplishmentApiResponse = /** status 201 Created */ AccomplishmentDto;
+export type CreateAccomplishmentApiResponse =
+  /** status 201 Created */ AccomplishmentDto;
 export type CreateAccomplishmentApiArg = {
   accomplishmentCreateDto: AccomplishmentCreateDto;
 };
-export type EditAccomplishmentApiResponse = /** status 200 Success */ undefined;
+export type EditAccomplishmentApiResponse = unknown;
 export type EditAccomplishmentApiArg = {
   accomplishmentEditDto: AccomplishmentEditDto;
 };
-export type GetAccomplishmentByIdApiResponse = /** status 200 Success */ AccomplishmentDetailsDto;
+export type GetAccomplishmentByIdApiResponse =
+  /** status 200 OK */ AccomplishmentDetailsDto;
 export type GetAccomplishmentByIdApiArg = {
   id: number;
 };
-export type DeleteAccomplishmentApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAccomplishmentApiResponse = unknown;
 export type DeleteAccomplishmentApiArg = {
   id: number;
 };
-export type GetMyAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetMyAppointmentsApiResponse =
+  /** status 200 OK */ AppointmentDetailsDtoPaginatedListRead;
 export type GetMyAppointmentsApiArg = {
   items?: number;
   page?: number;
   typeSlug: string;
 };
-export type GetMyRegistrationsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetMyRegistrationsApiResponse =
+  /** status 200 OK */ AppointmentDetailsDtoPaginatedListRead;
 export type GetMyRegistrationsApiArg = {
   items?: number;
   page?: number;
   typeSlug: string;
 };
-export type CreateAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
+export type CreateAppointmentApiResponse =
+  /** status 201 Created */ AppointmentDto;
 export type CreateAppointmentApiArg = {
   appointmentCreateDto: AppointmentCreateDto;
 };
-export type DeleteAppointmentApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentApiResponse = unknown;
 export type DeleteAppointmentApiArg = {
   id: number;
 };
-export type GetAppointmentByIdApiResponse = /** status 200 Success */ AppointmentDetailsDto;
+export type GetAppointmentByIdApiResponse =
+  /** status 200 OK */ AppointmentDetailsDto;
 export type GetAppointmentByIdApiArg = {
   id: number;
 };
-export type GetAppointmentAvailableHostsApiResponse = /** status 200 Success */ AppointmentHostDto[];
+export type GetAppointmentAvailableHostsApiResponse =
+  /** status 200 OK */ AppointmentHostDto[];
 export type GetAppointmentAvailableHostsApiArg = {
   typeSlug: string;
 };
-export type GetAppointmentAvailableDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
+export type GetAppointmentAvailableDatesApiResponse =
+  /** status 200 OK */ AppointmentDateDto[];
 export type GetAppointmentAvailableDatesApiArg = {
   typeSlug: string;
   userName: string;
 };
-export type GetAllAppointmentsApiResponse = /** status 200 Success */ AppointmentDetailsDtoPaginatedList;
+export type GetAllAppointmentsApiResponse =
+  /** status 200 OK */ AppointmentDetailsDtoPaginatedListRead;
 export type GetAllAppointmentsApiArg = {
   items?: number;
   page?: number;
   query?: string;
 };
-export type DeleteAppointmentTypeApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentTypeApiResponse = unknown;
 export type DeleteAppointmentTypeApiArg = {
   id: number;
 };
-export type GetAppointmentTypeByIdApiResponse = /** status 200 Success */ AppointmentTypeDto;
+export type GetAppointmentTypeByIdApiResponse =
+  /** status 200 OK */ AppointmentTypeDto;
 export type GetAppointmentTypeByIdApiArg = {
   id: number;
 };
-export type EditAppointmentTypeApiResponse = /** status 200 Success */ undefined;
+export type ResetAppointmentTypeApiResponse = unknown;
+export type ResetAppointmentTypeApiArg = {
+  id: number;
+};
+export type EditAppointmentTypeApiResponse = unknown;
 export type EditAppointmentTypeApiArg = {
   appointmentTypeEditDto: AppointmentTypeEditDto;
 };
-export type GetAppointmentTypesApiResponse = /** status 200 Success */ AppointmentTypeDto[];
+export type GetAppointmentTypesApiResponse =
+  /** status 200 OK */ AppointmentTypeDto[];
 export type GetAppointmentTypesApiArg = void;
-export type CreateAppointmentTypeApiResponse = /** status 201 Created */ AppointmentDto;
+export type CreateAppointmentTypeApiResponse =
+  /** status 201 Created */ AppointmentDto;
 export type CreateAppointmentTypeApiArg = {
   appointmentTypeCreateDto: AppointmentTypeCreateDto;
 };
-export type CreateAppointmentHostApiResponse = /** status 201 Created */ AppointmentExclusiveHostDto;
+export type CreateAppointmentHostApiResponse =
+  /** status 201 Created */ AppointmentExclusiveHostDto;
 export type CreateAppointmentHostApiArg = {
   appointmentExclusiveHostCreateDto: AppointmentExclusiveHostCreateDto;
 };
-export type DeleteAppointmentHostApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentHostApiResponse = unknown;
 export type DeleteAppointmentHostApiArg = {
   id: number;
 };
-export type GetAppointmentHostsApiResponse = /** status 200 Success */ AppointmentExclusiveHostDto[];
+export type GetAppointmentHostsApiResponse =
+  /** status 200 OK */ AppointmentExclusiveHostDto[];
 export type GetAppointmentHostsApiArg = {
   typeId: number;
 };
-export type CreateAppointmentDateApiResponse = /** status 201 Created */ AppointmentDateDto;
+export type CreateAppointmentDateApiResponse =
+  /** status 201 Created */ AppointmentDateDto;
 export type CreateAppointmentDateApiArg = {
   appointmentDateCreateDto: AppointmentDateCreateDto;
 };
-export type DeleteAppointmentDateApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentDateApiResponse = unknown;
 export type DeleteAppointmentDateApiArg = {
   id: number;
 };
-export type GetAppointmentDatesApiResponse = /** status 200 Success */ AppointmentDateDto[];
+export type GetAppointmentDatesApiResponse =
+  /** status 200 OK */ AppointmentDateDto[];
 export type GetAppointmentDatesApiArg = {
   typeId: number;
 };
 export type GetAppointmentReservedDatesApiResponse =
-  /** status 200 Success */ AppointmentReservedDateDto[];
+  /** status 200 OK */ AppointmentReservedDateDto[];
 export type GetAppointmentReservedDatesApiArg = {
   userName: string;
 };
@@ -769,30 +1545,32 @@ export type CreateAppointmentReservedDateApiResponse =
 export type CreateAppointmentReservedDateApiArg = {
   appointmentReservedDateCreateDto: AppointmentReservedDateCreateDto;
 };
-export type DeleteAppointmentReservedDateApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAppointmentReservedDateApiResponse = unknown;
 export type DeleteAppointmentReservedDateApiArg = {
   id: number;
 };
 export type GetPublicAppointmentAvailableHostsApiResponse =
-  /** status 200 Success */ AppointmentHostDto[];
+  /** status 200 OK */ AppointmentHostDto[];
 export type GetPublicAppointmentAvailableHostsApiArg = {
   typeSlug: string;
 };
 export type GetPublicAppointmentAvailableDatesApiResponse =
-  /** status 200 Success */ AppointmentDateDto[];
+  /** status 200 OK */ AppointmentDateDto[];
 export type GetPublicAppointmentAvailableDatesApiArg = {
   typeSlug: string;
   userName: string;
 };
-export type CreatePublicAppointmentApiResponse = /** status 201 Created */ AppointmentDto;
+export type CreatePublicAppointmentApiResponse =
+  /** status 201 Created */ AppointmentDto;
 export type CreatePublicAppointmentApiArg = {
   appointmentPublicCreateDto: AppointmentPublicCreateDto;
 };
-export type AuthorizeApiResponse = /** status 200 Success */ UserAuthDto;
+export type AuthorizeApiResponse = /** status 200 OK */ UserAuthDto;
 export type AuthorizeApiArg = {
   googleAuthDto: GoogleAuthDto;
 };
-export type GetBannersApiResponse = /** status 200 Success */ BannerDtoPaginatedList;
+export type GetBannersApiResponse =
+  /** status 200 OK */ BannerDtoPaginatedListRead;
 export type GetBannersApiArg = {
   items?: number;
   page?: number;
@@ -810,7 +1588,7 @@ export type CreateBannerApiArg = {
     LanguageId?: number;
   };
 };
-export type EditBannerApiResponse = /** status 200 Success */ undefined;
+export type EditBannerApiResponse = unknown;
 export type EditBannerApiArg = {
   body: {
     Id?: number;
@@ -824,76 +1602,84 @@ export type EditBannerApiArg = {
     LanguageId?: number;
   };
 };
-export type GetBannerByIdApiResponse = /** status 200 Success */ BannerDto;
+export type GetBannerByIdApiResponse = /** status 200 OK */ BannerDto;
 export type GetBannerByIdApiArg = {
   id: number;
 };
-export type DeleteBannerApiResponse = /** status 204 No Content */ undefined;
+export type DeleteBannerApiResponse = unknown;
 export type DeleteBannerApiArg = {
   id: number;
 };
-export type SearchBannersApiResponse = /** status 200 Success */ BannerDtoPaginatedList;
+export type SearchBannersApiResponse =
+  /** status 200 OK */ BannerDtoPaginatedListRead;
 export type SearchBannersApiArg = {
   text: string;
   items?: number;
   page?: number;
 };
-export type GetPublicBannersByLanguageApiResponse = /** status 200 Success */ BannerPublicDto[];
+export type GetPublicBannersByLanguageApiResponse =
+  /** status 200 OK */ BannerPublicDto[];
 export type GetPublicBannersByLanguageApiArg = {
   language: string;
 };
 export type GetBullyJournalReportsApiResponse =
-  /** status 200 Success */ BullyJournalReportDtoPaginatedList;
+  /** status 200 OK */ BullyJournalReportDtoPaginatedListRead;
 export type GetBullyJournalReportsApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateBullyJournalReportApiResponse = /** status 201 Created */ BullyJournalReportDetailsDto;
+export type CreateBullyJournalReportApiResponse =
+  /** status 201 Created */ BullyJournalReportDetailsDto;
 export type CreateBullyJournalReportApiArg = {
   bullyJournalReportCreateDto: BullyJournalReportCreateDto;
 };
-export type EditBullyJournalReportApiResponse = /** status 200 Success */ undefined;
+export type EditBullyJournalReportApiResponse = unknown;
 export type EditBullyJournalReportApiArg = {
   bullyJournalReportEditDto: BullyJournalReportEditDto;
 };
 export type GetBullyJournalReportByIdApiResponse =
-  /** status 200 Success */ BullyJournalReportDetailsDto;
+  /** status 200 OK */ BullyJournalReportDetailsDto;
 export type GetBullyJournalReportByIdApiArg = {
   id: number;
 };
-export type DeleteBullyJournalReportApiResponse = /** status 204 No Content */ undefined;
+export type DeleteBullyJournalReportApiResponse = unknown;
 export type DeleteBullyJournalReportApiArg = {
   id: number;
 };
-export type GetBullyReportsApiResponse = /** status 200 Success */ BullyReportDtoPaginatedList;
+export type GetBullyReportsApiResponse =
+  /** status 200 OK */ BullyReportDtoPaginatedListRead;
 export type GetBullyReportsApiArg = {
   items?: number;
   page?: number;
 };
-export type GetBullyReportByIdApiResponse = /** status 200 Success */ BullyReportDto;
+export type GetBullyReportByIdApiResponse = /** status 200 OK */ BullyReportDto;
 export type GetBullyReportByIdApiArg = {
   id: number;
 };
-export type DeleteBullyReportApiResponse = /** status 204 No Content */ undefined;
+export type DeleteBullyReportApiResponse = unknown;
 export type DeleteBullyReportApiArg = {
   id: number;
 };
-export type CreatePublicBullyReportApiResponse = /** status 201 Created */ BullyReportDto;
+export type CreatePublicBullyReportApiResponse =
+  /** status 201 Created */ BullyReportDto;
 export type CreatePublicBullyReportApiArg = {
   bullyReportCreateDto: BullyReportCreateDto;
 };
-export type GetCoursesStatsByDateApiResponse = /** status 200 Success */ CourseStatsDto[];
+export type GetCoursesStatsByDateApiResponse =
+  /** status 200 OK */ CourseStatsDto[];
 export type GetCoursesStatsByDateApiArg = {
   start?: string;
   end?: string;
 };
-export type GetTeacherCoursesByIdAndDateApiResponse = /** status 200 Success */ CourseDto[];
+export type GetTeacherCoursesByIdAndDateApiResponse =
+  /** status 200 OK */ CourseDto[];
 export type GetTeacherCoursesByIdAndDateApiArg = {
   id: number;
   start?: string;
   end?: string;
 };
-export type GetMyCoursesApiResponse = /** status 200 Success */ CourseDtoPaginatedList;
+export type GetMyCoursesApiResponse =
+  /** status 200 OK */ CourseDtoPaginatedListRead;
 export type GetMyCoursesApiArg = {
   items?: number;
   page?: number;
@@ -902,21 +1688,21 @@ export type CreateCourseApiResponse = /** status 201 Created */ CourseDto;
 export type CreateCourseApiArg = {
   courseCreateDto: CourseCreateDto;
 };
-export type EditCourseApiResponse = /** status 200 Success */ undefined;
+export type EditCourseApiResponse = unknown;
 export type EditCourseApiArg = {
   courseEditDto: CourseEditDto;
 };
-export type GetCourseByIdApiResponse = /** status 200 Success */ CourseDto;
+export type GetCourseByIdApiResponse = /** status 200 OK */ CourseDto;
 export type GetCourseByIdApiArg = {
   id: number;
 };
-export type DeleteCourseApiResponse = /** status 204 No Content */ undefined;
+export type DeleteCourseApiResponse = unknown;
 export type DeleteCourseApiArg = {
   id: number;
 };
-export type GetTeachersApiResponse = /** status 200 Success */ EmployeeDto[];
+export type GetTeachersApiResponse = /** status 200 OK */ EmployeeDto[];
 export type GetTeachersApiArg = void;
-export type GetEventsByDateApiResponse = /** status 200 Success */ EventDto[];
+export type GetEventsByDateApiResponse = /** status 200 OK */ EventDto[];
 export type GetEventsByDateApiArg = {
   start?: string;
   end?: string;
@@ -925,19 +1711,20 @@ export type CreateEventApiResponse = /** status 201 Created */ EventDto;
 export type CreateEventApiArg = {
   eventCreateDto: EventCreateDto;
 };
-export type DeleteEventApiResponse = /** status 204 No Content */ undefined;
+export type DeleteEventApiResponse = unknown;
 export type DeleteEventApiArg = {
   id: string;
 };
-export type GetPublicEventsApiResponse = /** status 200 Success */ EventDto[];
+export type GetPublicEventsApiResponse = /** status 200 OK */ EventDto[];
 export type GetPublicEventsApiArg = {
   week: number;
 };
-export type GetPublicDayEventsApiResponse = /** status 200 Success */ EventDto[];
+export type GetPublicDayEventsApiResponse = /** status 200 OK */ EventDto[];
 export type GetPublicDayEventsApiArg = void;
-export type GetPublicLanguagesApiResponse = /** status 200 Success */ LanguageDto[];
+export type GetPublicLanguagesApiResponse = /** status 200 OK */ LanguageDto[];
 export type GetPublicLanguagesApiArg = void;
-export type GetMenusApiResponse = /** status 200 Success */ MenuDetailsDtoPaginatedList;
+export type GetMenusApiResponse =
+  /** status 200 OK */ MenuDetailsDtoPaginatedListRead;
 export type GetMenusApiArg = {
   items?: number;
   page?: number;
@@ -946,37 +1733,105 @@ export type CreateMenuApiResponse = /** status 201 Created */ MenuDto;
 export type CreateMenuApiArg = {
   menuCreateDto: MenuCreateDto;
 };
-export type EditMenuApiResponse = /** status 200 Success */ undefined;
+export type EditMenuApiResponse = unknown;
 export type EditMenuApiArg = {
   menuEditDto: MenuEditDto;
 };
-export type GetMenuLocationsApiResponse = /** status 200 Success */ MenuLocationDto[];
+export type GetMenuLocationsApiResponse =
+  /** status 200 OK */ MenuLocationDto[];
 export type GetMenuLocationsApiArg = void;
-export type GetMenuByIdApiResponse = /** status 200 Success */ MenuDetailsDto;
+export type GetMenuByIdApiResponse = /** status 200 OK */ MenuDetailsDto;
 export type GetMenuByIdApiArg = {
   id: number;
 };
-export type DeleteMenuApiResponse = /** status 204 No Content */ undefined;
+export type DeleteMenuApiResponse = unknown;
 export type DeleteMenuApiArg = {
   id: number;
 };
-export type SearchMenusApiResponse = /** status 200 Success */ MenuDetailsDtoPaginatedList;
+export type SearchMenusApiResponse =
+  /** status 200 OK */ MenuDetailsDtoPaginatedListRead;
 export type SearchMenusApiArg = {
   text: string;
   items?: number;
   page?: number;
 };
-export type GetPublicMenusByLanguageApiResponse = /** status 200 Success */ MenuPublicDto[];
+export type GetPublicMenusByLanguageApiResponse =
+  /** status 200 OK */ MenuPublicDto[];
 export type GetPublicMenusByLanguageApiArg = {
   language: string;
 };
-export type GetMenusMetaApiResponse = /** status 200 Success */ MenuMetaDto[];
+export type GetMenusMetaApiResponse = /** status 200 OK */ MenuMetaDto[];
 export type GetMenusMetaApiArg = void;
-export type GetPostsMetaApiResponse = /** status 200 Success */ PostMetaDto[];
+export type GetPostsMetaApiResponse = /** status 200 OK */ PostMetaDto[];
 export type GetPostsMetaApiArg = void;
-export type GetLocalesMetaApiResponse = /** status 200 Success */ LocaleMetaDto[];
+export type GetLocalesMetaApiResponse = /** status 200 OK */ LocaleMetaDto[];
 export type GetLocalesMetaApiArg = void;
-export type GetPostsApiResponse = /** status 200 Success */ PostDtoPaginatedList;
+export type GetObservationLessonsApiResponse =
+  /** status 200 OK */ ObservationLessonDto[];
+export type GetObservationLessonsApiArg = void;
+export type CreateObservationLessonApiResponse =
+  /** status 201 Created */ ObservationLessonDto;
+export type CreateObservationLessonApiArg = {
+  observationLessonCreateDto: ObservationLessonCreateDto;
+};
+export type EditObservationLessonApiResponse = unknown;
+export type EditObservationLessonApiArg = {
+  observationLessonEditDto: ObservationLessonEditDto;
+};
+export type GetObservationLessonByIdApiResponse =
+  /** status 200 OK */ ObservationLessonDto;
+export type GetObservationLessonByIdApiArg = {
+  id: number;
+};
+export type DeleteObservationLessonApiResponse = unknown;
+export type DeleteObservationLessonApiArg = {
+  id: number;
+};
+export type GetObservationTargetsApiResponse =
+  /** status 200 OK */ ObservationTargetDto[];
+export type GetObservationTargetsApiArg = {
+  enabledOnly?: boolean;
+};
+export type CreateObservationTargetApiResponse =
+  /** status 201 Created */ ObservationTargetDto;
+export type CreateObservationTargetApiArg = {
+  observationTargetCreateDto: ObservationTargetCreateDto;
+};
+export type EditObservationTargetApiResponse = unknown;
+export type EditObservationTargetApiArg = {
+  observationTargetEditDto: ObservationTargetEditDto;
+};
+export type GetObservationTargetByIdApiResponse =
+  /** status 200 OK */ ObservationTargetDto;
+export type GetObservationTargetByIdApiArg = {
+  id: number;
+};
+export type DeleteObservationTargetApiResponse = unknown;
+export type DeleteObservationTargetApiArg = {
+  id: number;
+};
+export type GetObservationTypesApiResponse =
+  /** status 200 OK */ ObservationTypeDto[];
+export type GetObservationTypesApiArg = void;
+export type CreateObservationTypeApiResponse =
+  /** status 201 Created */ ObservationTypeDto;
+export type CreateObservationTypeApiArg = {
+  observationTypeCreateDto: ObservationTypeCreateDto;
+};
+export type EditObservationTypeApiResponse = unknown;
+export type EditObservationTypeApiArg = {
+  observationTypeEditDto: ObservationTypeEditDto;
+};
+export type GetObservationTypeByIdApiResponse =
+  /** status 200 OK */ ObservationTypeDto;
+export type GetObservationTypeByIdApiArg = {
+  id: number;
+};
+export type DeleteObservationTypeApiResponse = unknown;
+export type DeleteObservationTypeApiArg = {
+  id: number;
+};
+export type GetPostsApiResponse = /** status 200 OK */ PostDtoPaginatedListRead;
 export type GetPostsApiArg = {
   items?: number;
   page?: number;
@@ -1001,7 +1856,7 @@ export type CreatePostApiArg = {
     Title?: string;
   };
 };
-export type EditPostApiResponse = /** status 200 Success */ undefined;
+export type EditPostApiResponse = unknown;
 export type EditPostApiArg = {
   body: {
     Id?: number;
@@ -1025,161 +1880,206 @@ export type EditPostApiArg = {
     Title?: string;
   };
 };
-export type GetPostByIdApiResponse = /** status 200 Success */ PostDetailsDto;
+export type GetPostByIdApiResponse = /** status 200 OK */ PostDetailsDto;
 export type GetPostByIdApiArg = {
   id: number;
 };
-export type PatchPostApiResponse = /** status 200 Success */ undefined;
+export type PatchPostApiResponse = unknown;
 export type PatchPostApiArg = {
   id: number;
   postPatchDto: PostPatchDto;
 };
-export type DeletePostApiResponse = /** status 204 No Content */ undefined;
+export type DeletePostApiResponse = unknown;
 export type DeletePostApiArg = {
   id: number;
 };
-export type SearchPostsApiResponse = /** status 200 Success */ PostDtoPaginatedList;
+export type SearchPostsApiResponse =
+  /** status 200 OK */ PostDtoPaginatedListRead;
 export type SearchPostsApiArg = {
   text: string;
   items?: number;
   page?: number;
 };
-export type GetPublicPostByIdApiResponse = /** status 200 Success */ PostPublicDetailsDto;
+export type GetPublicPostByIdApiResponse =
+  /** status 200 OK */ PostPublicDetailsDto;
 export type GetPublicPostByIdApiArg = {
   id: number;
 };
-export type GetPublicPostByMenuLanguageAndPathApiResponse = /** status 200 Success */ PostDetailsDto;
+export type GetPublicPostByMenuLanguageAndPathApiResponse =
+  /** status 200 OK */ PostDetailsDto;
 export type GetPublicPostByMenuLanguageAndPathApiArg = {
   language: string;
   path: string;
 };
-export type GetPublicPostsByLanguageApiResponse = /** status 200 Success */ PostPublicDto[];
+export type GetPublicPostsByLanguageApiResponse =
+  /** status 200 OK */ PostPublicDto[];
 export type GetPublicPostsByLanguageApiArg = {
   language: string;
   items?: number;
   page?: number;
 };
-export type SearchPublicPostsApiResponse = /** status 200 Success */ PostPublicDtoPaginatedList;
+export type SearchPublicPostsApiResponse =
+  /** status 200 OK */ PostPublicDtoPaginatedListRead;
 export type SearchPublicPostsApiArg = {
   text: string;
   items?: number;
   page?: number;
 };
-export type GetClassroomsApiResponse = /** status 200 Success */ ClassroomDto[];
+export type GetClassroomsApiResponse = /** status 200 OK */ ClassroomDto[];
 export type GetClassroomsApiArg = void;
 export type CreateClassroomApiResponse = /** status 201 Created */ ClassroomDto;
 export type CreateClassroomApiArg = {
   classroomCreateDto: ClassroomCreateDto;
 };
-export type EditClassroomApiResponse = /** status 200 Success */ undefined;
+export type EditClassroomApiResponse = unknown;
 export type EditClassroomApiArg = {
   classroomEditDto: ClassroomEditDto;
 };
-export type GetClassroomByIdApiResponse = /** status 200 Success */ ClassroomDto;
+export type GetClassroomByIdApiResponse = /** status 200 OK */ ClassroomDto;
 export type GetClassroomByIdApiArg = {
   id: number;
 };
-export type DeleteClassroomApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClassroomApiResponse = unknown;
 export type DeleteClassroomApiArg = {
   id: number;
 };
-export type GetClasstimesApiResponse = /** status 200 Success */ ClasstimeDto[];
+export type GetClasstimesApiResponse = /** status 200 OK */ ClasstimeDto[];
 export type GetClasstimesApiArg = void;
 export type CreateClasstimeApiResponse = /** status 201 Created */ ClasstimeDto;
 export type CreateClasstimeApiArg = {
   classtimeCreateDto: ClasstimeCreateDto;
 };
-export type GetClasstimeByIdApiResponse = /** status 200 Success */ ClasstimeDto;
+export type GetClasstimeByIdApiResponse = /** status 200 OK */ ClasstimeDto;
 export type GetClasstimeByIdApiArg = {
   id: number;
 };
-export type DeleteClasstimeApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClasstimeApiResponse = unknown;
 export type DeleteClasstimeApiArg = {
   id: number;
 };
-export type EditClasstimeApiResponse = /** status 200 Success */ undefined;
+export type EditClasstimeApiResponse = unknown;
 export type EditClasstimeApiArg = {
   classtimeEditDto: ClasstimeEditDto;
 };
 export type GetClasstimesShortDaysApiResponse =
-  /** status 200 Success */ ClasstimeShortDayDtoPaginatedList;
+  /** status 200 OK */ ClasstimeShortDayDtoPaginatedListRead;
 export type GetClasstimesShortDaysApiArg = {
   items?: number;
   page?: number;
 };
-export type CreateClasstimeShortDayApiResponse = /** status 201 Created */ ClasstimeShortDayDto;
+export type CreateClasstimeShortDayApiResponse =
+  /** status 201 Created */ ClasstimeShortDayDto;
 export type CreateClasstimeShortDayApiArg = {
   classtimeShortDayCreateDto: ClasstimeShortDayCreateDto;
 };
-export type EditClasstimeShortDayApiResponse = /** status 200 Success */ undefined;
+export type EditClasstimeShortDayApiResponse = unknown;
 export type EditClasstimeShortDayApiArg = {
   classtimeShortDayEditDto: ClasstimeShortDayEditDto;
 };
-export type GetClasstimeShortDayByIdApiResponse = /** status 200 Success */ ClasstimeShortDayDto;
+export type GetClasstimeShortDayByIdApiResponse =
+  /** status 200 OK */ ClasstimeShortDayDto;
 export type GetClasstimeShortDayByIdApiArg = {
   id: number;
 };
-export type DeleteClasstimeShortDayApiResponse = /** status 204 No Content */ undefined;
+export type DeleteClasstimeShortDayApiResponse = unknown;
 export type DeleteClasstimeShortDayApiArg = {
   id: number;
 };
-export type GetClassdaysApiResponse = /** status 200 Success */ ClassdayDto[];
+export type GetClassdaysApiResponse = /** status 200 OK */ ClassdayDto[];
 export type GetClassdaysApiArg = void;
-export type GetAnnouncementByIdApiResponse = /** status 200 Success */ AnnouncementDto;
+export type GetAnnouncementByIdApiResponse =
+  /** status 200 OK */ AnnouncementDto;
 export type GetAnnouncementByIdApiArg = {
   id: number;
 };
-export type DeleteAnnouncementApiResponse = /** status 204 No Content */ undefined;
+export type DeleteAnnouncementApiResponse = unknown;
 export type DeleteAnnouncementApiArg = {
   id: number;
 };
-export type CreateAnnouncementApiResponse = /** status 201 Created */ AnnouncementDto;
+export type CreateAnnouncementApiResponse =
+  /** status 201 Created */ AnnouncementDto;
 export type CreateAnnouncementApiArg = {
   announcementCreateDto: AnnouncementCreateDto;
 };
-export type EditAnnouncementApiResponse = /** status 200 Success */ undefined;
+export type EditAnnouncementApiResponse = unknown;
 export type EditAnnouncementApiArg = {
   announcementEditDto: AnnouncementEditDto;
 };
-export type GetAnnouncementsApiResponse = /** status 200 Success */ AnnouncementDtoPaginatedList;
+export type GetAnnouncementsApiResponse =
+  /** status 200 OK */ AnnouncementDtoPaginatedListRead;
 export type GetAnnouncementsApiArg = {
   items?: number;
   page?: number;
 };
-export type GetPublicAnnouncementsApiResponse = /** status 200 Success */ AnnouncementDto[];
+export type GetPublicAnnouncementsApiResponse =
+  /** status 200 OK */ AnnouncementDto[];
 export type GetPublicAnnouncementsApiArg = void;
-export type GetPublicRandomImageApiResponse = /** status 200 Success */ RandomImageDto;
+export type GetPublicRandomImageApiResponse =
+  /** status 200 OK */ RandomImageDto;
 export type GetPublicRandomImageApiArg = void;
+export type GetStudentObservationsApiResponse =
+  /** status 200 OK */ StudentObservationDtoPaginatedListRead;
+export type GetStudentObservationsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type CreateStudentObservationApiResponse =
+  /** status 201 Created */ StudentObservationDto;
+export type CreateStudentObservationApiArg = {
+  studentObservationCreateDto: StudentObservationCreateDto;
+};
+export type EditStudentObservationApiResponse = unknown;
+export type EditStudentObservationApiArg = {
+  studentObservationEditDto: StudentObservationEditDto;
+};
+export type GetMyStudentObservationsApiResponse =
+  /** status 200 OK */ StudentObservationDtoPaginatedListRead;
+export type GetMyStudentObservationsApiArg = {
+  items?: number;
+  page?: number;
+};
+export type GetStudentObservationByIdApiResponse =
+  /** status 200 OK */ StudentObservationDto;
+export type GetStudentObservationByIdApiArg = {
+  id: number;
+};
+export type DeleteStudentObservationApiResponse = unknown;
+export type DeleteStudentObservationApiArg = {
+  id: number;
+};
 export type GetTechJournalReportsApiResponse =
-  /** status 200 Success */ TechJournalReportDtoPaginatedList;
+  /** status 200 OK */ TechJournalReportDtoPaginatedListRead;
 export type GetTechJournalReportsApiArg = {
   items?: number;
   page?: number;
   start?: string;
   end?: string;
 };
-export type CreateTechJournalReportApiResponse = /** status 201 Created */ TechJournalReportDto;
+export type CreateTechJournalReportApiResponse =
+  /** status 201 Created */ TechJournalReportDto;
 export type CreateTechJournalReportApiArg = {
   techJournalReportCreateDto: TechJournalReportCreateDto;
 };
-export type EditTechJournalReportApiResponse = /** status 200 Success */ undefined;
+export type EditTechJournalReportApiResponse = unknown;
 export type EditTechJournalReportApiArg = {
   techJournalReportEditDto: TechJournalReportEditDto;
 };
-export type GetTechJournalReportByIdApiResponse = /** status 200 Success */ TechJournalReportDto;
+export type GetTechJournalReportByIdApiResponse =
+  /** status 200 OK */ TechJournalReportDto;
 export type GetTechJournalReportByIdApiArg = {
   id: number;
 };
-export type PatchTechJournalReportApiResponse = /** status 200 Success */ undefined;
+export type PatchTechJournalReportApiResponse = unknown;
 export type PatchTechJournalReportApiArg = {
   id: number;
   techJournalReportPatchDto: TechJournalReportPatchDto;
 };
-export type DeleteTechJournalReportApiResponse = /** status 204 No Content */ undefined;
+export type DeleteTechJournalReportApiResponse = unknown;
 export type DeleteTechJournalReportApiArg = {
   id: number;
 };
-export type GetTimetableApiResponse = /** status 200 Success */ TimetableDtoPaginatedList;
+export type GetTimetableApiResponse =
+  /** status 200 OK */ TimetableDtoPaginatedListRead;
 export type GetTimetableApiArg = {
   items?: number;
   page?: number;
@@ -1188,19 +2088,19 @@ export type CreateTimetableApiResponse = /** status 201 Created */ TimetableDto;
 export type CreateTimetableApiArg = {
   timetableCreateDto: TimetableCreateDto;
 };
-export type EditTimetableApiResponse = /** status 200 Success */ undefined;
+export type EditTimetableApiResponse = unknown;
 export type EditTimetableApiArg = {
   timetableEditDto: TimetableEditDto;
 };
-export type GetTimetableByIdApiResponse = /** status 200 Success */ TimetableDto;
+export type GetTimetableByIdApiResponse = /** status 200 OK */ TimetableDto;
 export type GetTimetableByIdApiArg = {
   id: number;
 };
-export type DeleteTimetableApiResponse = /** status 204 No Content */ undefined;
+export type DeleteTimetableApiResponse = unknown;
 export type DeleteTimetableApiArg = {
   id: number;
 };
-export type ImportTimetableApiResponse = /** status 201 Created */ undefined;
+export type ImportTimetableApiResponse = unknown;
 export type ImportTimetableApiArg = {
   timetableImportDto: TimetableImportDto;
 };
@@ -1208,7 +2108,8 @@ export type DeleteTimetableDayApiResponse = unknown;
 export type DeleteTimetableDayApiArg = {
   timetableDeleteDayDto: TimetableDeleteDayDto;
 };
-export type GetPublicTimetableApiResponse = /** status 200 Success */ TimetablePublicDto;
+export type GetPublicTimetableApiResponse =
+  /** status 200 OK */ TimetablePublicDto;
 export type GetPublicTimetableApiArg = void;
 export type AccomplishmentTeacherDto = {
   id: number;
@@ -1244,6 +2145,11 @@ export type AccomplishmentScaleDto = {
   name: string;
 };
 export type AccomplishmentDtoPaginatedList = {
+  items: AccomplishmentDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type AccomplishmentDtoPaginatedListRead = {
   items: AccomplishmentDto[];
   pageNumber: number;
   totalPages: number;
@@ -1318,6 +2224,11 @@ export type AppointmentDetailsDto = {
   date: AppointmentDateDetailsDto;
 };
 export type AppointmentDetailsDtoPaginatedList = {
+  items: AppointmentDetailsDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type AppointmentDetailsDtoPaginatedListRead = {
   items: AppointmentDetailsDto[];
   pageNumber: number;
   totalPages: number;
@@ -1421,6 +2332,11 @@ export type BannerDto = {
 export type BannerDtoPaginatedList = {
   items: BannerDto[];
   pageNumber: number;
+  totalCount: number;
+};
+export type BannerDtoPaginatedListRead = {
+  items: BannerDto[];
+  pageNumber: number;
   totalPages: number;
   totalCount: number;
   hasPreviousPage: boolean;
@@ -1443,6 +2359,11 @@ export type BullyJournalReportDto = {
   date: string;
 };
 export type BullyJournalReportDtoPaginatedList = {
+  items: BullyJournalReportDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type BullyJournalReportDtoPaginatedListRead = {
   items: BullyJournalReportDto[];
   pageNumber: number;
   totalPages: number;
@@ -1487,6 +2408,11 @@ export type BullyReportDto = {
 export type BullyReportDtoPaginatedList = {
   items: BullyReportDto[];
   pageNumber: number;
+  totalCount: number;
+};
+export type BullyReportDtoPaginatedListRead = {
+  items: BullyReportDto[];
+  pageNumber: number;
   totalPages: number;
   totalCount: number;
   hasPreviousPage: boolean;
@@ -1523,6 +2449,11 @@ export type CourseDto = {
   userId: number;
 };
 export type CourseDtoPaginatedList = {
+  items: CourseDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type CourseDtoPaginatedListRead = {
   items: CourseDto[];
   pageNumber: number;
   totalPages: number;
@@ -1569,18 +2500,6 @@ export type EventCreateDto = {
   endDate: string;
   allDay: boolean;
 };
-export type MenuDto = {
-  id: number;
-  order: number;
-  url?: string | null;
-  title: string;
-  slug: string;
-  position: string;
-  path: string;
-  isPublished: boolean;
-  parentMenuId?: number | null;
-  childMenus: MenuDto[];
-};
 export type MenuLocationDto = {
   id: number;
   name: string;
@@ -1613,7 +2532,6 @@ export type MenuDetailsDto = {
   path: string;
   isPublished: boolean;
   parentMenuId?: number | null;
-  childMenus: MenuDto[];
   language: LanguageDto;
   menuLocation: MenuLocationDto;
   linkedPost: PostDetailsDto;
@@ -1621,10 +2539,26 @@ export type MenuDetailsDto = {
 export type MenuDetailsDtoPaginatedList = {
   items: MenuDetailsDto[];
   pageNumber: number;
+  totalCount: number;
+};
+export type MenuDetailsDtoPaginatedListRead = {
+  items: MenuDetailsDto[];
+  pageNumber: number;
   totalPages: number;
   totalCount: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+};
+export type MenuDto = {
+  id: number;
+  order: number;
+  url?: string | null;
+  title: string;
+  slug: string;
+  position: string;
+  path: string;
+  isPublished: boolean;
+  parentMenuId?: number | null;
 };
 export type MenuCreateDto = {
   order: number;
@@ -1657,7 +2591,6 @@ export type MenuPublicDto = {
   position: string;
   path: string;
   parentMenuId?: number | null;
-  childMenus: MenuPublicDto[];
 };
 export type MenuMetaDto = {
   url: string;
@@ -1674,6 +2607,42 @@ export type LocaleMetaDto = {
   ln: string;
   date: string;
 };
+export type ObservationLessonDto = {
+  id: number;
+  name: string;
+};
+export type ObservationLessonCreateDto = {
+  name: string;
+};
+export type ObservationLessonEditDto = {
+  name: string;
+  id: number;
+};
+export type ObservationTargetDto = {
+  id: number;
+  name: string;
+  enabled: boolean;
+};
+export type ObservationTargetCreateDto = {
+  name: string;
+  enabled: boolean;
+};
+export type ObservationTargetEditDto = {
+  name: string;
+  enabled: boolean;
+  id: number;
+};
+export type ObservationTypeDto = {
+  id: number;
+  name: string;
+};
+export type ObservationTypeCreateDto = {
+  name: string;
+};
+export type ObservationTypeEditDto = {
+  name: string;
+  id: number;
+};
 export type PostDto = {
   id: number;
   isFeatured: boolean;
@@ -1689,6 +2658,11 @@ export type PostDto = {
   featuredImage?: string | null;
 };
 export type PostDtoPaginatedList = {
+  items: PostDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type PostDtoPaginatedListRead = {
   items: PostDto[];
   pageNumber: number;
   totalPages: number;
@@ -1722,6 +2696,11 @@ export type PostPublicDto = {
   featuredImage?: string | null;
 };
 export type PostPublicDtoPaginatedList = {
+  items: PostPublicDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type PostPublicDtoPaginatedListRead = {
   items: PostPublicDto[];
   pageNumber: number;
   totalPages: number;
@@ -1768,6 +2747,11 @@ export type ClasstimeShortDayDto = {
 export type ClasstimeShortDayDtoPaginatedList = {
   items: ClasstimeShortDayDto[];
   pageNumber: number;
+  totalCount: number;
+};
+export type ClasstimeShortDayDtoPaginatedListRead = {
+  items: ClasstimeShortDayDto[];
+  pageNumber: number;
   totalPages: number;
   totalCount: number;
   hasPreviousPage: boolean;
@@ -1805,6 +2789,11 @@ export type AnnouncementEditDto = {
 export type AnnouncementDtoPaginatedList = {
   items: AnnouncementDto[];
   pageNumber: number;
+  totalCount: number;
+};
+export type AnnouncementDtoPaginatedListRead = {
+  items: AnnouncementDto[];
+  pageNumber: number;
   totalPages: number;
   totalCount: number;
   hasPreviousPage: boolean;
@@ -1812,6 +2801,47 @@ export type AnnouncementDtoPaginatedList = {
 };
 export type RandomImageDto = {
   url: string;
+};
+export type IdNameDto = {
+  id: number;
+  name: string;
+};
+export type StudentObservationDto = {
+  id: number;
+  note?: string | null;
+  date: string;
+  target: IdNameDto;
+  teacher: IdNameDto;
+  lesson: IdNameDto;
+  types: ObservationTypeDto[];
+};
+export type StudentObservationDtoPaginatedList = {
+  items: StudentObservationDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type StudentObservationDtoPaginatedListRead = {
+  items: StudentObservationDto[];
+  pageNumber: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+};
+export type StudentObservationCreateDto = {
+  note?: string | null;
+  date: string;
+  targetId: number;
+  lessonId: number;
+  typeIds: number[];
+};
+export type StudentObservationEditDto = {
+  note?: string | null;
+  date: string;
+  targetId: number;
+  lessonId: number;
+  typeIds: number[];
+  id: number;
 };
 export type TechJournalReportDto = {
   id: number;
@@ -1825,6 +2855,11 @@ export type TechJournalReportDto = {
   details: string;
 };
 export type TechJournalReportDtoPaginatedList = {
+  items: TechJournalReportDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type TechJournalReportDtoPaginatedListRead = {
   items: TechJournalReportDto[];
   pageNumber: number;
   totalPages: number;
@@ -1853,6 +2888,11 @@ export type TimetableDto = {
   className: string;
 };
 export type TimetableDtoPaginatedList = {
+  items: TimetableDto[];
+  pageNumber: number;
+  totalCount: number;
+};
+export type TimetableDtoPaginatedListRead = {
   items: TimetableDto[];
   pageNumber: number;
   totalPages: number;
@@ -1894,3 +2934,150 @@ export type TimetablePublicDto = {
   classtime: ClasstimeSimpleDto;
   currentTime: string;
 };
+export const {
+  useGetAccomplishmentsByDateQuery,
+  useGetAccomplishmentScalesQuery,
+  useGetAccomplishmentAchievementsQuery,
+  useGetMyAccomplishmentsQuery,
+  useCreateAccomplishmentMutation,
+  useEditAccomplishmentMutation,
+  useGetAccomplishmentByIdQuery,
+  useDeleteAccomplishmentMutation,
+  useGetMyAppointmentsQuery,
+  useGetMyRegistrationsQuery,
+  useCreateAppointmentMutation,
+  useDeleteAppointmentMutation,
+  useGetAppointmentByIdQuery,
+  useGetAppointmentAvailableHostsQuery,
+  useGetAppointmentAvailableDatesQuery,
+  useGetAllAppointmentsQuery,
+  useDeleteAppointmentTypeMutation,
+  useGetAppointmentTypeByIdQuery,
+  useResetAppointmentTypeMutation,
+  useEditAppointmentTypeMutation,
+  useGetAppointmentTypesQuery,
+  useCreateAppointmentTypeMutation,
+  useCreateAppointmentHostMutation,
+  useDeleteAppointmentHostMutation,
+  useGetAppointmentHostsQuery,
+  useCreateAppointmentDateMutation,
+  useDeleteAppointmentDateMutation,
+  useGetAppointmentDatesQuery,
+  useGetAppointmentReservedDatesQuery,
+  useCreateAppointmentReservedDateMutation,
+  useDeleteAppointmentReservedDateMutation,
+  useGetPublicAppointmentAvailableHostsQuery,
+  useGetPublicAppointmentAvailableDatesQuery,
+  useCreatePublicAppointmentMutation,
+  useAuthorizeMutation,
+  useGetBannersQuery,
+  useCreateBannerMutation,
+  useEditBannerMutation,
+  useGetBannerByIdQuery,
+  useDeleteBannerMutation,
+  useSearchBannersQuery,
+  useGetPublicBannersByLanguageQuery,
+  useGetBullyJournalReportsQuery,
+  useCreateBullyJournalReportMutation,
+  useEditBullyJournalReportMutation,
+  useGetBullyJournalReportByIdQuery,
+  useDeleteBullyJournalReportMutation,
+  useGetBullyReportsQuery,
+  useGetBullyReportByIdQuery,
+  useDeleteBullyReportMutation,
+  useCreatePublicBullyReportMutation,
+  useGetCoursesStatsByDateQuery,
+  useGetTeacherCoursesByIdAndDateQuery,
+  useGetMyCoursesQuery,
+  useCreateCourseMutation,
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+  useDeleteCourseMutation,
+  useGetTeachersQuery,
+  useGetEventsByDateQuery,
+  useCreateEventMutation,
+  useDeleteEventMutation,
+  useGetPublicEventsQuery,
+  useGetPublicDayEventsQuery,
+  useGetPublicLanguagesQuery,
+  useGetMenusQuery,
+  useCreateMenuMutation,
+  useEditMenuMutation,
+  useGetMenuLocationsQuery,
+  useGetMenuByIdQuery,
+  useDeleteMenuMutation,
+  useSearchMenusQuery,
+  useGetPublicMenusByLanguageQuery,
+  useGetMenusMetaQuery,
+  useGetPostsMetaQuery,
+  useGetLocalesMetaQuery,
+  useGetObservationLessonsQuery,
+  useCreateObservationLessonMutation,
+  useEditObservationLessonMutation,
+  useGetObservationLessonByIdQuery,
+  useDeleteObservationLessonMutation,
+  useGetObservationTargetsQuery,
+  useCreateObservationTargetMutation,
+  useEditObservationTargetMutation,
+  useGetObservationTargetByIdQuery,
+  useDeleteObservationTargetMutation,
+  useGetObservationTypesQuery,
+  useCreateObservationTypeMutation,
+  useEditObservationTypeMutation,
+  useGetObservationTypeByIdQuery,
+  useDeleteObservationTypeMutation,
+  useGetPostsQuery,
+  useCreatePostMutation,
+  useEditPostMutation,
+  useGetPostByIdQuery,
+  usePatchPostMutation,
+  useDeletePostMutation,
+  useSearchPostsQuery,
+  useGetPublicPostByIdQuery,
+  useGetPublicPostByMenuLanguageAndPathQuery,
+  useGetPublicPostsByLanguageQuery,
+  useSearchPublicPostsQuery,
+  useGetClassroomsQuery,
+  useCreateClassroomMutation,
+  useEditClassroomMutation,
+  useGetClassroomByIdQuery,
+  useDeleteClassroomMutation,
+  useGetClasstimesQuery,
+  useCreateClasstimeMutation,
+  useGetClasstimeByIdQuery,
+  useDeleteClasstimeMutation,
+  useEditClasstimeMutation,
+  useGetClasstimesShortDaysQuery,
+  useCreateClasstimeShortDayMutation,
+  useEditClasstimeShortDayMutation,
+  useGetClasstimeShortDayByIdQuery,
+  useDeleteClasstimeShortDayMutation,
+  useGetClassdaysQuery,
+  useGetAnnouncementByIdQuery,
+  useDeleteAnnouncementMutation,
+  useCreateAnnouncementMutation,
+  useEditAnnouncementMutation,
+  useGetAnnouncementsQuery,
+  useGetPublicAnnouncementsQuery,
+  useGetPublicRandomImageQuery,
+  useGetStudentObservationsQuery,
+  useCreateStudentObservationMutation,
+  useEditStudentObservationMutation,
+  useGetMyStudentObservationsQuery,
+  useGetStudentObservationByIdQuery,
+  useDeleteStudentObservationMutation,
+  useGetTechJournalReportsQuery,
+  useCreateTechJournalReportMutation,
+  useEditTechJournalReportMutation,
+  useGetTechJournalReportByIdQuery,
+  usePatchTechJournalReportMutation,
+  useDeleteTechJournalReportMutation,
+  useGetTimetableQuery,
+  useCreateTimetableMutation,
+  useEditTimetableMutation,
+  useGetTimetableByIdQuery,
+  useDeleteTimetableMutation,
+  useImportTimetableMutation,
+  useDeleteTimetableDayMutation,
+  useGetPublicTimetableQuery,
+} = injectedRtkApi;

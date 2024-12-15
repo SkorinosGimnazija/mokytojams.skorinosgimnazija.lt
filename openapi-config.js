@@ -5,4 +5,5 @@ module.exports = {
   outputFile: './src/services/generatedApi.ts',
   exportName: 'generatedApi',
   hooks: true,
+  tag: true
 };

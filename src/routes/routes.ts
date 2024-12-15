@@ -265,6 +265,45 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'Stebėjimo kortelė',
+        path: '/admin/observations',
+        accessRole: 'Manager',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/admin/observations/ViewObservations')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/admin/observations/EditObservation')),
+          },
+          {
+            path: 'types',
+            lazyElement: lazy(() => import('../pages/admin/observations/ViewObservationTypes')),
+          },
+          {
+            path: 'types/:id',
+            lazyElement: lazy(() => import('../pages/admin/observations/EditObservationType')),
+          },
+          {
+            path: 'lessons',
+            lazyElement: lazy(() => import('../pages/admin/observations/ViewObservationLessons')),
+          },
+          {
+            path: 'lessons/:id',
+            lazyElement: lazy(() => import('../pages/admin/observations/EditObservationLesson')),
+          },
+          {
+            path: 'targets',
+            lazyElement: lazy(() => import('../pages/admin/observations/ViewObservationTargets')),
+          },
+          {
+            path: 'targets/:id',
+            lazyElement: lazy(() => import('../pages/admin/observations/EditObservationTarget')),
+          },
+        ],
+      },
     ],
   },
   {
@@ -347,6 +386,25 @@ export const routes: RoutesGroup[] = [
           {
             path: ':id',
             lazyElement: lazy(() => import('../pages/teacher/accomplishments/EditAccomplishment')),
+          },
+        ],
+      },
+      {
+        name: 'Stebėjimo kortelė',
+        path: '/teacher/observations',
+        accessRole: 'Teacher',
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/observations/ViewObservations')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/observations/EditObservation')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/observations/EditObservation')),
           },
         ],
       },
