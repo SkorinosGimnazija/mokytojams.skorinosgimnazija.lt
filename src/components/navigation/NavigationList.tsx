@@ -15,7 +15,7 @@ export const NavigationList = () => {
       <Toolbar />
       <Divider />
       {routes
-        .filter((x) => auth.hasAnyRole(x.routes.map((z) => z.accessRole)))
+        .filter((x) => auth.hasAnyRole(x.routes.flatMap((z) => z.accessRole)))
         .map((group) => {
           return (
             <React.Fragment key={group.name}>
@@ -29,7 +29,7 @@ export const NavigationList = () => {
                 }
               >
                 {group.routes
-                  .filter((x) => auth.hasRole(x.accessRole))
+                  .filter((x) => auth.hasAnyRole(x.accessRole))
                   .map((route) => {
                     return <NavigationButton key={route.path} name={route.name} slug={route.path} />;
                   })}

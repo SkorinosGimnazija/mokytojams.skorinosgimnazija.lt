@@ -8,7 +8,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Posts',
         path: '/cms/posts',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -27,7 +27,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Menus',
         path: '/cms/menus',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -46,7 +46,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Banners',
         path: '/cms/banners',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -65,7 +65,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Events',
         path: '/cms/events',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -85,7 +85,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Patyčių dėžutė',
         path: '/admin/bullies',
-        accessRole: 'Admin', // 'Bully',
+        accessRole: ['Admin'], // 'Bully',
         innerRoutes: [
           {
             path: '',
@@ -100,7 +100,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Kvalifikacijos kursai',
         path: '/admin/courses',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -111,7 +111,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Mokinių pasiekimai',
         path: '/admin/accomplishments',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -126,7 +126,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Metiniai pokalbiai',
         path: '/manager/appointments/yearly',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -137,7 +137,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Registracijos',
         path: '/admin/appointments',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -172,7 +172,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Klasės',
         path: '/school/classrooms',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -191,7 +191,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Pamokos',
         path: '/school/classtimes',
-        accessRole: 'Admin',
+        accessRole: ['Admin'],
         innerRoutes: [
           {
             path: '',
@@ -222,7 +222,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Tvarkaraštis',
         path: '/admin/timetable',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -249,7 +249,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Skelbimai',
         path: '/admin/announcements',
-        accessRole: 'Manager',
+        accessRole: ['Manager'],
         innerRoutes: [
           {
             path: '',
@@ -268,7 +268,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Stebėjimo kortelė',
         path: '/admin/observations',
-        accessRole: 'Manager',
+        accessRole: ['Manager', 'Social'],
         innerRoutes: [
           {
             path: '',
@@ -310,28 +310,9 @@ export const routes: RoutesGroup[] = [
     name: 'Mokytojams',
     routes: [
       {
-        name: 'Patyčių žurnalas',
-        path: '/teacher/bullies',
-        accessRole: 'Teacher',
-        innerRoutes: [
-          {
-            path: '',
-            lazyElement: lazy(() => import('../pages/teacher/bullies/ViewBullies')),
-          },
-          {
-            path: 'create',
-            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
-          },
-          {
-            path: ':id',
-            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
-          },
-        ],
-      },
-      {
         name: 'Gedimų žurnalas',
         path: '/teacher/failures',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -352,9 +333,29 @@ export const routes: RoutesGroup[] = [
         ],
       },
       {
+        name: 'Patyčių žurnalas',
+        path: '/teacher/bullies',
+        accessRole: ['Teacher', 'Social'],
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/ViewBullies')),
+          },
+          {
+            path: 'create',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
+          },
+          {
+            path: ':id',
+            lazyElement: lazy(() => import('../pages/teacher/bullies/EditBully')),
+          },
+        ],
+      },
+
+      {
         name: 'Kvalifikacijos kursai',
         path: '/teacher/courses',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -373,7 +374,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Mokinių pasiekimai',
         path: '/teacher/accomplishments',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -392,7 +393,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Stebėjimo kortelė',
         path: '/teacher/observations',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -411,7 +412,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Tėvų dienos',
         path: '/teacher/appointments/parents',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -422,7 +423,7 @@ export const routes: RoutesGroup[] = [
       {
         name: 'Metiniai pokalbiai',
         path: '/teacher/appointments/yearly',
-        accessRole: 'Teacher',
+        accessRole: ['Teacher'],
         innerRoutes: [
           {
             path: '',
@@ -446,7 +447,7 @@ interface RoutesGroup {
 interface Route {
   name: string;
   path: string;
-  accessRole: AuthRole;
+  accessRole: AuthRole[];
   innerRoutes: InnerRoute[];
 }
 
