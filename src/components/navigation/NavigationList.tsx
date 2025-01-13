@@ -33,12 +33,6 @@ export const NavigationList = () => {
                   .map((route) => {
                     return <NavigationButton key={route.path} name={route.name} slug={route.path} />;
                   })}
-                {group.name === 'Mokytojams' && (
-                  <NavigationButton
-                    name="UTA bankas"
-                    slug="https://drive.google.com/drive/folders/0ANgMsvl4XlSlUk9PVA"
-                  />
-                )}
               </List>
             </React.Fragment>
           );

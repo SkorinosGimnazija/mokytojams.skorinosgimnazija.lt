@@ -30,18 +30,22 @@ export const Markdown: React.FC<Props> = ({ children }) => {
       }}
     >
       <MarkdownJsx
-        options={
-          {
-            // overrides: {
-            //   img: {
-            //     component: MyImage,
-            //     props: {
-            //       // props: 'foo',
-            //     },
+        options={{
+          overrides: {
+            // img: {
+            //   component: MyImage,
+            //   props: {
+            //     // props: 'foo',
             //   },
             // },
-          }
-        }
+            a: {
+              props: {
+                target: '_blank',
+                rel: 'noreferrer',
+              },
+            },
+          },
+        }}
       >
         {children}
       </MarkdownJsx>

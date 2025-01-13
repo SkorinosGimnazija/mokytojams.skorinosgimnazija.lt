@@ -435,6 +435,17 @@ export const routes: RoutesGroup[] = [
           },
         ],
       },
+      {
+        name: 'UTA bankas',
+        path: '/teacher/uta',
+        accessRole: ['Teacher'],
+        innerRoutes: [
+          {
+            path: '',
+            lazyElement: lazy(() => import('../pages/teacher/info/ViewUta')),
+          },
+        ],
+      },
     ],
   },
 ];
