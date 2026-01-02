@@ -1,0 +1,60 @@
+{
+  "name": "mokytojams.skorinosgimnazija.lt",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:client": "vite",
+    "dev:api": "dotnet run --project ../api.skorinosgimnazija.lt/API",
+    "generate:api": "npx @rtk-query/codegen-openapi openapi-config.cjs",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/charts": "^8.3.10",
+    "@mantine/core": "^8.3.10",
+    "@mantine/dates": "^8.3.10",
+    "@mantine/form": "^8.3.10",
+    "@mantine/hooks": "^8.3.10",
+    "@mantine/modals": "^8.3.10",
+    "@mantine/notifications": "^8.3.10",
+    "@mantine/nprogress": "^8.3.10",
+    "@phosphor-icons/react": "^2.1.7",
+    "@react-oauth/google": "^0.13.0",
+    "@reduxjs/toolkit": "^2.11.2",
+    "dayjs": "^1.11.19",
+    "markdown-to-jsx": "^7.7.17",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.9.6",
+    "recharts": "^3.5.1",
+    "slug": "^11.0.1",
+    "turndown": "^7.2.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^25.0.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/slug": "^5.0.9",
+    "@types/turndown": "^5.0.6",
+    "@vitejs/plugin-react": "^5.1.2",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.25",
+    "globals": "^16.5.0",
+    "postcss": "^8.4.49",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.49.0",
+    "vite": "npm:rolldown-vite@^7.1.15",
+    "vite-tsconfig-paths": "^6.0.0"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@^7.1.15"
+  }
+}

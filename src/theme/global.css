@@ -1,0 +1,61 @@
+﻿/*body {*/
+/*    max-width: 100vw;*/
+/*    width: 100vw;*/
+/*    max-height: 100dvh;*/
+/*    height: 100dvh;*/
+/*    overflow: hidden;*/
+/*}*/
+
+body {
+    overflow-y: scroll;
+}
+
+svg {
+    display: block;
+}
+
+.mantine-AppShell-header {
+    box-shadow: var(--mantine-shadow-xs);
+    padding-left: var(--mantine-spacing-lg);
+    padding-right: var(--mantine-spacing-lg);
+}
+
+.mantine-AppShell-main {
+    display: flex;
+    flex-direction: column;
+    /*display: grid;*/
+    /*height: 100dvh;*/
+    padding-right: 0;
+}
+
+.mantine-AppShell-navbar {
+    padding: var(--mantine-spacing-xs);
+
+    > div {
+        height: 100%;
+        padding-block: var(--mantine-spacing-sm);
+        padding-inline: var(--mantine-spacing-xs);
+        border-radius: var(--mantine-radius-lg);
+        background: var(--mantine-color-gray-1);
+
+        @mixin dark {
+            background: var(--mantine-color-dark-8);
+        }
+
+        a {
+            border-radius: var(--mantine-radius-sm);
+            transition: background-color 500ms ease-out;
+            margin-top: 2px;
+        }
+    }
+}
+
+.mantine-MonthPickerInput-input,
+.mantine-LineChart-axis text {
+    text-transform: capitalize;
+}
+
+.mantine-Modal-overlay,
+.mantine-Drawer-overlay {
+    background: rgba(0, 0, 0, 0.35);
+}
