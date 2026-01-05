@@ -21,6 +21,11 @@ export function parseTimetable({ html, rooms, days, times }: Props) {
   const doc = htmlParser.parse(html)
   const body = doc.body
 
+  const tableCount = body.querySelectorAll('table').length
+  if (tableCount != 1) {
+    throw new Error(`Found ${tableCount} tables`)
+  }
+
   const tableRows = body.querySelectorAll('tr')
   if (tableRows.length < 2) {
     return []
@@ -134,7 +139,7 @@ function getTimeId(timeName: string, times: ListClasstimesApiResponse) {
     }
   }
 
-  throw new Error(`Could not find time ${timeName}`)
+  throw new Error(`Could not find time '${timeName}'`)
 }
 
 function getRoomId(roomName: string, rooms: ListClassroomsApiResponse) {
@@ -146,7 +151,7 @@ function getRoomId(roomName: string, rooms: ListClassroomsApiResponse) {
     }
   }
 
-  throw new Error(`Could not find room ${roomName}`)
+  throw new Error(`Could not find room '${roomName}'`)
 }
 
 function normalizeClassroomName(name: string) {
