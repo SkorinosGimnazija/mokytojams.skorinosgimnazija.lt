@@ -119,8 +119,6 @@ export function UpdatePost() {
   const onSubmit = form.onSubmit(async (values) => {
     const fd = createFormData(values) as any
 
-    console.log(values)
-
     const response = isEdit ? await updateRecord(fd) : await createRecord(fd)
     if ('error' in response) {
       return
@@ -522,7 +520,8 @@ export function UpdatePost() {
         currentImages={form.getValues().newFeaturedImage}
         oldImages={form.getValues().oldFeaturedImage}
         onSelect={(newImages, oldImages) => {
-          form.setValues({ newFeaturedImage: newImages[0], oldFeaturedImage: oldImages[0] })
+          form.setFieldValue('newFeaturedImage', newImages[0])
+          form.setFieldValue('oldFeaturedImage', oldImages[0])
         }}
       />
 
@@ -534,7 +533,8 @@ export function UpdatePost() {
         currentImages={form.getValues().newImages}
         oldImages={form.getValues().oldImages}
         onSelect={(newImages, oldImages) => {
-          form.setValues({ newImages: newImages, oldImages: oldImages })
+          form.setFieldValue('newImages', newImages)
+          form.setFieldValue('oldImages', oldImages)
         }}
       />
 
@@ -545,7 +545,7 @@ export function UpdatePost() {
         multiple={true}
         currentFiles={form.getValues().newFiles}
         onSelect={(newFiles) => {
-          form.setValues({ newFiles: newFiles })
+          form.setFieldValue('newFiles', newFiles)
         }}
       />
 
