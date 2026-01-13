@@ -22,13 +22,13 @@ export function parseTimetable({ html, rooms, days, times }: Props) {
   const body = doc.body
 
   const tableCount = body.querySelectorAll('table').length
-  if (tableCount != 1) {
+  if (tableCount !== 1) {
     throw new Error(`Found ${tableCount} tables`)
   }
 
-  const tableRows = body.querySelectorAll('tr')
+  const tableRows = body.querySelectorAll('tr:not(:has(>td:first-child[colspan]))')
   if (tableRows.length < 2) {
-    return []
+    throw new Error(`Not enough rows`)
   }
 
   const dayId = getDayId(body.textContent, days)
@@ -66,7 +66,8 @@ export function parseTimetable({ html, rooms, days, times }: Props) {
       const className = td.textContent
         .replaceAll('/', ' / ')
         .replace(/\s+/g, ' ')
-        .replace(/-{2,}/g, '----')
+        .replace(/-{2,}/g, '-----')
+        .replace(/(?<=\p{L})-(?=\p{L})/gu, '')
         .trim()
 
       for (let i = 0; i < rowSpan; i++) {
