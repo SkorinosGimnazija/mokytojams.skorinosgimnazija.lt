@@ -18,7 +18,7 @@ export function UserProfileButton() {
   }
 
   return (
-    <Menu shadow="md" width={200} position="bottom-end">
+    <Menu shadow="md" width={200} position="bottom-end" withinPortal={false}>
 
       <Menu.Target>
         <ActionIcon variant="default" size={36}>
@@ -66,7 +66,7 @@ export function UserProfileButton() {
 
             <Menu.Divider/>
 
-            <Menu.Item onClick={() => dispatch(setId(15))}>
+            <Menu.Item onClick={() => dispatch(setId(2))}>
               Change user id
             </Menu.Item>
           </>
