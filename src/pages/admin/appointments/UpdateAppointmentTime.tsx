@@ -1,5 +1,6 @@
 ﻿import { SubmitButton } from '@/components/buttons/SubmitButton.tsx'
 import { useParamId } from '@/hooks/useParamId.tsx'
+import { useRequestHandler } from '@/hooks/useRequestHandler.tsx'
 import { DrawerLayout } from '@/layout/DrawerLayout.tsx'
 import {
   useGetAppointmentTypeQuery,
@@ -8,7 +9,7 @@ import {
   useUpdateAppointmentDatesMutation
 } from '@/services/generatedApi.ts'
 import { formatDateTime, ISO } from '@/utils/dateUtils.ts'
-import { itemSavedNotification, validationErrorNotification } from '@/utils/notifications.ts'
+import { validationErrorNotification } from '@/utils/notifications.ts'
 import { Button, Group, Pill, Stack } from '@mantine/core'
 import { DatePickerInput, TimePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
@@ -25,9 +26,10 @@ export function UpdateAppointmentTime() {
       datesToGenerate: [] as string[],
       generatedDates: [] as string[],
     },
-    transformValues: (values) => (
-      values.generatedDates.map(date => ({ typeId, date }))
-    )
+    transformValues: (values) => ({
+      id: typeId,
+      dates: values.generatedDates
+    })
   })
 
   const typeQuery = useGetAppointmentTypeQuery(typeId)
@@ -38,7 +40,8 @@ export function UpdateAppointmentTime() {
     })
   })
 
-  const [patchRecord] = useUpdateAppointmentDatesMutation()
+  const [updateRecord] = useUpdateAppointmentDatesMutation()
+  const handleRequest = useRequestHandler({ redirect: false })
 
   const setForm = useEffectEvent((data: NonNullable<typeof datesQuery.data>) => {
     form.setFieldValue('generatedDates', data.map(x => ISO(x.date)))
@@ -102,10 +105,7 @@ export function UpdateAppointmentTime() {
   return (
     <DrawerLayout title={`Laikas "${appointmentTypeNameQuery.data}"`} closeNavLink="../../">
       <form autoComplete="off" onSubmit={form.onSubmit(async (data) => {
-        const response = await patchRecord(data)
-        if ('data' in response) {
-          itemSavedNotification()
-        }
+        await handleRequest({ updateRecord, data })
       })}>
         <Stack>
           <Group>

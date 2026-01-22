@@ -1,5 +1,6 @@
 ﻿import { SubmitButton } from '@/components/buttons/SubmitButton.tsx'
 import { useParamId } from '@/hooks/useParamId.tsx'
+import { useRequestHandler } from '@/hooks/useRequestHandler.tsx'
 import { DrawerLayout } from '@/layout/DrawerLayout.tsx'
 import {
   useListAppointmentTypeAvailableHostsQuery,
@@ -9,7 +10,6 @@ import {
 } from '@/services/generatedApi.ts'
 import { nothingFoundMessage } from '@/utils/constants.ts'
 import { formatDateTime } from '@/utils/dateUtils.ts'
-import { itemSavedNotification } from '@/utils/notifications.ts'
 import { lithuanianSearchFilter } from '@/utils/optionFilters.ts'
 import { MultiSelect, Select, Stack } from '@mantine/core'
 import { isNotEmpty, useForm } from '@mantine/form'
@@ -23,12 +23,10 @@ export function UpdateAppointmentUserTime() {
       hostId: '',
       dateIds: [] as string[],
     },
-    transformValues: (values) => (
-      values.dateIds.map(id => ({
-        hostId: Number(values.hostId),
-        dateId: Number(id),
-      }))
-    ),
+    transformValues: (values) => ({
+      id: Number(values.hostId),
+      dateIds: values.dateIds.map(x => Number(x))
+    }),
     validate: {
       hostId: isNotEmpty(),
     }
@@ -42,17 +40,7 @@ export function UpdateAppointmentUserTime() {
 
   const datesQuery = useListAppointmentTypeStatusDatesQuery(
     { typeId, hostId: Number(form.getValues().hostId) },
-    {
-      skip: !form.getValues().hostId,
-      selectFromResult: ({ data }) => ({
-        data: data?.map(x => ({
-          value: String(x.id),
-          label: formatDateTime(x.date),
-          disabled: x.isRegistered,
-          reserved: x.isReserved,
-        })) ?? []
-      })
-    }
+    { skip: !form.getValues().hostId }
   )
 
   const hostsQuery = useListAppointmentTypeAvailableHostsQuery(typeId, {
@@ -66,9 +54,10 @@ export function UpdateAppointmentUserTime() {
   })
 
   const [updateRecord] = useUpdateAppointmentReservedDatesMutation()
+  const handleRequest = useRequestHandler({ redirect: false })
 
   const setForm = useEffectEvent((data: NonNullable<typeof datesQuery.data>) => {
-    form.setFieldValue('dateIds', data.filter(x => x.reserved).map(x => x.value))
+    form.setFieldValue('dateIds', data.filter(x => x.isReserved).map(x => String(x.id)))
   })
 
   useEffect(() => {
@@ -80,10 +69,7 @@ export function UpdateAppointmentUserTime() {
   return (
     <DrawerLayout title={`Rezervuoti laiką "${appointmentTypeNameQuery.data}"`} closeNavLink="../../">
       <form autoComplete="off" onSubmit={form.onSubmit(async (data) => {
-        const response = await updateRecord(data)
-        if ('data' in response) {
-          itemSavedNotification()
-        }
+        await handleRequest({ updateRecord, data })
       })}>
 
         <Stack>
@@ -106,7 +92,11 @@ export function UpdateAppointmentUserTime() {
             maxDropdownHeight={300}
             disabled={!form.getValues().hostId}
             withAlignedLabels
-            data={datesQuery.data}
+            data={datesQuery.data?.map(x => ({
+              value: String(x.id),
+              label: formatDateTime(x.date),
+              disabled: x.isRegistered
+            })) ?? []}
           />
 
           <SubmitButton disabled={form.submitting}/>

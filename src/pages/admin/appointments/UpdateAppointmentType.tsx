@@ -25,6 +25,7 @@ export function UpdateAppointmentType() {
     initialValues: {
       id,
       name: '',
+      description: '',
       exclusiveHostIds: [] as string[],
       additionalInviteeIds: [] as string[],
       durationInMinutes: '' as number | string,
@@ -34,6 +35,7 @@ export function UpdateAppointmentType() {
     },
     validate: {
       name: isNotEmpty(),
+      description: isNotEmpty(),
       registrationEndsAt: isNotEmpty(),
       durationInMinutes: isNotEmpty(),
     },
@@ -86,6 +88,14 @@ export function UpdateAppointmentType() {
             key={form.key('name')}
             {...form.getInputProps('name')}
             label="Pavadinimas"
+            withAsterisk
+            maxLength={128}
+          />
+
+          <TextInput
+            key={form.key('description')}
+            {...form.getInputProps('description')}
+            label="Aprašymas"
             withAsterisk
             maxLength={128}
           />

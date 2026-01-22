@@ -1236,12 +1236,12 @@ export type DeleteAppointmentTypeApiResponse = unknown;
 export type DeleteAppointmentTypeApiArg = number;
 export type UpdateAppointmentReservedDatesApiResponse = unknown;
 export type UpdateAppointmentReservedDatesApiArg =
-  UpdateAppointmentReservedDatesRequest[];
+  UpdateAppointmentReservedDatesRequest;
 export type ListAppointmentTypeAvailableHostsApiResponse =
   /** status 200 Success */ AppointmentHostResponse[];
 export type ListAppointmentTypeAvailableHostsApiArg = number;
 export type UpdateAppointmentDatesApiResponse = unknown;
-export type UpdateAppointmentDatesApiArg = UpdateAppointmentDatesRequest[];
+export type UpdateAppointmentDatesApiArg = UpdateAppointmentDatesRequest;
 export type ListAppointmentTypeDatesApiResponse =
   /** status 200 Success */ AppointmentDateResponse[];
 export type ListAppointmentTypeDatesApiArg = number;
@@ -1726,6 +1726,7 @@ export type CreateAppointmentRequest = {
 export type AppointmentTypeResponse = {
   id: number;
   name: string;
+  description: string;
   registrationEndsAt: string;
 };
 export type AppointmentTypeDetailedResponse = AppointmentTypeResponse & {
@@ -1737,6 +1738,7 @@ export type AppointmentTypeDetailedResponse = AppointmentTypeResponse & {
 };
 export type CreateAppointmentTypeRequest = {
   name: string;
+  description: string;
   durationInMinutes: number;
   isOnline: boolean;
   isPublic: boolean;
@@ -1748,8 +1750,8 @@ export type UpdateAppointmentTypeRequest = CreateAppointmentTypeRequest & {
   id: number;
 };
 export type UpdateAppointmentReservedDatesRequest = {
-  dateId: number;
-  hostId: number;
+  id: number;
+  dateIds: number[];
 };
 export type AppointmentHostResponse = {
   id: number;
@@ -1757,8 +1759,8 @@ export type AppointmentHostResponse = {
   normalizedName: string;
 };
 export type UpdateAppointmentDatesRequest = {
-  typeId: number;
-  date: string;
+  id: number;
+  dates: string[];
 };
 export type AppointmentDateResponse = {
   id: number;

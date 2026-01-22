@@ -72,7 +72,7 @@ export function CreateAppointment() {
             key={form.key('typeId')}
             {...form.getInputProps('typeId')}
             label="Tipas"
-            data={typesQuery.data?.map(x => ({ value: String(x.id), label: x.name }))}
+            data={typesQuery.data?.map(x => ({ value: String(x.id), label: x.description }))}
             allowDeselect={false}
             withAsterisk
           />
