@@ -1367,16 +1367,16 @@ export type UpdateShortDayRequest = CreateShortDayRequest & {
 export type ClasstimeResponse = {
   id: number;
   startTime: string;
-  startTimeShort: string;
+  startTimeShort?: string | null;
   endTime: string;
-  endTimeShort: string;
+  endTimeShort?: string | null;
 };
 export type UpsertClasstimeRequest = {
   id: number;
   startTime: string;
-  startTimeShort: string;
+  startTimeShort?: string | null;
   endTime: string;
-  endTimeShort: string;
+  endTimeShort?: string | null;
 };
 export type ClassroomResponse = {
   id: number;

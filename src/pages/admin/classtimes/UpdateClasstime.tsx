@@ -17,16 +17,21 @@ export function UpdateClasstime() {
     initialValues: {
       id,
       startTime: '',
-      startTimeShort: '',
+      startTimeShort: '' as string | null | undefined,
       endTime: '',
-      endTimeShort: '',
+      endTimeShort: '' as string | null | undefined,
     },
     validate: {
       id: isNotEmpty(),
       startTime: isNotEmpty(),
-      startTimeShort: isNotEmpty(),
-      endTime: isNotEmpty(),
-      endTimeShort: isNotEmpty(),
+      endTime: isNotEmpty()
+    },
+    transformValues: (values) => {
+      return {
+        ...values,
+        startTimeShort: values.startTimeShort ? values.startTimeShort : null,
+        endTimeShort: values.endTimeShort ? values.endTimeShort : null,
+      }
     }
   })
 
@@ -86,14 +91,12 @@ export function UpdateClasstime() {
               key={form.key('startTimeShort')}
               {...form.getInputProps('startTimeShort')}
               label="Nuo (sutrumpintas)"
-              withAsterisk
             />
 
             <TimeInput
               key={form.key('endTimeShort')}
               {...form.getInputProps('endTimeShort')}
               label="Iki (sutrumpintas)"
-              withAsterisk
             />
           </Group>
 

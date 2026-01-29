@@ -26,7 +26,7 @@ export function ViewClasstimes() {
           <Table.Tr key={x.id}>
             <Table.Td>{x.id}</Table.Td>
             <Table.Td>{`${x.startTime} - ${x.endTime}`}</Table.Td>
-            <Table.Td>{`${x.startTimeShort} - ${x.endTimeShort}`}</Table.Td>
+            <Table.Td>{`${x.startTimeShort ?? ''} - ${x.endTimeShort ?? ''}`}</Table.Td>
             <Table.Td ta="right">
               <EditButton to={x.id}/>
               <DeleteButton onClick={() => deleteRecord(x.id)}/>
