@@ -24,6 +24,7 @@ import { ViewObservationStats } from '@/pages/admin/observations/ViewObservation
 import { ViewObservationStudents } from '@/pages/admin/observations/ViewObservationStudents.tsx'
 import { UpdateShortDay } from '@/pages/admin/shortdays/UpdateShortDay.tsx'
 import { ViewShortDays } from '@/pages/admin/shortdays/ViewShortDays.tsx'
+import { UpdateRandomImageSettings } from '@/pages/admin/settings/UpdateRandomImageSettings.tsx'
 import { DeleteTimetable } from '@/pages/admin/timetable/DeleteTimetable.tsx'
 import { ViewTimetable } from '@/pages/admin/timetable/ViewTimetable.tsx'
 import { UpdateBanner } from '@/pages/cms/banners/UpdateBanner.tsx'
@@ -231,6 +232,7 @@ export const routes: RoutesGroup[] = [
             children: [
               { index: true, Component: null },
               { path: 'delete', Component: DeleteTimetable },
+              { path: 'random-image', Component: UpdateRandomImageSettings },
             ]
           },
           {

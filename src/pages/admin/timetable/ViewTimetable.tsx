@@ -52,6 +52,7 @@ export function ViewTimetable() {
         <Button component={Link} to="classrooms">Klasės</Button>
         <Button component={Link} to="classtimes">Pamokos</Button>
         <Button component={Link} to="short-days">Sutrumpintos dienos</Button>
+        <Button component={Link} to="random-image">TV nuotraukų nustatymai</Button>
       </>
     }>
       <Table.Thead>

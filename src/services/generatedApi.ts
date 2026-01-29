@@ -2,6 +2,7 @@ import { baseApi as api } from "./baseApi";
 export const addTagTypes = [
   "Teachers",
   "Users",
+  "Settings",
   "School",
   "Posts",
   "Public",
@@ -33,6 +34,24 @@ const injectedRtkApi = api
       listUsers: build.query<ListUsersApiResponse, ListUsersApiArg>({
         query: () => ({ url: `/users` }),
         providesTags: ["Users"],
+      }),
+      getRandomImageSettings: build.query<
+        GetRandomImageSettingsApiResponse,
+        GetRandomImageSettingsApiArg
+      >({
+        query: () => ({ url: `/settings/random-image` }),
+        providesTags: ["Settings"],
+      }),
+      postRandomImageSettings: build.mutation<
+        PostRandomImageSettingsApiResponse,
+        PostRandomImageSettingsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/settings/random-image`,
+          method: "POST",
+          body: queryArg,
+        }),
+        invalidatesTags: ["Settings"],
       }),
       getTimetableStats: build.query<
         GetTimetableStatsApiResponse,
@@ -970,6 +989,11 @@ export type ListTeachersApiResponse = /** status 200 Success */ UserResponse[];
 export type ListTeachersApiArg = void;
 export type ListUsersApiResponse = /** status 200 Success */ UserResponse[];
 export type ListUsersApiArg = void;
+export type GetRandomImageSettingsApiResponse =
+  /** status 200 Success */ RandomImageSettings;
+export type GetRandomImageSettingsApiArg = void;
+export type PostRandomImageSettingsApiResponse = unknown;
+export type PostRandomImageSettingsApiArg = RandomImageSettings;
 export type GetTimetableStatsApiResponse =
   /** status 200 Success */ TimetableStatsResponse[];
 export type GetTimetableStatsApiArg = void;
@@ -1291,6 +1315,10 @@ export type UserResponse = {
   id: number;
   name: string;
   normalizedName: string;
+};
+export type RandomImageSettings = {
+  cacheDurationInMinutes: number;
+  forcedPostId?: number | null;
 };
 export type TimetableStatsResponse = {
   roomId: number;
@@ -1834,6 +1862,8 @@ export type AchievementScaleResponse = {
 export const {
   useListTeachersQuery,
   useListUsersQuery,
+  useGetRandomImageSettingsQuery,
+  usePostRandomImageSettingsMutation,
   useGetTimetableStatsQuery,
   useDeleteTimetableMutation,
   useCreateTimetableMutation,
