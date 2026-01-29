@@ -65,9 +65,10 @@ export function parseTimetable({ html, rooms, days, times }: Props) {
 
       const className = td.textContent
         .replaceAll('/', ' / ')
+        .replace(/\skalba\s/gi, ' k. ')
         .replace(/\s+/g, ' ')
-        .replace(/-{2,}/g, '-----')
-        .replace(/(?<=\p{L})-(?=\p{L})/gu, '')
+        .replace(/-{2,}/g, '-'.repeat(5))
+        .replace(/(?<=\p{L})-(?=\p{L})/gu, '') // remove hyphens between letters
         .trim()
 
       for (let i = 0; i < rowSpan; i++) {
