@@ -6,10 +6,11 @@ updates:
       interval: "weekly"
       day: "sunday"
       time: "22:00"
-    allow:
-      - dependency-type: "production"
+    labels:
+      - "dependencies"
     ignore:
       - dependency-name: "markdown-to-jsx"
+        update-types: [ "version-update:semver-major" ]
     groups:
       all:
         patterns: [ "*" ]
@@ -20,6 +21,25 @@ updates:
       interval: "weekly"
       day: "sunday"
       time: "22:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
     groups:
       all-actions:
         patterns: [ "*" ]
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "22:00"
+    labels:
+      - "dependencies"
+      - "docker"
+    groups:
+      all-images:
+        patterns: [ "*" ]
+    ignore:
+      - dependency-name: "node"
+        update-types: [ "version-update:semver-major" ]
