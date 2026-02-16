@@ -6,10 +6,10 @@ updates:
       interval: "weekly"
       day: "sunday"
       time: "22:00"
-    labels:
-      - "dependencies"
     ignore:
       - dependency-name: "markdown-to-jsx"
+        update-types: [ "version-update:semver-major" ]
+      - dependency-name: "@types/node"
         update-types: [ "version-update:semver-major" ]
     groups:
       all:
@@ -21,9 +21,6 @@ updates:
       interval: "weekly"
       day: "sunday"
       time: "22:00"
-    labels:
-      - "dependencies"
-      - "github-actions"
     groups:
       all-actions:
         patterns: [ "*" ]
@@ -34,9 +31,6 @@ updates:
       interval: "weekly"
       day: "sunday"
       time: "22:00"
-    labels:
-      - "dependencies"
-      - "docker"
     groups:
       all-images:
         patterns: [ "*" ]
