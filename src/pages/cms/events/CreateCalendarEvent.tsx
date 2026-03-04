@@ -100,7 +100,7 @@ export function CreateCalendarEvent() {
           </Group>
 
           <Group grow align="flex-end">
-            <Button onClick={increaseDay}>+1 d.</Button>
+            <Button variant="light" onClick={increaseDay}>+1 d.</Button>
             {form.getValues().allDay ?
               <>
                 <DatePickerInput
