@@ -992,7 +992,8 @@ export type ListUsersApiArg = void;
 export type GetRandomImageSettingsApiResponse =
   /** status 200 Success */ RandomImageSettings;
 export type GetRandomImageSettingsApiArg = void;
-export type PostRandomImageSettingsApiResponse = unknown;
+export type PostRandomImageSettingsApiResponse =
+  /** status 200 Success */ RandomImageSettings;
 export type PostRandomImageSettingsApiArg = RandomImageSettings;
 export type GetTimetableStatsApiResponse =
   /** status 200 Success */ TimetableStatsResponse[];
@@ -1326,7 +1327,9 @@ export type TimetableStatsResponse = {
   countsByDay: {
     [key: string]: number;
   };
-  overrideDates: string[];
+  overrideDates: {
+    [key: string]: number;
+  };
 };
 export type ProblemDetailsError = {
   /** the name of the error or property of the dto that caused the error */

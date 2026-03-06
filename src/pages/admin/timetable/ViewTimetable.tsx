@@ -69,7 +69,7 @@ export function ViewTimetable() {
             <Table.Tr key={x.roomId}>
               <Table.Td>{x.roomName}</Table.Td>
               <Table.Td>{Object.values(x.countsByDay).join(', ')}</Table.Td>
-              <Table.Td>{x.overrideDates.map(x => formatDate(x)).join(', ')}</Table.Td>
+              <Table.Td>{Object.entries(x.overrideDates).map(([date, count]) => `${formatDate(date)} (${count})`).join(', ')}</Table.Td>
             </Table.Tr>
           )
         })}
