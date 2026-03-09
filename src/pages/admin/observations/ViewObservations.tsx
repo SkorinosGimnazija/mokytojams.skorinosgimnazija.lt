@@ -23,7 +23,7 @@ export function ViewObservations() {
         <>
           <ProtectedComponent authRole="Admin">
             <Button variant="light" component={Link} to="students">Mokiniai</Button>
-            <Button variant="light" component={Link} to="lessons">Pamokų laikas</Button>
+            <Button variant="light" component={Link} to="lessons">Pamokos</Button>
             <Button variant="light" component={Link} to="types">Pasirinkimai</Button>
           </ProtectedComponent>
           <Button variant="light" component={Link} to="stats">Statistika</Button>
