@@ -50,7 +50,7 @@ export function ViewTimetable() {
         <Button onClick={handleImport}>Importuoti tvarkaraštį</Button>
         <Button component={Link} to="delete" viewTransition>Ištrinti tvarkaraštį</Button>
         <Button component={Link} to="classrooms">Klasės</Button>
-        <Button component={Link} to="classtimes">Pamokos</Button>
+        <Button component={Link} to="classtimes">Pamokų laikas</Button>
         <Button component={Link} to="short-days">Sutrumpintos dienos</Button>
         <Button component={Link} to="random-image">TV nuotraukų nustatymai</Button>
       </>
