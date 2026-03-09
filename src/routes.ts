@@ -251,7 +251,7 @@ export const routes: RoutesGroup[] = [
           },
           {
             path: 'classtimes',
-            handle: { breadcrumb: { title: 'Pamokos' } },
+            handle: { breadcrumb: { title: 'Pamokų laikas' } },
             children: [
               {
                 Component: ViewClasstimes,
