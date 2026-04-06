@@ -1,7 +1,6 @@
 import babel from '@rolldown/plugin-babel'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,9 +14,11 @@ export default defineConfig({
     sourcemap: false,
     chunkSizeWarningLimit: 5000
   },
+  resolve: {
+    tsconfigPaths: true
+  },
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] }),
-    tsconfigPaths()
+    babel({ presets: [reactCompilerPreset()] })
   ]
 })

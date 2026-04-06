@@ -1,11 +1,11 @@
 ﻿import { searchMessage } from '@/utils/constants.ts'
-import type { ComboboxStringData } from '@mantine/core'
+import type { ComboboxData } from '@mantine/core'
 import { Autocomplete } from '@mantine/core'
 import React from 'react'
 
 interface Props {
   onChange: (value: string) => void
-  autocompleteData?: ComboboxStringData
+  autocompleteData?: ComboboxData
 }
 
 export function SearchInput({ autocompleteData, onChange }: Props) {
