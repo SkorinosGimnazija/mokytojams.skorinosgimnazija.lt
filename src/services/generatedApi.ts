@@ -1782,6 +1782,7 @@ export type UpdateAppointmentTypeRequest = CreateAppointmentTypeRequest & {
 };
 export type UpdateAppointmentReservedDatesRequest = {
   id: number;
+  hostId: number;
   dateIds: number[];
 };
 export type AppointmentHostResponse = {

@@ -20,11 +20,13 @@ export function UpdateAppointmentUserTime() {
   const form = useForm({
     mode: 'controlled',
     initialValues: {
+      id: Number(typeId),
       hostId: '',
       dateIds: [] as string[],
     },
     transformValues: (values) => ({
-      id: Number(values.hostId),
+      ...values,
+      hostId: Number(values.hostId),
       dateIds: values.dateIds.map(x => Number(x))
     }),
     validate: {
@@ -91,6 +93,7 @@ export function UpdateAppointmentUserTime() {
             label="Laikas"
             maxDropdownHeight={300}
             disabled={!form.getValues().hostId}
+            loading={datesQuery.isFetching}
             withAlignedLabels
             data={datesQuery.data?.map(x => ({
               value: String(x.id),
