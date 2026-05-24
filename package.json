@@ -39,7 +39,7 @@
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.12.4",
-    "@types/react": "^19.2.10",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@types/slug": "^5.0.9",
     "@types/turndown": "^5.0.6",
@@ -49,11 +49,11 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
-    "postcss": "^8.5.14",
+    "postcss": "^8.5.15",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.59.3",
-    "vite": "^8.0.13"
+    "typescript-eslint": "^8.59.4",
+    "vite": "^8.0.14"
   }
 }
