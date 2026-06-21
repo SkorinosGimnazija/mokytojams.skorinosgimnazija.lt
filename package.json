@@ -12,14 +12,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mantine/charts": "^9.3.1",
-    "@mantine/core": "^9.3.1",
-    "@mantine/dates": "^9.3.1",
-    "@mantine/form": "^9.3.1",
-    "@mantine/hooks": "^9.3.1",
-    "@mantine/modals": "^9.3.1",
-    "@mantine/notifications": "^9.3.1",
-    "@mantine/nprogress": "^9.3.1",
+    "@mantine/charts": "^9.3.2",
+    "@mantine/core": "^9.3.2",
+    "@mantine/dates": "^9.3.2",
+    "@mantine/form": "^9.3.2",
+    "@mantine/hooks": "^9.3.2",
+    "@mantine/modals": "^9.3.2",
+    "@mantine/notifications": "^9.3.2",
+    "@mantine/nprogress": "^9.3.2",
     "@phosphor-icons/react": "^2.1.7",
     "@react-oauth/google": "^0.13.5",
     "@reduxjs/toolkit": "^2.12.0",
@@ -28,13 +28,13 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-redux": "^9.3.0",
-    "react-router": "^7.17.0",
+    "react-router": "^8.0.1",
     "recharts": "^3.7.0",
     "slug": "^11.0.1",
     "turndown": "^7.2.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.1",
     "@eslint/js": "^9.39.2",
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/babel__core": "^7.20.5",
@@ -53,7 +53,7 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.61.0",
+    "typescript-eslint": "^8.61.1",
     "vite": "^8.0.16"
   }
 }
