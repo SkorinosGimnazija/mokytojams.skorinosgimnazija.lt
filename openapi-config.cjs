@@ -1,7 +1,7 @@
 // https://redux-toolkit.js.org/rtk-query/usage/code-generation#openapi
 
 module.exports = {
-  schemaFile: 'http://localhost:5000/swagger/v1/swagger.json',
+  schemaFile: 'http://localhost:5000/openapi/v1.json',
   apiFile: './src/services/baseApi.ts',
   apiImport: 'baseApi',
   outputFile: './src/services/generatedApi.ts',

@@ -1,4 +1,4 @@
-﻿import { baseApi } from '@/services/baseApi.ts'
+import { baseApi } from '@/services/baseApi.ts'
 import type {
   addTagTypes,
   ListAchievementsApiArg,
@@ -19,7 +19,14 @@ import type {
 import type { InfiniteQueryConfigOptions } from '@reduxjs/toolkit/query'
 
 const infiniteQueryDefaultOptions:
-  InfiniteQueryConfigOptions<{ hasNextPage: boolean }, number, unknown> = {
+  InfiniteQueryConfigOptions<{
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    items: [];
+    page: number;
+    totalItems: number;
+    totalPages: number;
+  }, number, unknown> = {
   initialPageParam: 1,
   getNextPageParam: (lastPage, _allPages, lastPageParam) => {
     if (!lastPage.hasNextPage) {
