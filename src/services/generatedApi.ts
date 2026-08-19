@@ -222,7 +222,10 @@ const injectedRtkApi = api
         GetPostByUrlPublicApiArg
       >({
         query: (queryArg) => ({
-          url: `/public/${queryArg.languageId}/posts/menu/${queryArg.menuUrl}`,
+          url: `/public/${queryArg.languageId}/posts/menu/${queryArg["*MenuUrl"]}`,
+          params: {
+            menuUrl: queryArg.menuUrl,
+          },
         }),
         providesTags: ["Public"],
       }),
@@ -1055,6 +1058,7 @@ export type GetPostByUrlPublicApiResponse =
   /** status 200 Success */ GetPostPublicResponse;
 export type GetPostByUrlPublicApiArg = {
   languageId: string;
+  "*MenuUrl": string;
   menuUrl: string;
 };
 export type GetPostApiResponse = /** status 200 Success */ PostResponse;
@@ -1450,6 +1454,7 @@ export type GetPostPublicResponse = {
   text?: string | null;
   meta?: string | null;
   images?: string[] | null;
+  menuUrl?: string | null;
 };
 export type ObservationStudentResponse = {
   id: number;
@@ -1708,6 +1713,8 @@ export type BannerResponse = {
 export type BannerRequest = {
   title: string;
   url: string;
+  width: number;
+  height: number;
   isPublished: boolean;
   order: number;
   languageId: string;

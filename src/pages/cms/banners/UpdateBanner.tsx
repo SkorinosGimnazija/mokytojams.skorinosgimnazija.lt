@@ -27,6 +27,8 @@ export function UpdateBanner() {
       isPublished: true,
       order: 0,
       languageId: 'lt',
+      width: 0,
+      height: 0,
       image: null as File | null,
       imageUrl: null as string | null
     },
@@ -59,6 +61,8 @@ export function UpdateBanner() {
       isPublished: data.isPublished,
       order: data.order,
       languageId: String(data.languageId),
+      width: data.width,
+      height: data.height,
       imageUrl: data.imageUrl,
       image: null,
     })
@@ -83,6 +87,16 @@ export function UpdateBanner() {
   }, validationErrorNotification)
 
   const image = form.getValues().image || form.getValues().imageUrl
+
+  const onImageChange = async (file: File | null) => {
+    form.setFieldValue('image', file)
+    if (file) {
+      const bitmap = await createImageBitmap(file)
+      form.setFieldValue('width', bitmap.width)
+      form.setFieldValue('height', bitmap.height)
+      bitmap.close()
+    }
+  }
 
   return (
     <DrawerLayout>
@@ -133,9 +147,11 @@ export function UpdateBanner() {
               <FileInput
                 key={form.key('image')}
                 {...form.getInputProps('image')}
+                onChange={onImageChange}
                 accept="image/*"
                 label="Paveikslėlis"
-                placeholder={isEdit ? 'Pakeisti' : undefined}
+                withAsterisk={!isEdit}
+                placeholder={isEdit ? 'Pakeisti' : null}
               />
               <SubmitButton disabled={form.submitting || query.isFetching}/>
             </Stack>
