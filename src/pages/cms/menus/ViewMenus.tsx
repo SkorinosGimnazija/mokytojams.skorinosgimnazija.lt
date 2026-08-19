@@ -14,7 +14,7 @@ export function ViewMenus() {
   const form = useForm({
     mode: 'controlled',
     initialValues: {
-      languageId: ''
+      languageId: null as null | string
     }
   })
 

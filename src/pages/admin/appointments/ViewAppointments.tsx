@@ -13,11 +13,11 @@ import React, { useMemo } from 'react'
 import { Link } from 'react-router'
 
 export function ViewAppointments() {
-  const teacher = useField({ initialValue: '' })
+  const teacher = useField({ initialValue: null as null | string })
 
   const query = useListAppointmentsInfiniteQuery({
     items: 20,
-    userId: teacher.getValue() ? Number(teacher.getValue()) : undefined
+    userId: Number(teacher.getValue()) || undefined
   })
   const [deleteRecord] = useDeleteAppointmentMutation()
 

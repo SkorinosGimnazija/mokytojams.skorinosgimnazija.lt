@@ -100,7 +100,7 @@ export function UpdatePost() {
       isFeatured: data.isFeatured,
       showInFeed: data.showInFeed,
       publishedAt: ISO(data.publishedAt),
-      modifiedAt: data.modifiedAt ? currentDateTime() : '',
+      modifiedAt: currentDateTime(),
       introText: data.introText ?? '',
       text: data.text ?? '',
       meta: data.meta ?? '',
