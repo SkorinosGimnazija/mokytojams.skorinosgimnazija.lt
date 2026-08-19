@@ -4,16 +4,14 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "sunday"
-      time: "22:00"
+      day: "monday"
+      time: "02:00"
     ignore:
       - dependency-name: "@types/node"
         update-types: [ "version-update:semver-major" ]
       - dependency-name: "markdown-to-jsx"
         update-types: [ "version-update:semver-major" ]
-      - dependency-name: "@eslint/js"
-        update-types: [ "version-update:semver-major" ]
-      - dependency-name: "eslint"
+      - dependency-name: "@babel/core"
         update-types: [ "version-update:semver-major" ]
       - dependency-name: "typescript"
         update-types: [ "version-update:semver-major" ]
@@ -25,8 +23,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "sunday"
-      time: "22:00"
+      day: "monday"
+      time: "02:00"
     groups:
       all-actions:
         patterns: [ "*" ]
@@ -35,8 +33,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "sunday"
-      time: "22:00"
+      day: "monday"
+      time: "02:00"
     groups:
       all-images:
         patterns: [ "*" ]
