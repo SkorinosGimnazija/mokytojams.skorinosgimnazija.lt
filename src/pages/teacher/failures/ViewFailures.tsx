@@ -13,6 +13,7 @@ import { formatDate, getAcademicYearEnd, getAcademicYearStart } from '@/utils/da
 import { ActionIcon, Table } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { WrenchIcon } from '@phosphor-icons/react'
+import dayjs from 'dayjs'
 import React, { useMemo } from 'react'
 import { Link } from 'react-router'
 
@@ -26,7 +27,11 @@ export function ViewFailures() {
   })
   const auth = useAuth()
 
-  const query = useListFailureReportsInfiniteQuery({ ...form.getValues(), items: 20 })
+  const query = useListFailureReportsInfiniteQuery({
+    startDate: dayjs(form.getValues().startDate).add(-10, 'days').format('YYYY-MM-DD'),
+    endDate: form.getValues().endDate,
+    items: 20
+  })
   const [deleteRecord] = useDeleteFailureReportMutation()
 
   const ref = useFetchPageInViewport(query)
