@@ -23,15 +23,17 @@ export function TableLayout({ children, topBar, topBarRight, layout = 'auto' }: 
         </Group>
       </Group>
 
-      <Table
-        layout={layout}
-        highlightOnHover
-        stickyHeader
-        stickyHeaderOffset="var(--app-shell-header-height)"
-        horizontalSpacing="md"
-      >
-        {children}
-      </Table>
+      <Table.ScrollContainer minWidth={700}>
+        <Table
+          layout={layout}
+          highlightOnHover
+          // stickyHeader
+          // stickyHeaderOffset="var(--app-shell-header-height)"
+          horizontalSpacing="md"
+        >
+          {children}
+        </Table>
+      </Table.ScrollContainer>
     </>
   )
 }
