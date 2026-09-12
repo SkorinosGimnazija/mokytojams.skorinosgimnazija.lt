@@ -133,6 +133,7 @@ export function UpdateBanner() {
               withAsterisk
               label="Kalba"
               data={languagesQuery.data?.map((x) => ({ value: String(x.id), label: x.name })) ?? []}
+              comboboxProps={{ withinPortal: false }}
             />
           </Group>
 

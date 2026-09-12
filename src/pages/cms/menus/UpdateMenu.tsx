@@ -164,6 +164,7 @@ export function UpdateMenu() {
               label="Kalba"
               withAsterisk
               data={languagesQuery.data}
+              comboboxProps={{ withinPortal: false }}
             />
           </Group>
 
@@ -179,6 +180,7 @@ export function UpdateMenu() {
               nothingFoundMessage={nothingFoundMessage}
               clearable
               searchable
+              comboboxProps={{ withinPortal: false }}
             />
 
             <Select
@@ -190,6 +192,7 @@ export function UpdateMenu() {
               nothingFoundMessage={nothingFoundMessage}
               clearable
               searchable
+              comboboxProps={{ withinPortal: false }}
             />
           </Group>
 

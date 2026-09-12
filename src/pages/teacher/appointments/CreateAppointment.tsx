@@ -75,6 +75,7 @@ export function CreateAppointment() {
             data={typesQuery.data?.map(x => ({ value: String(x.id), label: x.description }))}
             allowDeselect={false}
             withAsterisk
+            comboboxProps={{ withinPortal: false }}
           />
 
           <Select
@@ -85,6 +86,7 @@ export function CreateAppointment() {
             data={hostsQuery.data?.map(x => ({ value: String(x.id), label: x.name }))}
             allowDeselect={false}
             withAsterisk
+            comboboxProps={{ withinPortal: false }}
           />
 
           <Select
@@ -94,6 +96,7 @@ export function CreateAppointment() {
             disabled={!form.getValues().hostId || datesQuery.isFetching}
             data={datesQuery.data?.map(x => ({ value: String(x.id), label: formatDateTime(x.date) }))}
             withAsterisk
+            comboboxProps={{ withinPortal: false }}
           />
 
           <SubmitButton disabled={form.submitting}/>

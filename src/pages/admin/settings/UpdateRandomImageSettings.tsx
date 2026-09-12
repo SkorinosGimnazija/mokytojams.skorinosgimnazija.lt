@@ -97,6 +97,7 @@ export function UpdateRandomImageSettings() {
             nothingFoundMessage={nothingFoundMessage}
             clearable
             searchable
+            comboboxProps={{ withinPortal: false }}
           />
 
           <NumberInput

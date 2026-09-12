@@ -85,6 +85,7 @@ export function UpdateAppointmentUserTime() {
             filter={lithuanianSearchFilter}
             searchable
             withAsterisk
+            comboboxProps={{ withinPortal: false }}
           />
 
           <MultiSelect
@@ -100,6 +101,7 @@ export function UpdateAppointmentUserTime() {
               label: formatDateTime(x.date),
               disabled: x.isRegistered
             })) ?? []}
+            comboboxProps={{ withinPortal: false }}
           />
 
           <SubmitButton disabled={form.submitting}/>

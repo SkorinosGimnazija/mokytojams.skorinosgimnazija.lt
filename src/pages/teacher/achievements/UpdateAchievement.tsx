@@ -137,6 +137,7 @@ export function UpdateAchievement() {
               label="Mastas"
               nothingFoundMessage={nothingFoundMessage}
               data={scalesQuery.data}
+              comboboxProps={{ withinPortal: false }}
             />
 
             <DatePickerInput
@@ -153,35 +154,42 @@ export function UpdateAchievement() {
             <Stack>
 
               {form.getValues().students.map((item, index) => (
-                <Group key={item.key} align="flex-end">
-                  <TextInput
-                    key={form.key(`students.${index}.name`)}
-                    {...form.getInputProps(`students.${index}.name`)}
-                    label="Vardas pavardė"
-                    flex="2"
-                    withAsterisk
-                    maxLength={256}
-                  />
-                  <Select
-                    key={form.key(`students.${index}.classroomId`)}
-                    {...form.getInputProps(`students.${index}.classroomId`)}
-                    label="Klasė"
-                    flex="1"
-                    nothingFoundMessage={nothingFoundMessage}
-                    searchable
-                    withAsterisk
-                    allowDeselect={false}
-                    data={classroomsQuery.data}
-                  />
-                  <Select
-                    key={form.key(`students.${index}.achievementTypeId`)}
-                    {...form.getInputProps(`students.${index}.achievementTypeId`)}
-                    label="Laimėjimas"
-                    flex="1"
-                    withAsterisk
-                    allowDeselect={false}
-                    data={achievementTypesQuery.data}
-                  />
+                <Group key={item.key} align="flex-end" wrap="nowrap">
+                  <Group wrap="wrap">
+                    <TextInput
+                      key={form.key(`students.${index}.name`)}
+                      {...form.getInputProps(`students.${index}.name`)}
+                      label="Vardas pavardė"
+                      flex="2"
+                      miw={250}
+                      withAsterisk
+                      maxLength={256}
+                    />
+                    <Select
+                      key={form.key(`students.${index}.classroomId`)}
+                      {...form.getInputProps(`students.${index}.classroomId`)}
+                      label="Klasė"
+                      flex="1"
+                      miw={100}
+                      nothingFoundMessage={nothingFoundMessage}
+                      searchable
+                      withAsterisk
+                      allowDeselect={false}
+                      data={classroomsQuery.data}
+                      comboboxProps={{ withinPortal: false }}
+                    />
+                    <Select
+                      key={form.key(`students.${index}.achievementTypeId`)}
+                      {...form.getInputProps(`students.${index}.achievementTypeId`)}
+                      label="Laimėjimas"
+                      flex="1"
+                      miw={150}
+                      withAsterisk
+                      allowDeselect={false}
+                      data={achievementTypesQuery.data}
+                      comboboxProps={{ withinPortal: false }}
+                    />
+                  </Group>
                   <QuickDeleteButton onClick={() => {
                     if (form.getValues().students.length === 1) return
                     form.removeListItem('students', index)
@@ -213,10 +221,10 @@ export function UpdateAchievement() {
             label="Papildomai prisidėję mokytojai"
             nothingFoundMessage={nothingFoundMessage}
             filter={lithuanianSearchFilter}
-            maxDropdownHeight={200}
             data={teachersQuery.data}
             withAlignedLabels
             searchable
+            comboboxProps={{ withinPortal: false }}
           />
 
           <SubmitButton disabled={form.submitting || query.isFetching}/>

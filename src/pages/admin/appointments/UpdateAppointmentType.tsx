@@ -135,6 +135,7 @@ export function UpdateAppointmentType() {
             data={teachersQuery.data}
             searchable
             withAlignedLabels
+            comboboxProps={{ withinPortal: false }}
           />
 
           <MultiSelect
@@ -147,6 +148,7 @@ export function UpdateAppointmentType() {
             data={teachersQuery.data}
             searchable
             withAlignedLabels
+            comboboxProps={{ withinPortal: false }}
           />
 
           <Group mt="lg">

@@ -102,6 +102,7 @@ export function UpdateObservation() {
               label="Mokinys"
               data={studentsQuery.data?.map(x => ({ value: String(x.id), label: x.name })) ?? []}
               searchable
+              comboboxProps={{ withinPortal: false }}
             />
 
             <Select
@@ -111,6 +112,7 @@ export function UpdateObservation() {
               label="Pamoka"
               data={lessonsQuery.data?.map(x => ({ value: String(x.id), label: x.name })) ?? []}
               searchable
+              comboboxProps={{ withinPortal: false }}
             />
 
             <DatePickerInput
