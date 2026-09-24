@@ -16,6 +16,7 @@ import { ActionIcon, Button, Checkbox, Grid, Group, Popover, Select, Stack, Text
 import { DateTimePicker } from '@mantine/dates'
 import { hasLength, isNotEmpty, useForm } from '@mantine/form'
 import { FileIcon, ImageIcon, LinkIcon, YoutubeLogoIcon } from '@phosphor-icons/react'
+import dayjs from 'dayjs'
 import React, { useEffect, useEffectEvent, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import slug from 'slug'
@@ -100,7 +101,7 @@ export function UpdatePost() {
       isFeatured: data.isFeatured,
       showInFeed: data.showInFeed,
       publishedAt: ISO(data.publishedAt),
-      modifiedAt: currentDateTime(),
+      modifiedAt: dayjs().diff(dayjs(data.publishedAt), 'hour') >= 24 ? currentDateTime() : data.modifiedAt,
       introText: data.introText ?? '',
       text: data.text ?? '',
       meta: data.meta ?? '',
