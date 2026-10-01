@@ -2,10 +2,16 @@
 import { NewRecordButton } from '@/components/buttons/NewRecordButton.tsx'
 import { SimpleMonthPicker } from '@/components/inputs/SimpleMonthPicker.tsx'
 import { TableLayout } from '@/layout/TableLayout.tsx'
-import { useDeleteCalendarEventMutation, useListCalendarEventsQuery } from '@/services/generatedApi.ts'
+import { parseCalendarEvents } from '@/pages/cms/events/parseCalendarEvents.ts'
+import {
+  useCreateCalendarEventMutation,
+  useDeleteCalendarEventMutation,
+  useListCalendarEventsQuery
+} from '@/services/generatedApi.ts'
 import { recordsCountText } from '@/utils/constants.ts'
 import { formatDate, formatDateTime, getMonthEnd, getMonthStart } from '@/utils/dateUtils.ts'
-import { Table, Text } from '@mantine/core'
+import { errorNotification, itemSavedNotification, validationErrorNotification } from '@/utils/notifications.ts'
+import { Button, Table, Text } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import React from 'react'
 
@@ -20,14 +26,40 @@ export function ViewCalendarEvents() {
 
   const query = useListCalendarEventsQuery({ ...form.getValues() })
   const [deleteRecord] = useDeleteCalendarEventMutation()
+  const [createCalendarEventMutation] = useCreateCalendarEventMutation()
+
+  const handleImport = async () => {
+    try {
+      const clipboard = await navigator.clipboard.read()
+      const blob = await clipboard[0].getType('text/html')
+      const html = await blob.text()
+
+      const data = parseCalendarEvents({ html })
+      if (!data.length) {
+        validationErrorNotification()
+        return
+      }
+
+      const response = await createCalendarEventMutation(data)
+      if ('error' in response) {
+        return
+      }
+
+      itemSavedNotification()
+    } catch (e: any) {
+      errorNotification({ message: e.toString() })
+    }
+  }
 
   return (
-    <TableLayout topBar={
-      <>
-        <NewRecordButton/>
-        <SimpleMonthPicker form={form}/>
-      </>
-    }>
+    <TableLayout
+      topBar={
+        <>
+          <NewRecordButton/>
+          <Button onClick={handleImport}>Importuoti renginius</Button>
+          <SimpleMonthPicker form={form}/>
+        </>
+      }>
       <Table.Thead>
         <Table.Tr>
           <Table.Th w="70%">Pavadinimas</Table.Th>

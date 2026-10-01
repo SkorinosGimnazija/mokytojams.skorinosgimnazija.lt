@@ -8,10 +8,12 @@ interface Props {
 
 const startTimeRegex = /^(\d{1,2})[.:](\d{2})\s?val\.\s?[-–]?\s?(.*)$/
 const startEndTimeRegex = /^(\d{1,2})[.:](\d{2})\s?[-–]\s?(\d{1,2})[.:](\d{2})\s?val\.\s?[-–]?\s?(.*)$/
+const startDateTimeRegex = /^(\d{1,2})\s?d\.\s?[-–]?\s?(\d{1,2})[.:](\d{2})\s?val\.\s?[-–]?\s?(.*)$/
 const startDateRegex = /^(\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
 const startEndDateRegex = /^(\d{1,2})[-–](\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
+const startEndMonthDateRegex = /^(\d{1,2})[-–](\d{1,2})\/(\d{1,2})[-–](\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
 
-export function parseEvent({ text, date }: Props) {
+export function parseCalendarEvent({ text, date }: Props) {
   if (!text?.length || !date?.length) {
     throw new Error('Missing required data')
   }
@@ -53,6 +55,45 @@ export function parseEvent({ text, date }: Props) {
       .set('minute', +startM))
 
     return { title, startDate, endDate, allDay: false }
+  }
+
+  match = startDateTimeRegex.exec(normalizedText)
+  if (match) {
+    const [, startDay, startH, startM, title] = match
+
+    const startDate = formatDateTime(baseDate
+      .set('date', +startDay)
+      .set('hour', +startH)
+      .set('minute', +startM))
+
+    const endDate = formatDateTime(baseDate
+      .set('date', +startDay)
+      .set('hour', +startH + 1) // default +1h
+      .set('minute', +startM))
+
+    return { title, startDate, endDate, allDay: false }
+  }
+
+  match = startEndMonthDateRegex.exec(normalizedText)
+  if (match) {
+    const [, startMonth, startDay, endMonth, endDay, title] = match
+
+    const startDateValue = baseDate
+      .set('month', +startMonth - 1)
+      .set('date', +startDay)
+
+    let endDateValue = baseDate
+      .set('month', +endMonth - 1)
+      .set('date', +endDay)
+
+    if (endDateValue.isBefore(startDateValue)) {
+      endDateValue = endDateValue.add(1, 'year')
+    }
+
+    const startDate = formatDate(startDateValue)
+    const endDate = formatDate(endDateValue)
+
+    return { title, startDate, endDate, allDay: true }
   }
 
   match = startEndDateRegex.exec(normalizedText)

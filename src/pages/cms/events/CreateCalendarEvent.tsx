@@ -1,7 +1,7 @@
 ﻿import { SubmitButton } from '@/components/buttons/SubmitButton.tsx'
 import { useRequestHandler } from '@/hooks/useRequestHandler.tsx'
 import { DrawerLayout } from '@/layout/DrawerLayout.tsx'
-import { parseEvent } from '@/pages/cms/events/parseEvent.ts'
+import { parseCalendarEvent } from '@/pages/cms/events/parseCalendarEvent.ts'
 import { useCreateCalendarEventMutation } from '@/services/generatedApi.ts'
 import { formatDate, formatDateTime, ISO } from '@/utils/dateUtils.ts'
 import { errorNotification, validationErrorNotification } from '@/utils/notifications.ts'
@@ -63,7 +63,7 @@ export function CreateCalendarEvent() {
 
     try {
       const text = e.clipboardData.getData('text/plain')
-      const parse = parseEvent({ text, date: form.getValues().startDate })
+      const parse = parseCalendarEvent({ text, date: form.getValues().startDate })
       form.setValues(parse)
     } catch (e: any) {
       errorNotification({ message: e.toString() })
@@ -73,10 +73,7 @@ export function CreateCalendarEvent() {
   return (
     <DrawerLayout>
       <form autoComplete="off" onSubmit={form.onSubmit(async (data) => {
-        const response = await handleRequest({ createRecord, data })
-        if (response) {
-          form.setValues({ title: '', placeholder: response[0]?.title })
-        }
+        await handleRequest({ createRecord, data })
       }, validationErrorNotification)}>
         <Stack>
           <Textarea
