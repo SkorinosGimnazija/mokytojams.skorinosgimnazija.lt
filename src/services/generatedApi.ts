@@ -1121,8 +1121,8 @@ export type ListCalendarEventsApiArg = {
   endDate: string;
 };
 export type CreateCalendarEventApiResponse =
-  /** status 200 Success */ CreateCalendarEventResponse;
-export type CreateCalendarEventApiArg = CreateCalendarEventRequest;
+  /** status 200 Success */ ListOfCreateCalendarEventResponse;
+export type CreateCalendarEventApiArg = ListOfCreateCalendarEventRequest;
 export type DeleteCalendarEventApiResponse = unknown;
 export type DeleteCalendarEventApiArg = null | string;
 export type UpdateFailureReportApiResponse =
@@ -1630,12 +1630,14 @@ export type CreateCalendarEventResponse = {
   startDate: string;
   endDate: string;
 };
+export type ListOfCreateCalendarEventResponse = CreateCalendarEventResponse[];
 export type CreateCalendarEventRequest = {
   title: string;
   startDate: string;
   endDate: string;
   allDay: boolean;
 };
+export type ListOfCreateCalendarEventRequest = CreateCalendarEventRequest[];
 export type FailureReportResponse = {
   id: number;
   creatorName: string;
@@ -1683,7 +1685,7 @@ export type BannerResponse = {
 };
 export type UpdateBannerRequest = {
   id: number;
-  image?: Blob | Blob | Blob;
+  image?: null | Blob;
   title: string;
   url: string;
   width: number;
@@ -1708,7 +1710,6 @@ export type LanguageResponse = {
   name: string;
 };
 export type IEnumerableOfLanguageResponse = LanguageResponse[];
-export type ListOfMenuResponse = MenuResponse[];
 export type MenuResponse = {
   id: number;
   order: number;
@@ -1721,7 +1722,7 @@ export type MenuResponse = {
   languageName: string;
   languageId: string;
   parentMenuId?: null | number;
-  children?: ListOfMenuResponse;
+  children?: null | MenuResponse[];
 };
 export type UpdateMenuRequest = {
   id: number;
@@ -1861,12 +1862,12 @@ export type PostResponse = {
   featuredImage?: null | string;
   meta?: null | string;
   modifiedAt?: null | string;
-  files?: ListOfString;
-  images?: ListOfString;
+  files?: null | string[];
+  images?: null | string[];
 };
 export type UpdatePostRequest = {
   id: number;
-  oldImages?: ListOfString;
+  oldImages?: null | string[];
   oldFeaturedImage?: null | string;
   isFeatured: boolean;
   isPublished: boolean;
@@ -1879,7 +1880,7 @@ export type UpdatePostRequest = {
   slug: string;
   introText?: null | string;
   text?: null | string;
-  newFeaturedImage?: Blob | Blob | Blob;
+  newFeaturedImage?: null | Blob;
   meta?: null | string;
   newFiles?: null | Blob[];
   newImages?: null | Blob[];
@@ -1905,7 +1906,7 @@ export type CreatePostRequest = {
   slug: string;
   introText?: null | string;
   text?: null | string;
-  newFeaturedImage?: Blob | Blob | Blob;
+  newFeaturedImage?: null | Blob;
   meta?: null | string;
   newFiles?: null | Blob[];
   newImages?: null | Blob[];
@@ -1918,8 +1919,9 @@ export type GetPostPublicResponse = {
   title: string;
   text?: null | string;
   meta?: null | string;
-  images?: ListOfString;
+  images?: null | string[];
   menuUrl?: null | string;
+  languageId: string;
 };
 export type ClassdayResponse = {
   id: number;
@@ -1947,9 +1949,9 @@ export type NullableOfTimeOnly = string;
 export type UpsertClasstimeRequest = {
   id: number;
   startTime: TimeOnly;
-  startTimeShort?: NullableOfTimeOnly;
+  startTimeShort?: null | NullableOfTimeOnly;
   endTime: TimeOnly;
-  endTimeShort?: NullableOfTimeOnly;
+  endTimeShort?: null | NullableOfTimeOnly;
 };
 export type IEnumerableOfClasstimeResponse = ClasstimeResponse[];
 export type ShortDayResponse = {

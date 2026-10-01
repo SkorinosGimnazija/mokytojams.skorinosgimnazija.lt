@@ -30,12 +30,12 @@ export function CreateCalendarEvent() {
       const start = values.allDay ? formatDate(values.startDate) : ISO(values.startDate)
       const end = values.allDay ? formatDate(values.endDate) : ISO(values.endDate)
 
-      return {
+      return [{
         title: values.title,
         allDay: values.allDay,
         startDate: start,
         endDate: end,
-      }
+      }]
     }
   })
 
@@ -75,7 +75,7 @@ export function CreateCalendarEvent() {
       <form autoComplete="off" onSubmit={form.onSubmit(async (data) => {
         const response = await handleRequest({ createRecord, data })
         if (response) {
-          form.setValues({ title: '', placeholder: response.title })
+          form.setValues({ title: '', placeholder: response[0]?.title })
         }
       }, validationErrorNotification)}>
         <Stack>
