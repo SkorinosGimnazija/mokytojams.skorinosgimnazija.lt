@@ -38,7 +38,7 @@ export function useRequestHandler(options?: Partial<typeof defaultOptions>) {
     if (mergedOptions.redirect) {
       navigate(
         { pathname: mergedOptions.redirectPath },
-        { relative: 'path', viewTransition: true, preventScrollReset: true })
+        { relative: 'path', preventScrollReset: true })
     }
 
     return response.data

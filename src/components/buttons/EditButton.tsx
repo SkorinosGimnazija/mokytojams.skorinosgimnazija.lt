@@ -12,7 +12,6 @@ export function EditButton({ to }: Props) {
     <ActionIcon
       component={Link}
       to={{ pathname: String(to) }}
-      viewTransition
       preventScrollReset={true}
       title="Redaguoti"
       variant="subtle"

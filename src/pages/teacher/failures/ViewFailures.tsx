@@ -38,12 +38,14 @@ export function ViewFailures() {
   const data = useMemo(() => query.data?.pages.flatMap(x => x.items) ?? [], [query.data])
 
   return (
-    <TableLayout topBar={
-      <>
-        <NewRecordButton/>
-        <AcademicYearPicker form={form}/>
-      </>
-    }>
+    <TableLayout
+      topBar={
+        <>
+          <NewRecordButton/>
+          <AcademicYearPicker form={form}/>
+        </>
+      }
+    >
 
       <Table.Thead>
         <Table.Tr>
@@ -84,7 +86,6 @@ export function ViewFailures() {
                 <ActionIcon
                   component={Link}
                   to={{ pathname: `${item.id}/fix` }}
-                  viewTransition
                   preventScrollReset={true}
                   title="Gedimas"
                   variant="subtle"

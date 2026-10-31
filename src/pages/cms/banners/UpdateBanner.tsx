@@ -83,7 +83,7 @@ export function UpdateBanner() {
     }
 
     itemSavedNotification()
-    navigate('..', { relative: 'path', viewTransition: true, preventScrollReset: true })
+    navigate('..', { relative: 'path', preventScrollReset: true })
   }, validationErrorNotification)
 
   const image = form.getValues().image || form.getValues().imageUrl

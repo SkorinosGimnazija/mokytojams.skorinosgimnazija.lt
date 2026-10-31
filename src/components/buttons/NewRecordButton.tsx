@@ -7,5 +7,5 @@ interface Props {
 }
 
 export function NewRecordButton({ title }: Props) {
-  return <Button component={Link} to="new" viewTransition>{title ?? 'Naujas įrašas'}</Button>
+  return <Button component={Link} to="new">{title ?? 'Naujas įrašas'}</Button>
 }

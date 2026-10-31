@@ -59,7 +59,6 @@ export function ViewBullyReports() {
               <ActionIcon
                 component={Link}
                 to={{ pathname: `${item.id}/resolve` }}
-                viewTransition
                 preventScrollReset={true}
                 title="Pranešimas"
                 variant="subtle"

@@ -45,16 +45,17 @@ export function ViewTimetable() {
   }
 
   return (
-    <TableLayout topBar={
-      <>
-        <Button onClick={handleImport}>Importuoti tvarkaraštį</Button>
-        <Button component={Link} to="delete" viewTransition>Ištrinti tvarkaraštį</Button>
-        <Button component={Link} to="classrooms">Klasės</Button>
-        <Button component={Link} to="classtimes">Pamokų laikas</Button>
-        <Button component={Link} to="short-days">Sutrumpintos dienos</Button>
-        <Button component={Link} to="random-image">TV nuotraukų nustatymai</Button>
-      </>
-    }>
+    <TableLayout
+      topBar={
+        <>
+          <Button onClick={handleImport}>Importuoti tvarkaraštį</Button>
+          <Button component={Link} to="delete">Ištrinti tvarkaraštį</Button>
+          <Button component={Link} to="classrooms">Klasės</Button>
+          <Button component={Link} to="classtimes">Pamokų laikas</Button>
+          <Button component={Link} to="short-days">Sutrumpintos dienos</Button>
+          <Button component={Link} to="random-image">TV nuotraukų nustatymai</Button>
+        </>
+      }>
       <Table.Thead>
         <Table.Tr>
           <Table.Th w="32%">Klasė</Table.Th>
