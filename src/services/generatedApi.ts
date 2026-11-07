@@ -1115,13 +1115,13 @@ export type GetCourseApiArg = number;
 export type DeleteCourseApiResponse = unknown;
 export type DeleteCourseApiArg = number;
 export type ListCalendarEventsApiResponse =
-  /** status 200 Success */ ListOfCalendarEvent;
+  /** status 200 Success */ ListOfCalendarResponse;
 export type ListCalendarEventsApiArg = {
   startDate: string;
   endDate: string;
 };
 export type CreateCalendarEventApiResponse =
-  /** status 200 Success */ ListOfCreateCalendarEventResponse;
+  /** status 200 Success */ ListOfCalendarResponse;
 export type CreateCalendarEventApiArg = ListOfCreateCalendarEventRequest;
 export type DeleteCalendarEventApiResponse = unknown;
 export type DeleteCalendarEventApiArg = null | string;
@@ -1616,21 +1616,15 @@ export type GetCourseStatsResponse = {
   totalDuration: number;
   teachers: ListOfTeacherStatsResponse;
 };
-export type CalendarEvent = {
+export type CalendarResponse = {
   id: string;
+  eventLink?: null | string;
   title: string;
   startDate: string;
   endDate: string;
   allDay: boolean;
 };
-export type ListOfCalendarEvent = CalendarEvent[];
-export type CreateCalendarEventResponse = {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-};
-export type ListOfCreateCalendarEventResponse = CreateCalendarEventResponse[];
+export type ListOfCalendarResponse = CalendarResponse[];
 export type CreateCalendarEventRequest = {
   title: string;
   startDate: string;
@@ -1857,8 +1851,8 @@ export type PostResponse = {
   language: string;
   title: string;
   slug: string;
-  introText?: null | string;
-  text?: null | string;
+  introText: string;
+  text: string;
   featuredImage?: null | string;
   meta?: null | string;
   modifiedAt?: null | string;
@@ -1878,8 +1872,8 @@ export type UpdatePostRequest = {
   languageId: string;
   title: string;
   slug: string;
-  introText?: null | string;
-  text?: null | string;
+  introText: string;
+  text: string;
   newFeaturedImage?: null | Blob;
   meta?: null | string;
   newFiles?: null | Blob[];
@@ -1904,8 +1898,8 @@ export type CreatePostRequest = {
   languageId: string;
   title: string;
   slug: string;
-  introText?: null | string;
-  text?: null | string;
+  introText: string;
+  text: string;
   newFeaturedImage?: null | Blob;
   meta?: null | string;
   newFiles?: null | Blob[];
