@@ -63,7 +63,7 @@ export function CreateCalendarEvent() {
 
     try {
       const text = e.clipboardData.getData('text/plain')
-      const parse = parseCalendarEvent({ text, date: form.getValues().startDate })
+      const parse = parseCalendarEvent({ text, startDate: form.getValues().startDate })
       form.setValues(parse)
     } catch (e: any) {
       errorNotification({ message: e.toString() })
