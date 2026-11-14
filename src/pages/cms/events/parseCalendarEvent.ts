@@ -3,7 +3,8 @@ import dayjs from 'dayjs'
 
 interface Props {
   text: string,
-  date: string
+  startDate: string,
+  endDate?: string
 }
 
 const startTimeRegex = /^(\d{1,2})[.:](\d{2})\s?val\.\s?[-–]?\s?(.*)$/
@@ -13,12 +14,13 @@ const startDateRegex = /^(\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
 const startEndDateRegex = /^(\d{1,2})[-–](\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
 const startEndMonthDateRegex = /^(\d{1,2})[-–](\d{1,2})\/(\d{1,2})[-–](\d{1,2})\s?d\.\s?[-–]?\s?(.*)$/
 
-export function parseCalendarEvent({ text, date }: Props) {
-  if (!text?.length || !date?.length) {
+export function parseCalendarEvent({ text, startDate: startDateProp, endDate: endDateProp }: Props) {
+  if (!text?.length || !startDateProp?.length) {
     throw new Error('Missing required data')
   }
 
-  const baseDate = dayjs(date)
+  const baseDate = dayjs(startDateProp)
+  const baseEndDate = dayjs(endDateProp || startDateProp)
   const normalizedText = text
     .replace(/\s+/g, ' ') // remove double spaces
     .replace(/-{5,}/g, ' ') // remove day split
@@ -35,7 +37,7 @@ export function parseCalendarEvent({ text, date }: Props) {
       .set('hour', +startH)
       .set('minute', +startM))
 
-    const endDate = formatDateTime(baseDate
+    const endDate = formatDateTime(baseEndDate
       .set('hour', +endH)
       .set('minute', +endM))
 
@@ -50,7 +52,7 @@ export function parseCalendarEvent({ text, date }: Props) {
       .set('hour', +startH)
       .set('minute', +startM))
 
-    const endDate = formatDateTime(baseDate
+    const endDate = formatDateTime(baseEndDate
       .set('hour', +startH + 1) // default +1h
       .set('minute', +startM))
 
@@ -119,6 +121,5 @@ export function parseCalendarEvent({ text, date }: Props) {
     return { title, startDate, endDate: startDate, allDay: true }
   }
 
-  const fallbackDate = formatDate(baseDate)
-  return { title: normalizedText, startDate: fallbackDate, endDate: fallbackDate, allDay: true }
+  return { title: normalizedText, startDate: formatDate(baseDate), endDate: formatDate(baseEndDate), allDay: true }
 }

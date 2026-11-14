@@ -165,17 +165,12 @@ export function parseCalendarEvents({ html }: Props): CreateCalendarEventRequest
 
     for (const itemText of eventItems) {
       if (!itemText) continue
-      const parsed = parseCalendarEvent({ text: itemText, date: startDateStr })
-      const isExplicitRange = parsed.startDate !== parsed.endDate
+      const parsed = parseCalendarEvent({ text: itemText, startDate: startDateStr, endDate: endDateStr })
       events.push({
         title: parsed.title,
         allDay: parsed.allDay,
-        startDate: parsed.allDay
-          ? formatDate(isExplicitRange ? parsed.startDate : startDateStr)
-          : ISO(parsed.startDate),
-        endDate: parsed.allDay
-          ? formatDate(isExplicitRange ? parsed.endDate : endDateStr)
-          : ISO(parsed.endDate),
+        startDate: parsed.allDay ? formatDate(parsed.startDate) : ISO(parsed.startDate),
+        endDate: parsed.allDay ? formatDate(parsed.endDate) : ISO(parsed.endDate),
       })
     }
   }
