@@ -28,7 +28,7 @@ export const rtkQueryErrorLogger: Middleware =
 
       if (details?.errors) {
         for (const error of details.errors) {
-          errorNotification({ message: error.reason })
+          errorNotification({ message: error.reason ?? 'Klaida!' })
         }
       }
     }

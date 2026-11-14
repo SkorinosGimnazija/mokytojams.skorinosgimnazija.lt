@@ -18,15 +18,7 @@ import type {
 } from '@/services/generatedApi.ts'
 import type { InfiniteQueryConfigOptions } from '@reduxjs/toolkit/query'
 
-const infiniteQueryDefaultOptions:
-  InfiniteQueryConfigOptions<{
-    hasNextPage?: boolean;
-    hasPreviousPage?: boolean;
-    items: [];
-    page: number;
-    totalItems: number;
-    totalPages: number;
-  }, number, unknown> = {
+const infiniteQueryDefaultOptions = {
   initialPageParam: 1,
   getNextPageParam: (lastPage, _allPages, lastPageParam) => {
     if (!lastPage.hasNextPage) {
@@ -35,7 +27,7 @@ const infiniteQueryDefaultOptions:
 
     return lastPageParam + 1
   },
-} as const
+} satisfies InfiniteQueryConfigOptions<{ hasNextPage?: boolean }, number, unknown>
 
 const injectedApi = baseApi.enhanceEndpoints({
   addTagTypes: [

@@ -69,7 +69,7 @@ export function UpdateRandomImageSettings() {
   const initForm = useEffectEvent((data: NonNullable<typeof query.data>) => {
     form.initialize({
       forcedPostId: data.forcedPostId ? String(data.forcedPostId) : '',
-      cacheDurationInMinutes: data.cacheDurationInMinutes,
+      cacheDurationInMinutes: data.cacheDurationInMinutes ?? 0,
     })
   })
 

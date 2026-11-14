@@ -40,7 +40,7 @@ export function UpdatePost() {
       isFeatured: false,
       showInFeed: true,
       publishedAt: currentDateTime(),
-      modifiedAt: '',
+      modifiedAt: '' as string | null | undefined,
       introText: '',
       text: '',
       meta: '',
