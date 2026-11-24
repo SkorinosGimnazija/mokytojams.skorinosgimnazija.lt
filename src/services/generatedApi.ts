@@ -991,7 +991,7 @@ export type UpdateAchievementApiArg = UpdateAchievementRequest;
 export type ListAchievementsApiResponse =
   /** status 200 Success */ PaginatedListResponseOfAchievementResponse;
 export type ListAchievementsApiArg = {
-  userId?: null | number;
+  userId?: number | null;
   items: number;
   page: number;
 };
@@ -1018,7 +1018,7 @@ export type DeleteAchievementApiArg = number;
 export type ListAppointmentsApiResponse =
   /** status 200 Success */ PaginatedListResponseOfAppointmentResponse;
 export type ListAppointmentsApiArg = {
-  userId?: null | number;
+  userId?: number | null;
   items: number;
   page: number;
 };
@@ -1037,7 +1037,7 @@ export type UpdateAppointmentTypeApiResponse =
 export type UpdateAppointmentTypeApiArg = UpdateAppointmentTypeRequest;
 export type ListAppointmentTypesApiResponse =
   /** status 200 Success */ IEnumerableOfAppointmentTypeDetailedResponse;
-export type ListAppointmentTypesApiArg = (null | boolean) | undefined;
+export type ListAppointmentTypesApiArg = (boolean | null) | undefined;
 export type CreateAppointmentTypeApiResponse =
   /** status 200 Success */ AppointmentTypeDetailedResponse;
 export type CreateAppointmentTypeApiArg = CreateAppointmentTypeRequest;
@@ -1081,7 +1081,7 @@ export type PatchBullyReportApiArg = PatchBullyReportRequest;
 export type ListBullyReportsApiResponse =
   /** status 200 Success */ PaginatedListResponseOfBullyReportResponse;
 export type ListBullyReportsApiArg = {
-  userId?: null | number;
+  userId?: number | null;
   items: number;
   page: number;
 };
@@ -1098,7 +1098,7 @@ export type UpdateCourseApiArg = UpdateCourseRequest;
 export type ListCoursesApiResponse =
   /** status 200 Success */ PaginatedListResponseOfCourseResponse;
 export type ListCoursesApiArg = {
-  userId?: null | number;
+  userId?: number | null;
   items: number;
   page: number;
 };
@@ -1124,7 +1124,7 @@ export type CreateCalendarEventApiResponse =
   /** status 200 Success */ ListOfCalendarResponse;
 export type CreateCalendarEventApiArg = ListOfCreateCalendarEventRequest;
 export type DeleteCalendarEventApiResponse = unknown;
-export type DeleteCalendarEventApiArg = null | string;
+export type DeleteCalendarEventApiArg = string | null;
 export type UpdateFailureReportApiResponse =
   /** status 200 Success */ FailureReportResponse;
 export type UpdateFailureReportApiArg = UpdateFailureReportRequest;
@@ -1164,7 +1164,7 @@ export type UpdateMenuApiResponse = /** status 200 Success */ MenuResponse;
 export type UpdateMenuApiArg = UpdateMenuRequest;
 export type ListMenusApiResponse =
   /** status 200 Success */ IEnumerableOfMenuResponse;
-export type ListMenusApiArg = (null | string) | undefined;
+export type ListMenusApiArg = (string | null) | undefined;
 export type CreateMenuApiResponse = /** status 200 Success */ MenuResponse;
 export type CreateMenuApiArg = CreateMenuRequest;
 export type GetMenuApiResponse = /** status 200 Success */ MenuResponse;
@@ -1177,7 +1177,7 @@ export type UpdateObservationApiArg = UpdateObservationRequest;
 export type ListObservationsApiResponse =
   /** status 200 Success */ PaginatedListResponseOfObservationResponse;
 export type ListObservationsApiArg = {
-  creatorId?: null | number;
+  creatorId?: number | null;
   items: number;
   page: number;
 };
@@ -1224,7 +1224,7 @@ export type UpdateObservationStudentApiResponse =
 export type UpdateObservationStudentApiArg = UpdateObservationStudentRequest;
 export type ListObservationStudentsApiResponse =
   /** status 200 Success */ IEnumerableOfObservationStudentResponse;
-export type ListObservationStudentsApiArg = (null | boolean) | undefined;
+export type ListObservationStudentsApiArg = (boolean | null) | undefined;
 export type CreateObservationStudentApiResponse =
   /** status 200 Success */ ObservationStudentResponse;
 export type CreateObservationStudentApiArg = CreateObservationStudentRequest;
@@ -1243,7 +1243,7 @@ export type UpdatePostApiArg = UpdatePostRequest;
 export type ListPostsApiResponse =
   /** status 200 Success */ PaginatedListResponseOfPostResponse;
 export type ListPostsApiArg = {
-  searchTerm?: null | string;
+  searchTerm?: string | null;
   items: number;
   page: number;
 };
@@ -1399,11 +1399,11 @@ export type AchievementTypeResponse = {
 export type IEnumerableOfAchievementTypeResponse = AchievementTypeResponse[];
 export type AppointmentResponse = {
   id: string;
-  link: null | string;
+  link: string | null;
   date: string;
   dateId?: number;
   typeName: string;
-  note: null | string;
+  note: string | null;
   hostName: string;
   hostId: number;
   attendeeName: string;
@@ -1419,22 +1419,22 @@ export type PaginatedListResponseOfAppointmentResponse = {
   hasNextPage?: boolean;
 };
 export type ProblemDetails = {
-  type?: null | string;
-  title?: null | string;
+  type?: string;
+  title?: string;
   status?: number;
   instance?: string;
   traceId?: string;
   /** the details of the error */
-  detail?: null | string;
+  detail?: string | null;
   errors?: {
     /** the name of the error or property of the dto that caused the error */
     name?: string;
     /** the reason for the error */
     reason?: string;
     /** the code of the error */
-    code?: null | string;
+    code?: string | null;
     /** the severity of the error */
-    severity?: null | string;
+    severity?: string | null;
   }[];
 };
 export type CreateAppointmentRequest = {
@@ -1527,24 +1527,24 @@ export type BullyReportResponse = {
   bullyName: string;
   location: string;
   details: string;
-  observers?: null | string;
-  actions?: null | string;
-  creatorName?: null | string;
-  creatorId?: null | number;
+  observers?: string | null;
+  actions?: string | null;
+  creatorName?: string | null;
+  creatorId?: number | null;
 };
 export type UpdateBullyReportRequest = {
   id: number;
-  observers?: null | string;
+  observers?: string | null;
   date: DateOnly;
   victimName: string;
   bullyName: string;
   location: string;
   details: string;
-  actions?: null | string;
+  actions?: string | null;
 };
 export type PatchBullyReportRequest = {
   id: number;
-  actions?: null | string;
+  actions?: string | null;
 };
 export type ListOfBullyReportResponse = BullyReportResponse[];
 export type PaginatedListResponseOfBullyReportResponse = {
@@ -1561,7 +1561,7 @@ export type CreateBullyReportRequest = {
   bullyName: string;
   location: string;
   details: string;
-  actions?: null | string;
+  actions?: string | null;
 };
 export type CourseResponse = {
   id: number;
@@ -1570,7 +1570,7 @@ export type CourseResponse = {
   startDate: DateOnly;
   endDate: DateOnly;
   durationInHours: number;
-  certificate?: null | string;
+  certificate?: string | null;
   isUseful: boolean;
   creatorId: number;
   creatorName: string;
@@ -1582,7 +1582,7 @@ export type UpdateCourseRequest = {
   startDate: DateOnly;
   endDate: DateOnly;
   durationInHours: number;
-  certificate?: null | string;
+  certificate?: string | null;
   isUseful: boolean;
 };
 export type ListOfCourseResponse = CourseResponse[];
@@ -1600,7 +1600,7 @@ export type CreateCourseRequest = {
   startDate: DateOnly;
   endDate: DateOnly;
   durationInHours: number;
-  certificate?: null | string;
+  certificate?: string | null;
   isUseful: boolean;
 };
 export type GetCourseStatsResponseTeacherStatsResponse = {
@@ -1618,7 +1618,7 @@ export type GetCourseStatsResponse = {
 };
 export type CalendarResponse = {
   id: string;
-  eventLink?: null | string;
+  eventLink?: string | null;
   title: string;
   startDate: string;
   endDate: string;
@@ -1638,9 +1638,9 @@ export type FailureReportResponse = {
   creatorId: number;
   details: string;
   location: string;
-  isFixed: null | boolean;
+  isFixed: boolean | null;
   reportDate: string;
-  fixDate: null | string;
+  fixDate: string | null;
 };
 export type UpdateFailureReportRequest = {
   id: number;
@@ -1649,8 +1649,8 @@ export type UpdateFailureReportRequest = {
 };
 export type PatchFailureReportRequest = {
   id: number;
-  isFixed?: null | boolean;
-  note?: null | string;
+  isFixed?: boolean | null;
+  note?: string | null;
 };
 export type ListOfFailureReportResponse = FailureReportResponse[];
 export type PaginatedListResponseOfFailureReportResponse = {
@@ -1679,7 +1679,7 @@ export type BannerResponse = {
 };
 export type UpdateBannerRequest = {
   id: number;
-  image?: null | Blob;
+  image?: (null | null) | Blob;
   title: string;
   url: string;
   width: number;
@@ -1710,13 +1710,13 @@ export type MenuResponse = {
   isPublished: boolean;
   isHidden: boolean;
   title: string;
-  url?: null | string;
-  postId?: null | number;
-  postTitle?: null | string;
+  url?: string | null;
+  postId?: number | null;
+  postTitle?: string | null;
   languageName: string;
   languageId: string;
-  parentMenuId?: null | number;
-  children?: null | MenuResponse[];
+  parentMenuId?: number | null;
+  children?: MenuResponse[] | null;
 };
 export type UpdateMenuRequest = {
   id: number;
@@ -1725,9 +1725,9 @@ export type UpdateMenuRequest = {
   isHidden: boolean;
   title: string;
   languageId: string;
-  url?: null | string;
-  postId?: null | number;
-  parentMenuId?: null | number;
+  url?: string | null;
+  postId?: number | null;
+  parentMenuId?: number | null;
 };
 export type IEnumerableOfMenuResponse = MenuResponse[];
 export type CreateMenuRequest = {
@@ -1736,14 +1736,14 @@ export type CreateMenuRequest = {
   isHidden: boolean;
   title: string;
   languageId: string;
-  url?: null | string;
-  postId?: null | number;
-  parentMenuId?: null | number;
+  url?: string | null;
+  postId?: number | null;
+  parentMenuId?: number | null;
 };
 export type ObservationResponse = {
   id: number;
   date: DateOnly;
-  note?: null | string;
+  note?: string | null;
   creatorName: string;
   studentName: string;
   studentId: number;
@@ -1754,7 +1754,7 @@ export type ObservationResponse = {
 export type UpdateObservationRequest = {
   id: number;
   date: DateOnly;
-  note?: null | string;
+  note?: string | null;
   studentId: number;
   lessonId: number;
   optionIds: ListOfInt32;
@@ -1770,7 +1770,7 @@ export type PaginatedListResponseOfObservationResponse = {
 };
 export type CreateObservationRequest = {
   date: DateOnly;
-  note?: null | string;
+  note?: string | null;
   studentId: number;
   lessonId: number;
   optionIds: ListOfInt32;
@@ -1853,31 +1853,31 @@ export type PostResponse = {
   slug: string;
   introText: string;
   text: string;
-  featuredImage?: null | string;
-  meta?: null | string;
-  modifiedAt?: null | string;
-  files?: null | string[];
-  images?: null | string[];
+  featuredImage?: string | null;
+  meta?: string | null;
+  modifiedAt?: string | null;
+  files?: string[] | null;
+  images?: string[] | null;
 };
 export type UpdatePostRequest = {
   id: number;
-  oldImages?: null | string[];
-  oldFeaturedImage?: null | string;
+  oldImages?: string[] | null;
+  oldFeaturedImage?: string | null;
   isFeatured: boolean;
   isPublished: boolean;
   showInFeed: boolean;
   optimizeImages: boolean;
   publishedAt: string;
-  modifiedAt?: null | string;
+  modifiedAt?: string | null;
   languageId: string;
   title: string;
   slug: string;
   introText: string;
   text: string;
-  newFeaturedImage?: null | Blob;
-  meta?: null | string;
-  newFiles?: null | Blob[];
-  newImages?: null | Blob[];
+  newFeaturedImage?: (null | null) | Blob;
+  meta?: string | null;
+  newFiles?: Blob[] | null;
+  newImages?: Blob[] | null;
 };
 export type ListOfPostResponse = PostResponse[];
 export type PaginatedListResponseOfPostResponse = {
@@ -1894,27 +1894,27 @@ export type CreatePostRequest = {
   showInFeed: boolean;
   optimizeImages: boolean;
   publishedAt: string;
-  modifiedAt?: null | string;
+  modifiedAt?: string | null;
   languageId: string;
   title: string;
   slug: string;
   introText: string;
   text: string;
-  newFeaturedImage?: null | Blob;
-  meta?: null | string;
-  newFiles?: null | Blob[];
-  newImages?: null | Blob[];
+  newFeaturedImage?: (null | null) | Blob;
+  meta?: string | null;
+  newFiles?: Blob[] | null;
+  newImages?: Blob[] | null;
 };
 export type GetPostPublicResponse = {
   id: number;
   slug: string;
   publishedAt: string;
-  modifiedAt?: null | string;
+  modifiedAt?: string | null;
   title: string;
-  text?: null | string;
-  meta?: null | string;
-  images?: null | string[];
-  menuUrl?: null | string;
+  text?: string | null;
+  meta?: string | null;
+  images?: string[] | null;
+  menuUrl?: string | null;
   languageId: string;
 };
 export type ClassdayResponse = {
@@ -1934,18 +1934,18 @@ export type IEnumerableOfClassroomResponse = ClassroomResponse[];
 export type ClasstimeResponse = {
   id: number;
   startTime: string;
-  startTimeShort?: null | string;
+  startTimeShort?: string | null;
   endTime: string;
-  endTimeShort?: null | string;
+  endTimeShort?: string | null;
 };
 export type TimeOnly = string;
 export type NullableOfTimeOnly = string;
 export type UpsertClasstimeRequest = {
   id: number;
   startTime: TimeOnly;
-  startTimeShort?: null | NullableOfTimeOnly;
+  startTimeShort?: (null | null) | NullableOfTimeOnly;
   endTime: TimeOnly;
-  endTimeShort?: null | NullableOfTimeOnly;
+  endTimeShort?: (null | null) | NullableOfTimeOnly;
 };
 export type IEnumerableOfClasstimeResponse = ClasstimeResponse[];
 export type ShortDayResponse = {
@@ -1979,7 +1979,7 @@ export type CreateTimetableRequest = {
 export type ListOfCreateTimetableRequest = CreateTimetableRequest[];
 export type RandomImageSettings = {
   cacheDurationInMinutes?: number;
-  forcedPostId?: null | number;
+  forcedPostId?: number | null;
 };
 export type IEnumerableOfUserResponse = UserResponse[];
 export const {
